@@ -71,6 +71,14 @@
     /* Tertiary */
     .ks-ter-row { display: flex; gap: 12px; margin-bottom: 14px; }
     .ks-ter-cell { border-radius: 10px; padding: 10px 14px; flex: 1; }
+    /* Compact variant for dense slides */
+    .ks-compact { padding-top: 12px !important; }
+    .ks-compact .ks-divider { margin: 8px 0; }
+    .ks-compact .ks-ter-row { margin-bottom: 8px; }
+    .ks-compact .ks-ter-cell { padding: 7px 12px; }
+    .ks-compact .ks-ter-val { font-size: 18px; }
+    .ks-compact .ks-sec-label { margin-bottom: 4px; }
+    .ks-compact .ks-headline { margin-bottom: 10px; padding: 8px 14px; font-size: 11px; }
     .ks-ter-cell-blue  { background: #f3f6f9; }
     .ks-ter-cell-green { background: #f0f6f3; }
     .ks-ter-name { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 4px; }
@@ -139,6 +147,8 @@
     tr.aw-rb td.aw-cur { color: #1a7e7f !important; font-weight: 700 !important; background: rgba(48,184,183,0.09); }
 
     tr.aw-in td:first-child { padding-left: 20px; font-size: 10.5px; font-weight: 400; color: #64748b; }
+    tr.aw-cc td { border-top: 1px dashed #cbd5e1 !important; }
+    tr.aw-cc td:first-child { color: #0f172b !important; font-weight: 600 !important; font-size: 10.5px; }
 
     tr.aw-sh td {
       height: 15px !important; font-family: 'DM Sans', sans-serif !important;
@@ -210,7 +220,7 @@
        ============================================================ */
     .hl-outer-grid {
       display: grid;
-      grid-template-columns: 3fr 2fr;
+      grid-template-columns: 1fr 1fr;
       gap: 0 28px;
       flex: 1;
       align-items: start;
@@ -231,39 +241,45 @@
     .hl-item-sm .hl-dot {
       margin-top: 5px;
     }
+    .hl-lead-pos { color: #0f172b; font-weight: 600; }
+    .hl-lead-neg { color: #0f172b; font-weight: 600; }
+    .hl-financial {
+      border-top: 1px solid #e2e8f0;
+      margin-top: 10px;
+      padding-top: 8px;
+    }
+    .hl-col-title.financial { color: #1d4ed8; border-color: #1d4ed8; }
+    .hl-financial-label {
+      font-size: 9px; font-weight: 700; color: #0f172b;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      margin-bottom: 5px;
+    }
+    .hl-financial-text {
+      font-size: 9px; line-height: 1.48; color: #475569;
+    }
 
     /* ============================================================
-       ARR Overview (slide 4) — prefix .arr-
+       ARR Overview (slide 4) — prefix .arr2-
        ============================================================ */
-    .arr-body {
+    .arr2-body {
       flex: 1; overflow: hidden;
-      padding: 10px 32px 4px;
-      display: flex; flex-direction: column; gap: 4px;
+      padding: 8px 28px 4px;
+      display: flex; flex-direction: column;
     }
-    .arr-section-bar {
-      background: var(--color-teal); color: #fff;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
-      text-align: center; padding: 4px 0; border-radius: 4px; margin-bottom: 2px;
+    .arr2-section-header {
+      background: #28c4b8; color: #fff;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.2px;
+      padding: 4px 14px; border-radius: 3px; margin-bottom: 5px; flex-shrink: 0;
     }
-    .arr-section-bar sup { font-size: 8px; }
-    .arr-panel { display: flex; flex-direction: column; min-height: 0; }
-    .arr-panel.top    { flex: 0 0 200px; }
-    .arr-panel.bottom { flex: 1 1 auto; min-height: 0; }
-    .arr-chart-wrap { position: relative; width: 100%; flex: 1 1 auto; min-height: 0; }
-    .arr-legend {
-      display: flex; justify-content: center; gap: 16px;
-      font-family: 'DM Sans', sans-serif; font-size: 9.5px;
-      color: var(--color-text-secondary); margin-top: 2px;
-    }
-    .arr-legend .item { display: inline-flex; align-items: center; gap: 5px; }
-    .arr-legend .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
-    .arr-legend .sw.line { height: 2px; width: 14px; border-radius: 1px; position: relative; }
-    .arr-legend .sw.line::after {
-      content: ""; position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%,-50%);
-      width: 4px; height: 4px; border-radius: 50%; background: inherit;
-    }
+    .arr2-section-header sup { font-size: 8px; }
+    .arr2-chart-wrap { position: relative; flex-shrink: 0; }
+    .arr2-c1 { height: 140px; }
+    .arr2-c2 { height: 200px; }
+    .arr2-footnote { font-size: 9px; color: #6b7280; padding: 2px 0 0; flex-shrink: 0; }
+    .arr2-divider { border: none; border-top: 1px solid #e5e7eb; margin: 5px 0; flex-shrink: 0; }
+    .arr2-legend { display: flex; justify-content: center; gap: 16px; font-size: 9.5px; color: #4b5563; margin-top: 4px; flex-shrink: 0; }
+    .arr2-legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .arr2-legend .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
   </style>
 </head>
 <body>
@@ -294,25 +310,29 @@
         <!-- Highlights — 2 sub-columnas para 8 items -->
         <div>
           <div class="hl-col-title positive">✦ &nbsp;Highlights</div>
-          <div class="hl-items-2col">
-            {% for item in editorial.highlights %}
-            <div class="hl-item-sm">
-              <div class="hl-dot positive"></div>
-              <div>{{ item }}</div>
-            </div>
-            {% endfor %}
+          {% for item in editorial.highlights %}
+          <div class="hl-item-sm">
+            <div class="hl-dot positive"></div>
+            <div>{{ item | hl_split('hl-lead-pos') | safe }}</div>
           </div>
+          {% endfor %}
         </div>
 
-        <!-- Lowlights -->
+        <!-- Lowlights + Financial Update -->
         <div>
           <div class="hl-col-title negative">▼ &nbsp;Lowlights</div>
           {% for item in editorial.lowlights %}
           <div class="hl-item-sm">
             <div class="hl-dot negative"></div>
-            <div>{{ item }}</div>
+            <div>{{ item | hl_split('hl-lead-neg') | safe }}</div>
           </div>
           {% endfor %}
+          {% if editorial.financial_update %}
+          <div class="hl-financial">
+            <div class="hl-col-title financial">$ &nbsp;Financial Update</div>
+            <div class="hl-financial-text">{{ editorial.financial_update }}</div>
+          </div>
+          {% endif %}
         </div>
 
       </div>
@@ -382,28 +402,26 @@
        ============================================================ -->
   <div class="slide">
     <div class="slide-header">
-      <span class="title">ARR Overview — Spot vs Constant FX &amp; Net New ARR drivers</span>
+      <span class="title" style="font-size:15px;">ARR Overview — Spot vs Constant FX &amp; Net New ARR drivers</span>
       <span class="period">{{ config.month_label }}</span>
     </div>
-    <div class="arr-body">
-      <div class="arr-panel top">
-        <div class="arr-section-bar">ARR EoP (USD Mn)<sup>1</sup></div>
-        <div class="arr-chart-wrap"><canvas id="arrEoP"></canvas></div>
-        <div class="arr-legend">
-          <span class="item"><span class="sw" style="background:#185FA5;"></span>Spot FX</span>
-          <span class="item"><span class="sw" style="background:#94a3b8;"></span>Constant Currency FX</span>
-        </div>
+    <div class="arr2-body">
+      <div class="arr2-section-header">ARR EoP (USD Mn)&thinsp;<sup>1</sup></div>
+      <div class="arr2-chart-wrap arr2-c1"><canvas id="arrEoP"></canvas></div>
+      <div class="arr2-legend">
+        <span><span class="sw" style="background:#1e3a6e"></span>Spot FX</span>
+        <span><span class="sw" style="background:#9db3c8"></span>Constant Currency FX</span>
+        <span style="color:#9ca3af;font-size:9px"><sup>1</sup> Includes Alanube</span>
       </div>
-      <div class="arr-panel bottom">
-        <div class="arr-section-bar">Net New ARR — Breakdown (USD 000's)</div>
-        <div class="arr-chart-wrap"><canvas id="netNew"></canvas></div>
-        <div class="arr-legend">
-          <span class="item"><span class="sw" style="background:#185FA5;"></span>New Adds</span>
-          <span class="item"><span class="sw" style="background:#94a3b8;"></span>Upsells / (Downsells)</span>
-          <span class="item"><span class="sw" style="background:#5EEAD4;"></span>Disconnects</span>
-          <span class="item"><span class="sw" style="background:#0f172b;"></span>FX Appreciation / (Depreciation)</span>
-          <span class="item"><span class="sw line" style="background:#E11D48;"></span>Net New</span>
-        </div>
+      <hr class="arr2-divider"/>
+      <div class="arr2-section-header">Net New ARR — Breakdown (USD 000's) &nbsp;|&nbsp; Excludes Alanube</div>
+      <div class="arr2-chart-wrap arr2-c2"><canvas id="netNew"></canvas></div>
+      <div class="arr2-legend">
+        <span><span class="sw" style="background:#1e3a6e"></span>New Adds</span>
+        <span><span class="sw" style="background:#8fa8c4"></span>Upsells / (Downsells)</span>
+        <span><span class="sw" style="background:#2dd4bf"></span>Disconnects</span>
+        <span><span class="sw" style="background:#1a1a2e"></span>FX</span>
+        <span><span class="sw" style="background:#dc2626;height:2px;margin-bottom:4px"></span>Net New</span>
       </div>
     </div>
     <div class="slide-footer">
@@ -482,28 +500,50 @@
 
       <hr class="ks-divider">
 
-      <div class="ks-sec-label">Risk & Sustainability</div>
-      <div class="ks-ter-row">
-        <div class="ks-ter-cell ks-ter-cell-blue">
-          <div class="ks-ter-name">Logo Churn</div>
-          <div class="ks-ter-val ks-ter-val-risk">{{ metrics.logo_churn_core }}% core · {{ metrics.logo_churn_global }}% global</div>
-          <div class="ks-ter-d">{{ metrics.logo_churn_vs_budget_pp }}pp above budget</div>
+      <div style="display:flex; gap:24px;">
+        <div style="flex:1;">
+          <div class="ks-sec-label">Risk & Sustainability</div>
+          <div class="ks-ter-row">
+            <div class="ks-ter-cell ks-ter-cell-blue">
+              <div class="ks-ter-name">Logo Churn</div>
+              <div class="ks-ter-val ks-ter-val-risk">{{ metrics.logo_churn_global }}% global</div>
+              <div class="ks-ter-d">Core {{ metrics.logo_churn_core }}% · Lite {{ metrics.logo_churn_lite }}% · {{ metrics.logo_churn_vs_budget_pp }}pp above budget</div>
+            </div>
+            <div class="ks-ter-cell ks-ter-cell-blue">
+              <div class="ks-ter-name">Payback</div>
+              <div class="ks-ter-val ks-ter-val-muted">{{ metrics.payback_global }} mo global</div>
+              <div class="ks-ter-d">Core {{ metrics.payback_core }} mo · Lite {{ metrics.payback_lite }} mo · vs {{ metrics.payback_hist }} mo avg {{ config.prev_year }}</div>
+            </div>
+          </div>
         </div>
-        <div class="ks-ter-cell ks-ter-cell-blue">
-          <div class="ks-ter-name">Payback</div>
-          <div class="ks-ter-val ks-ter-val-muted">{{ metrics.payback_core }} mo core</div>
-          <div class="ks-ter-d">Lite {{ metrics.payback_lite }} mo · vs {{ metrics.payback_hist }} mo avg {{ config.prev_year }}</div>
+        <div style="width:0.5px; background:#e8e6df; margin:0 0 8px;"></div>
+        <div style="flex:1;">
+          <div class="ks-sec-label">Customer Base</div>
+          <div class="ks-ter-row">
+            <div class="ks-ter-cell ks-ter-cell-blue">
+              <div class="ks-ter-name">SMB Logos EoP</div>
+              <div class="ks-ter-val ks-ter-val-blue">{{ metrics.smb_logos_eop }}</div>
+              <div class="ks-ter-d"><span class="{{ 'ks-pos' if metrics.smb_logos_yoy_positive else 'ks-neg' }}">{{ metrics.smb_logos_yoy }}</span> YoY · {{ metrics.smb_logos_net_adds }} net adds {{ config.month }}</div>
+            </div>
+            <div class="ks-ter-cell ks-ter-cell-blue">
+              <div class="ks-ter-name">Accountant Logos EoP</div>
+              <div class="ks-ter-val ks-ter-val-blue">{{ metrics.accountant_logos_eop }}</div>
+              <div class="ks-ter-d"><span class="{{ 'ks-pos' if metrics.accountant_logos_qoq_positive else 'ks-neg' }}">{{ metrics.accountant_logos_qoq }}</span> QoQ · {{ metrics.accountant_logos_net_adds }} net adds</div>
+            </div>
+          </div>
         </div>
       </div>
 
     </div>
+    <p style="font-size:8px;color:#94a3b8;margin:4px 0 0 2px;">* ARR figures include Alanube.</p>
     <div class="slide-footer">
       <span class="footer-brand">Alegra · Confidential</span>
-      <span class="footer-source">Source: Redshift · fact_customers_mrr · {% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
       <span class="footer-page">5</span>
     </div>
   </div>
 
+  {# YTD Performance oculto temporalmente — descomentar cuando se necesite #}
+  {% if false %}
   <div class="slide-divider">↓ &nbsp; 6 / 7</div>
 
   <!-- ============================================================
@@ -592,10 +632,10 @@
     </div>
     <div class="slide-footer">
       <span class="footer-brand">Alegra · Confidential</span>
-      <span class="footer-source">Source: Redshift · fact_customers_mrr · {% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
       <span class="footer-page">6</span>
     </div>
   </div>
+  {% endif %}{# /YTD Performance oculto #}
 
   <div class="slide-divider">↓ &nbsp; 7 / 7</div>
 
@@ -630,7 +670,7 @@
             <td></td><td></td>
           </tr>
           {% for row in section.rows %}
-          <tr class="aw-{{ row.type }}">
+          <tr class="aw-{{ row.type }}{% if row.label == 'ARR EoP Constant Currency' %} aw-cc{% endif %}">
             <td>{% if row.dot %}<span class="aw-di aw-di-{{ row.dot }}"></span>{% endif %}{{ row.label }}</td>
             {% for v in row.cells %}
             <td{% if loop.last %} class="aw-cur{% if row.nv %} aw-nv{% endif %}"{% elif row.nv %} class="aw-nv"{% endif %}>{{ v }}</td>
@@ -638,7 +678,7 @@
             <td class="aw-ytd{% if row.nv %} aw-nv{% endif %}">{{ row.ytd_prev }}</td>
             <td class="aw-ytd{% if row.nv %} aw-nv{% endif %}">{{ row.ytd_cur }}</td>
           </tr>
-          {% if row.label == "ARR EoP (CC)" %}
+          {% if row.label == "ARR EoP Constant Currency" %}
           <tr class="aw-delta-sub">
             <td>QoQ</td>
             {% for c in row.qoq_cells %}
@@ -674,7 +714,6 @@
 
     <div class="slide-footer">
       <span class="footer-brand">Alegra · Confidential</span>
-      <span class="footer-source">Source: Redshift · fact_customers_mrr · {% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
       <span class="footer-page">7</span>
     </div>
   </div>
@@ -747,86 +786,88 @@
 
   const months = ['Jan-25','Feb-25','Mar-25','Apr-25','May-25','Jun-25','Jul-25','Aug-25','Sep-25','Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26'];
 
-  /* ---------- Panel 1: ARR EoP ---------- */
-  const arrSpot  = [19.3, 20.9, 22.4, 22.0, 22.5, 22.9, 23.5, 23.5, 24.2, 24.7, 25.6, 26.6, 27.0, 26.8, 27.3];
-  const arrConst = [21.5, 22.7, 24.2, 24.3, 24.6, 24.6, 24.9, 25.2, 25.5, 26.0, 27.0, 27.0, 26.6, 27.3, 27.3];
+  /* ---------- Panel 1: ARR EoP (Alegra + Alanube) ---------- */
+  const alegraSpot  = [19.33,20.94,22.35,21.95,22.53,22.94,23.53,23.49,24.24,24.72,25.61,26.59,27.05,26.84,27.29];
+  const alegraCC    = [21.54,22.67,24.21,24.27,24.56,24.63,24.94,24.94,25.24,25.52,26.02,27.03,26.98,26.57,27.29];
+  const alanubeSpot = [364078,312013,330253,380487,416879,441827,552085,529985,504917,807412,631976,633027,616780,830995,955172].map(v=>+(v/1e6).toFixed(4));
+  const alanubeCC   = [389035,326406,348128,405167,438495,462151,576649,550536,516491,828499,637183,638182,615854,825851,955172].map(v=>+(v/1e6).toFixed(4));
+  const totalSpot   = alegraSpot.map((v,i) => +(v + alanubeSpot[i]).toFixed(2));
+  const totalCC     = alegraCC.map((v,i)   => +(v + alanubeCC[i]).toFixed(2));
+
+  const xAxis = {
+    grid: { display: false }, border: { display: false },
+    ticks: { font: { size: 9, family: 'Inter' }, color: '#4b5563', maxRotation: 0, padding: 4 }
+  };
 
   new Chart(document.getElementById('arrEoP'), {
     type: 'bar',
     data: {
       labels: months,
       datasets: [
-        { label: 'Spot FX',              data: arrSpot,  backgroundColor: '#185FA5', borderRadius: 2, maxBarThickness: 16 },
-        { label: 'Constant Currency FX', data: arrConst, backgroundColor: '#94a3b8', borderRadius: 2, maxBarThickness: 16 }
+        { label: 'Spot FX',              data: totalSpot, backgroundColor: '#1e3a6e', barPercentage: 0.72, categoryPercentage: 0.62, borderRadius: 2 },
+        { label: 'Constant Currency FX', data: totalCC,   backgroundColor: '#9db3c8', barPercentage: 0.72, categoryPercentage: 0.62, borderRadius: 2 }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false, animation: false,
-      layout: { padding: { top: 14, right: 6, left: 4, bottom: 0 } },
-      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      layout: { padding: { top: 16 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { mode: 'index', callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y.toFixed(2)} Mn` } }
+      },
       scales: {
-        x: { grid: { display: false }, border: { display: false },
-             ticks: { color: '#64748b', font: { family: 'DM Sans', size: 9, weight: '500' } } },
-        y: { display: false, beginAtZero: true, max: 32 }
+        x: xAxis,
+        y: { min: 0, grid: { color: '#e5e7eb', lineWidth: 0.5 }, border: { display: false },
+             ticks: { font: { size: 9.5, family: 'Inter' }, color: '#4b5563', callback: v => v.toFixed(0) } }
       }
     },
     plugins: [{
       id: 'arrEoPLabels',
       afterDatasetsDraw(chart) {
-        const {ctx} = chart;
+        const { ctx } = chart;
         ctx.save();
-        ctx.font = "500 8.5px 'DM Mono', monospace";
-        ctx.textAlign = 'center';
-        const spotBars  = chart.getDatasetMeta(0).data;
-        const constBars = chart.getDatasetMeta(1).data;
-        spotBars.forEach((bar, i) => {
-          ctx.fillStyle = '#185FA5';
-          ctx.fillText(arrSpot[i].toFixed(1), bar.x, bar.y - 4);
-        });
-        constBars.forEach((bar, i) => {
-          ctx.fillStyle = '#475569';
-          ctx.fillText(arrConst[i].toFixed(1), bar.x, bar.y - 4);
+        ctx.font = '700 9px Arial'; ctx.fillStyle = '#1f2937';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+        chart.data.datasets.forEach((ds, di) => {
+          chart.getDatasetMeta(di).data.forEach((bar, i) => {
+            ctx.fillText(ds.data[i].toFixed(1), bar.x, bar.y - 2);
+          });
         });
         ctx.restore();
       }
     }]
   });
 
-  /* ---------- Panel 2: Net New ARR ---------- */
-  const newAdds     = [ 600,  800,  700,  800,  800,  800,  900,  800,  800,  800,  800, 1000, 1000, 1000, 1200];
-  const upsellsNet  = [   0, 1400, 1400,  300,  300,  200,  300,  200,  300,  200,  400,  800,  100, -100,    0];
-  const disconnects = [-800,-1000, -700,-1000, -800, -900, -800, -800, -800, -800, -800, -800,-1200,-1300, -800];
-  const fxImpact    = [ 300,  600,    0, -500,  300,  300,  300,    0,  500,  200,  400,    0,  500,  200, -300];
-  const netNew      = [ 100, 1600, 1400, -400,  600,  400,  600,    0,  800,  500,  900, 1000,  500, -200,  400];
+  /* ---------- Panel 2: Net New ARR (Excludes Alanube) ---------- */
+  const newAdds      = [616,748,762,798,770,756,828,757,796,820,883,993,970,969,1172];
+  const netChurn     = [-808,-1010,-741,-991,-733,-863,-792,-915,-791,-781,-830,-831,-1121,-1265,-878];
+  const netExpansion = [8,1313,1425,257,227,173,259,163,278,235,438,835,101,-125,426];
+  const fxImpact     = [323,555,-29,-463,310,350,291,-43,470,200,403,-21,511,214,-275];
+  const netNew       = [139,1606,1418,-399,574,416,585,-38,752,475,894,975,462,-207,445];
 
   new Chart(document.getElementById('netNew'), {
     type: 'bar',
     data: {
       labels: months,
       datasets: [
-        { label: 'New Adds',              data: newAdds,     backgroundColor: '#185FA5', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
-        { label: 'Upsells / (Downsells)', data: upsellsNet,  backgroundColor: '#94a3b8', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
-        { label: 'Disconnects',           data: disconnects, backgroundColor: '#5EEAD4', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
-        { label: 'FX',                    data: fxImpact,    backgroundColor: '#0f172b', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
-        { type: 'line', label: 'Net New', data: netNew,
-          borderColor: '#E11D48', backgroundColor: '#E11D48',
-          tension: 0, pointRadius: 3, borderWidth: 1.5,
-          borderDash: [4, 3], order: 0 }
+        { label: 'New Adds',                       data: newAdds,      backgroundColor: '#1e3a6e', stack: 'main', barPercentage: 0.72, categoryPercentage: 0.62, order: 2 },
+        { label: 'Upsells / (Downsells)',           data: netExpansion, backgroundColor: '#8fa8c4', stack: 'main', barPercentage: 0.72, categoryPercentage: 0.62, order: 2 },
+        { label: 'Disconnects',                     data: netChurn,     backgroundColor: '#2dd4bf', stack: 'main', barPercentage: 0.72, categoryPercentage: 0.62, order: 2 },
+        { label: 'FX Appreciation / (Depreciation)',data: fxImpact,     backgroundColor: '#1a1a2e', stack: 'main', barPercentage: 0.72, categoryPercentage: 0.62, order: 2 },
+        { type: 'line', label: 'Net New', data: netNew, borderColor: '#dc2626', borderDash: [5,4], borderWidth: 2, pointRadius: 0, pointHoverRadius: 3, fill: false, tension: 0.15, order: 1 }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false, animation: false,
-      layout: { padding: { top: 10, right: 6, left: 10, bottom: 0 } },
-      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { mode: 'index', callbacks: { label: c => ` ${c.dataset.label}: ${Math.round(c.parsed.y).toLocaleString()}` } }
+      },
       scales: {
-        x: { stacked: true, grid: { color: 'rgba(15,23,43,.04)', drawTicks: false },
-             border: { color: '#cbd5e1' },
-             ticks: { color: '#64748b', font: { family: 'DM Sans', size: 9, weight: '500' } } },
-        y: { stacked: true, beginAtZero: true, min: -2000, max: 2500,
-             grid: { color: 'rgba(128,128,128,.10)' }, border: { display: false },
-             ticks: { color: '#94a3b8', font: { family: 'DM Mono', size: 9 }, stepSize: 500,
-               callback: v => v === 0 ? '0' : (v < 0 ? '\u2212' : '') + Math.abs(v).toLocaleString('en-US')
-             }}
+        x: xAxis,
+        y: { stacked: true, grid: { color: '#e5e7eb', lineWidth: 0.5 }, border: { display: false },
+             ticks: { font: { size: 9.5, family: 'Inter' }, color: '#4b5563',
+               callback: v => Math.abs(v) >= 1000 ? (v/1000).toFixed(0)+'k' : v } }
       }
     }
   });

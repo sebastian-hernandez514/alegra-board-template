@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles/base.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
   <style>
     .section-cover {
       background: var(--color-navy);
@@ -147,6 +148,20 @@
       text-transform: uppercase; color: var(--color-teal);
       margin-right: 8px;
     }
+
+    /* ── Churn by Tenure slides ── */
+    .block-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: #1e3a8a;
+      padding-bottom: 8px; border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .block-label .legend-inline { font-weight: 500; letter-spacing: 0; text-transform: none; }
+    .churn-chart-wrap { position: relative; flex: 1; min-height: 0; width: 100%; height: 390px; }
+    .legend-inline { display: flex; flex-wrap: nowrap; gap: 14px; align-items: center; flex-shrink: 0; white-space: nowrap; }
+    .legend-inline .li { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; color: var(--color-text-secondary); font-weight: 500; white-space: nowrap; }
+    .legend-inline .lb { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
   </style>
 </head>
 <body>
@@ -217,44 +232,18 @@
   <div class="slide-divider">↓</div>
 
   <!-- ============================================================
-       SLIDE 3 — Core Cohorts
+       SLIDE 3 — Churn by Tenure: Global
        ============================================================ -->
   <div class="slide">
     <div class="slide-header">
-      <span class="title" style="font-size: 15px;">Core cohorts · 2026 starts above 2025 in COL, MEX, CRI · DOM is the early lag (−3.3 pp at M2)</span>
-      <span class="period">{{ config.quarter_label }}</span>
+      <span class="title">Churned companies breakdown by months since joining · GLO</span>
     </div>
-    <div class="slide-body" style="gap: 10px; padding-top: 14px; padding-bottom: 6px; min-height: 0;">
-
-      <div class="legend-strip">
-        <span class="li"><span class="sw"></span> 2026 cohorts</span>
-        <span class="li"><span class="sw dashed"></span> 2025 cohorts</span>
+    <div class="slide-body">
+      <div class="block-label">
+        <span>Companies churned per month · stacked by tenure at time of churn</span>
+        <span class="legend-inline" id="leg-global"></span>
       </div>
-
-      <div class="country-grid">
-        <div class="country-card">
-          <div class="c-head"><span class="c-title">COL</span></div>
-          <div class="chart-wrap"><canvas id="ch_COL_Core"></canvas></div>
-        </div>
-        <div class="country-card">
-          <div class="c-head"><span class="c-title">DOM</span></div>
-          <div class="chart-wrap"><canvas id="ch_DOM_Core"></canvas></div>
-        </div>
-        <div class="country-card">
-          <div class="c-head"><span class="c-title">MEX</span></div>
-          <div class="chart-wrap"><canvas id="ch_MEX_Core"></canvas></div>
-        </div>
-        <div class="country-card">
-          <div class="c-head"><span class="c-title">CRI</span></div>
-          <div class="chart-wrap"><canvas id="ch_CRI_Core"></canvas></div>
-        </div>
-      </div>
-
-      <div class="insight-box">
-        <span class="so-what">So what</span>
-        At M2 (the overlap point), <strong>CRI Core leads +7.7 pp vs 2025</strong> and MEX +3.5 pp · COL +1.3 pp.
-        DOM is the only Core market under baseline (<strong>−3.3 pp at M2</strong>) — worth a deeper look before the 2026-Q1 cohort matures.
-      </div>
+      <div class="churn-chart-wrap"><canvas id="chart-global"></canvas></div>
     </div>
     <div class="slide-footer">
       <span class="footer-brand">Alegra · Confidential</span>
@@ -265,48 +254,44 @@
   <div class="slide-divider">↓</div>
 
   <!-- ============================================================
-       SLIDE 4 — Lite Cohorts
+       SLIDE 4 — Churn by Tenure: Core
        ============================================================ -->
   <div class="slide">
     <div class="slide-header">
-      <span class="title" style="font-size: 15px;">Lite cohorts · uniformly tougher floor (~70% at M2) · DOM 2026 is the positive surprise (+3.9 pp)</span>
-      <span class="period">{{ config.quarter_label }}</span>
+      <span class="title">Churned companies breakdown by months since joining · CORE</span>
     </div>
-    <div class="slide-body" style="gap: 10px; padding-top: 14px; padding-bottom: 6px; min-height: 0;">
-
-      <div class="legend-strip">
-        <span class="li"><span class="sw"></span> 2026 cohorts</span>
-        <span class="li"><span class="sw dashed"></span> 2025 cohorts</span>
+    <div class="slide-body">
+      <div class="block-label">
+        <span>Core companies churned per month · stacked by tenure at time of churn</span>
+        <span class="legend-inline" id="leg-core"></span>
       </div>
-
-      <div class="country-grid">
-        <div class="country-card">
-          <div class="c-head"><span class="c-title">COL</span></div>
-          <div class="chart-wrap"><canvas id="ch_COL_Lite"></canvas></div>
-        </div>
-        <div class="country-card">
-          <div class="c-head"><span class="c-title">DOM</span></div>
-          <div class="chart-wrap"><canvas id="ch_DOM_Lite"></canvas></div>
-        </div>
-        <div class="country-card">
-          <div class="c-head"><span class="c-title">MEX</span></div>
-          <div class="chart-wrap"><canvas id="ch_MEX_Lite"></canvas></div>
-        </div>
-        <div class="country-card">
-          <div class="c-head"><span class="c-title">CRI</span></div>
-          <div class="chart-wrap"><canvas id="ch_CRI_Lite"></canvas></div>
-        </div>
-      </div>
-
-      <div class="insight-box">
-        <span class="so-what">So what</span>
-        Lite starts steeper everywhere — <strong>~15-25 pp below Core by M2</strong>. 2026 vs 2025 at M2: DOM <strong>+3.9 pp</strong> · CRI +1.0 · COL +1.0 · MEX <strong>−2.4 pp</strong> (watchlist).
-        The 2025 baseline already shows M12+ settling around <strong>40-50% retention</strong>, the Lite structural floor.
-      </div>
+      <div class="churn-chart-wrap"><canvas id="chart-core"></canvas></div>
     </div>
     <div class="slide-footer">
       <span class="footer-brand">Alegra · Confidential</span>
       <span class="footer-page">4</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ============================================================
+       SLIDE 5 — Churn by Tenure: Lite
+       ============================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Churned companies breakdown by months since joining · LITE</span>
+    </div>
+    <div class="slide-body">
+      <div class="block-label">
+        <span>Lite companies churned per month · stacked by tenure at time of churn</span>
+        <span class="legend-inline" id="leg-lite"></span>
+      </div>
+      <div class="churn-chart-wrap"><canvas id="chart-lite"></canvas></div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">5</span>
     </div>
   </div>
 
@@ -405,85 +390,116 @@
 
   <script>
     (function(){
-      Chart.defaults.font.family = "'Inter', sans-serif";
+      const MONTHS = ['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar'];
+      const BRACKETS = ["M1-M3","M4-M6","M7-M9","M10-M12","M13+"];
 
       const DATA = {
-        COL_Core_2025: [100.0, 87.11, 80.8, 76.73, 74.93, 72.86, 71.92, 69.3, 67.93, 66.34, 66.04, 65.45, 60.53, 57.96, 56.03],
-        COL_Core_2026: [100.0, 88.57, 82.07, null, null, null, null, null, null, null, null, null, null, null, null],
-        COL_Lite_2025: [100.0, 83.31, 75.98, 70.31, 67.28, 64.47, 62.42, 60.4, 59.27, 57.72, 56.68, 55.39, 51.77, 50.38, 47.8],
-        COL_Lite_2026: [100.0, 85.8, 76.96, null, null, null, null, null, null, null, null, null, null, null, null],
-        DOM_Core_2025: [100.0, 90.12, 82.72, 76.7, 73.75, 71.38, 69.42, 68.65, 63.71, 61.56, 61.23, 59.53, 56.71, 51.06, 48.28],
-        DOM_Core_2026: [100.0, 91.53, 79.41, null, null, null, null, null, null, null, null, null, null, null, null],
-        DOM_Lite_2025: [100.0, 84.69, 74.42, 66.81, 61.99, 56.45, 53.43, 49.4, 47.58, 47.81, 44.57, 44.93, 45.33, 45.0, 40.58],
-        DOM_Lite_2026: [100.0, 87.8, 78.36, null, null, null, null, null, null, null, null, null, null, null, null],
-        MEX_Core_2025: [100.0, 87.15, 80.21, 75.46, 72.02, 69.35, 67.35, 63.64, 60.34, 58.77, 59.89, 57.48, 57.87, 54.23, 54.88],
-        MEX_Core_2026: [100.0, 89.71, 83.75, null, null, null, null, null, null, null, null, null, null, null, null],
-        MEX_Lite_2025: [100.0, 78.41, 72.33, 65.53, 62.85, 61.44, 59.1, 57.03, 54.59, 53.12, 51.35, 50.9, 45.22, 44.35, 42.34],
-        MEX_Lite_2026: [100.0, 80.57, 69.92, null, null, null, null, null, null, null, null, null, null, null, null],
-        CRI_Core_2025: [100.0, 83.61, 77.26, 75.25, 71.12, 71.26, 68.33, 68.72, 65.69, 64.41, 63.33, 66.15, 63.64, 68.75, 65.22],
-        CRI_Core_2026: [100.0, 92.31, 85.0, null, null, null, null, null, null, null, null, null, null, null, null],
-        CRI_Lite_2025: [100.0, 81.09, 70.15, 65.67, 60.28, 58.64, 56.52, 52.33, 52.53, 51.85, 52.02, 47.85, 40.62, 42.39, 42.59],
-        CRI_Lite_2026: [100.0, 81.82, 71.15, null, null, null, null, null, null, null, null, null, null, null, null],
+        Global: {
+          "M1-M3":   [713, 747, 649, 628, 546, 601, 594, 567, 607, 643, 686, 730, 809, 684, 623],
+          "M4-M6":   [446, 406, 384, 352, 371, 324, 295, 311, 299, 275, 286, 295, 392, 353, 328],
+          "M7-M9":   [325, 386, 324, 400, 286, 279, 235, 270, 201, 252, 243, 258, 272, 263, 227],
+          "M10-M12": [310, 424, 293, 359, 300, 353, 352, 286, 248, 227, 301, 232, 299, 291, 228],
+          "M13+":    [2015,2338,2032,2305,1977,2033,1812,1954,1859,1843,1931,2156,2458,2665,2469]
+        },
+        Core: {
+          "M1-M3":   [169, 189, 185, 186, 174, 202, 209, 195, 222, 194, 231, 235, 294, 228, 222],
+          "M4-M6":   [ 90,  70,  83,  63,  89,  76,  80, 110, 100,  99,  95, 105, 140, 125, 117],
+          "M7-M9":   [ 74,  74,  82,  86,  55,  52,  40,  66,  50,  93,  86,  91,  94, 100,  93],
+          "M10-M12": [ 80,  87,  65,  86,  72,  59,  75,  61,  55,  50,  83,  64,  98, 102,  90],
+          "M13+":    [553, 633, 525, 565, 558, 514, 474, 487, 485, 455, 497, 512, 667, 727, 657]
+        },
+        Lite: {
+          "M1-M3":   [544, 558, 464, 442, 372, 399, 385, 372, 385, 449, 455, 495, 515, 456, 401],
+          "M4-M6":   [356, 336, 301, 289, 282, 248, 215, 201, 199, 176, 191, 190, 252, 228, 211],
+          "M7-M9":   [251, 312, 242, 314, 231, 227, 195, 204, 151, 159, 157, 167, 178, 163, 134],
+          "M10-M12": [230, 337, 228, 273, 228, 294, 277, 225, 193, 177, 218, 168, 201, 189, 138],
+          "M13+":    [1462,1705,1507,1740,1419,1519,1338,1467,1374,1388,1434,1644,1790,1938,1812]
+        }
       };
 
-      const LABELS = Array.from({length: 15}, (_, i) => String(i));
-      const COLOR_2026 = '#c59b2d';
-      const COLOR_2025 = '#94a3b8';
+      const FILL        = ['#e2e8f0','#93c5fd','#3b82f6','#1d4ed8','#1e3a8a'];
+      const LABEL_COLOR = ['#334155','#1e3a8a','#ffffff','#ffffff','#ffffff'];
 
-      function makeChart(canvasId, key) {
+
+      function buildLegend(id) {
+        const el = document.getElementById(id);
+        BRACKETS.forEach((b, i) => {
+          el.insertAdjacentHTML('beforeend',
+            `<span class="li"><span class="lb" style="background:${FILL[i]}"></span>${b}</span>`);
+        });
+      }
+
+      function computeShares(segData) {
+        const totals = MONTHS.map((_, i) =>
+          BRACKETS.reduce((sum, b) => sum + (segData[b][i] || 0), 0)
+        );
+        const shares = {};
+        BRACKETS.forEach(b => {
+          shares[b] = segData[b].map((v, i) => totals[i] > 0 ? (v / totals[i]) * 100 : 0);
+        });
+        return { totals, shares };
+      }
+
+      function buildChart(canvasId, seg) {
+        const segData = DATA[seg];
+        const { totals, shares } = computeShares(segData);
+        const datasets = BRACKETS.map((b, i) => ({
+          label: b,
+          data: segData[b],
+          backgroundColor: FILL[i],
+          borderWidth: 0,
+          borderRadius: 1,
+          stack: 'stack',
+          maxBarThickness: 42,
+          categoryPercentage: 0.78,
+          barPercentage: 0.9,
+          _totals: totals,
+          _shares: shares[b]
+        }));
+
         new Chart(document.getElementById(canvasId), {
-          type: 'line',
-          data: {
-            labels: LABELS,
-            datasets: [
-              {
-                label: '2025', data: DATA[key + '_2025'],
-                borderColor: COLOR_2025, borderWidth: 1.8,
-                borderDash: [5, 4], pointRadius: 0, pointHoverRadius: 4,
-                pointBackgroundColor: COLOR_2025, pointBorderColor: '#ffffff',
-                tension: 0.30, fill: false, spanGaps: false
-              },
-              {
-                label: '2026', data: DATA[key + '_2026'],
-                borderColor: COLOR_2026, backgroundColor: 'rgba(197,155,45,0.10)',
-                borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5,
-                pointBackgroundColor: COLOR_2026, pointBorderColor: '#ffffff',
-                pointBorderWidth: 1.5, tension: 0.30, fill: true, spanGaps: false
-              }
-            ]
-          },
+          type: 'bar',
+          data: { labels: MONTHS, datasets: datasets },
           options: {
-            responsive: true, maintainAspectRatio: false,
-            layout: { padding: { top: 4, right: 4, bottom: 0, left: 0 } },
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 10, right: 4, bottom: 0 } },
             interaction: { mode: 'index', intersect: false, axis: 'x' },
             plugins: {
               legend: { display: false },
               tooltip: {
-                enabled: true, backgroundColor: '#0f172b', padding: 10,
-                titleFont: { size: 11, weight: '600' }, titleColor: '#ffffff',
+                enabled: true, backgroundColor: '#0f172b', padding: 12,
+                titleFont: { size: 12, weight: '600' }, titleColor: '#ffffff',
                 bodyFont: { size: 11 }, bodyColor: '#ffffff',
                 displayColors: true, boxPadding: 4, cornerRadius: 6,
                 borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
                 callbacks: {
-                  title: items => 'Month ' + items[0].label,
-                  label: ctx => ctx.raw == null ? null : `  ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`
-                }
+                  label: ctx => {
+                    const val = ctx.raw;
+                    const total = ctx.dataset._totals[ctx.dataIndex];
+                    const pct = total > 0 ? (val / total * 100) : 0;
+                    return `  ${ctx.dataset.label}: ${val.toLocaleString()}  (${pct.toFixed(1)}%)`;
+                  },
+                  footer: items => `  Total: ${items[0].dataset._totals[items[0].dataIndex].toLocaleString()}`
+                },
+                footerFont: { size: 11, weight: '600' }, footerColor: '#1e3a8a', footerMarginTop: 6
               }
             },
             scales: {
-              y: {
-                min: 0, max: 100,
-                grid: { color: '#f1f5f9', drawBorder: false },
-                border: { display: false },
-                ticks: { callback: v => v + '%', font: { size: 9.5 }, color: '#94a3b8', stepSize: 20, padding: 4 }
-              },
               x: {
+                stacked: true,
                 grid: { display: false },
                 border: { display: false },
+                ticks: { font: { size: 10 }, color: '#94a3b8', maxRotation: 0 }
+              },
+              y: {
+                stacked: true,
+                beginAtZero: true,
+                grid: { color: '#f1f5f9', drawBorder: false },
+                border: { display: false },
                 ticks: {
-                  font: { size: 9.5 }, color: '#94a3b8', maxRotation: 0,
-                  autoSkip: false, padding: 2,
-                  callback: function(v, i) { return i % 2 === 0 ? this.getLabelForValue(v) : ''; }
+                  font: { size: 10 }, color: '#94a3b8',
+                  callback: v => v.toLocaleString()
                 }
               }
             }
@@ -491,10 +507,13 @@
         });
       }
 
-      ['COL_Core','DOM_Core','MEX_Core','CRI_Core',
-       'COL_Lite','DOM_Lite','MEX_Lite','CRI_Lite'].forEach(k =>
-         makeChart('ch_' + k, k)
-       );
+      buildLegend('leg-global');
+      buildLegend('leg-core');
+      buildLegend('leg-lite');
+
+      buildChart('chart-global', 'Global');
+      buildChart('chart-core',   'Core');
+      buildChart('chart-lite',   'Lite');
     })();
   </script>
 

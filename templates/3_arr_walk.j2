@@ -48,6 +48,8 @@
     tr.aw-rb td:first-child { color: #0f172b !important; }
     tr.aw-rb td.aw-cur { color: #1a7e7f !important; font-weight: 700 !important; background: rgba(48,184,183,0.09); }
     tr.aw-in td:first-child { padding-left: 20px; font-size: 10.5px; font-weight: 400; color: #64748b; }
+    tr.aw-cc td { border-top: 1px dashed #cbd5e1 !important; }
+    tr.aw-cc td:first-child { color: #0f172b !important; font-weight: 600 !important; font-size: 10.5px; }
     tr.aw-sh td { height: 15px !important; font-family: 'DM Sans', sans-serif !important; font-weight: 700 !important; font-size: 8.5px !important; text-transform: uppercase; letter-spacing: 1.4px; color: #0f172b !important; border-top: 1.5px solid #e2e8f0 !important; border-bottom: none !important; background: #f8fafc; padding-top: 3px !important; }
     tr.aw-sh td.aw-cur { background: rgba(48,184,183,0.07); color: #1a7e7f !important; }
     tr.aw-sh td:not(.aw-cur):not(:first-child) { background: #f8fafc; }
@@ -435,7 +437,7 @@
             <td></td><td></td>
           </tr>
           {% for row in section.rows %}
-          <tr class="aw-{{ row.type }}">
+          <tr class="aw-{{ row.type }}{% if row.label == 'ARR EoP Constant Currency' %} aw-cc{% endif %}">
             <td>{% if row.dot %}<span class="aw-di aw-di-{{ row.dot }}"></span>{% endif %}{{ row.label }}</td>
             {% for v in row.cells %}
             <td{% if loop.last %} class="aw-cur{% if row.nv %} aw-nv{% endif %}"{% elif row.nv %} class="aw-nv"{% endif %}>{{ v }}</td>
@@ -443,6 +445,18 @@
             <td class="aw-ytd{% if row.nv %} aw-nv{% endif %}">{{ row.ytd_prev }}</td>
             <td class="aw-ytd{% if row.nv %} aw-nv{% endif %}">{{ row.ytd_cur }}</td>
           </tr>
+          {% if row.label == "ARR EoP Constant Currency" %}
+          <tr class="aw-delta-sub">
+            <td>QoQ CC</td>
+            {% for c in row.qoq_cells %}<td{% if loop.last %} class="aw-cur"{% endif %}>{{ c.v }}</td>{% endfor %}
+            <td></td><td></td>
+          </tr>
+          <tr class="aw-delta-sub">
+            <td>YoY CC</td>
+            {% for c in row.yoy_cells %}<td{% if loop.last %} class="aw-cur"{% endif %}>{{ c.v }}</td>{% endfor %}
+            <td></td><td></td>
+          </tr>
+          {% endif %}
           {% if row.label == "ARR EoP" %}
           <tr class="aw-delta-sub">
             <td>QoQ</td>
@@ -468,7 +482,6 @@
 
     <div class="slide-footer">
       <span class="footer-brand">Alegra · Confidential</span>
-      <span class="footer-source">Source: Redshift · fact_customers_mrr · {{ config.month_label }}</span>
       <span class="footer-page">{{ loop.index + 1 }}</span>
     </div>
   </div>
@@ -641,7 +654,6 @@
     </div><!-- /.aw-body-row -->
     <div class="slide-footer">
       <span class="footer-brand">Alegra · Confidential</span>
-      <span class="footer-source">Source: Alanube · data updated as of Mar-26</span>
       <span class="footer-page">4</span>
     </div>
   </div>

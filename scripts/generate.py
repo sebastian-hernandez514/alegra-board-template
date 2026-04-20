@@ -15,7 +15,7 @@ Writes:
     output/<template_name>.html
 """
 
-import argparse, json
+import argparse, json, re
 from pathlib import Path
 from datetime import datetime
 
@@ -52,6 +52,15 @@ def _merge_arr_walk_editorial(metrics, arr_walk_ed):
 # ── tojson Jinja2 filter ───────────────────────────────────────────────────────
 def _tojson(value, indent=None):
     return json.dumps(value, ensure_ascii=False, indent=indent)
+
+# ── hl_split Jinja2 filter ─────────────────────────────────────────────────────
+def _hl_split(text, cls):
+    """Bold the lead up to the first '.', ',', or ' —'."""
+    m = re.search(r'\.| —', text)
+    if m:
+        end = m.end()
+        return f'<span class="{cls}">{text[:end]}</span>{text[end:]}'
+    return text
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 def main():
@@ -101,8 +110,9 @@ def main():
 
     # ── Jinja2 environment
     env = Environment(loader=FileSystemLoader(str(TMPL_DIR)), autoescape=False)
-    env.filters["tojson"] = _tojson
-    env.filters["safe"]   = lambda v: v  # already safe (no autoescaping)
+    env.filters["tojson"]   = _tojson
+    env.filters["hl_split"] = _hl_split
+    env.filters["safe"]     = lambda v: v  # already safe (no autoescaping)
 
     ctx = {"metrics": metrics, "config": config, "editorial": editorial}
 

@@ -1363,6 +1363,7 @@ def build_yaml(seg_metrics, segs_raw, all_months, latest_mm, country_raw, cutoff
 
         # --- Risk KPIs (Sheets for payback, RS for churn)
         "logo_churn_core":    round((_q("Core") if is_quarter_end else _mo("Core")).get("l_churn_pct", 0) * 100, 1),
+        "logo_churn_lite":    round((_q("Lite") if is_quarter_end else _mo("Lite")).get("l_churn_pct", 0) * 100, 1),
         "logo_churn_global":  round((_q("all")  if is_quarter_end else all_m).get("l_churn_pct", 0) * 100, 1),
         "logo_churn_vs_budget_pp": "N/A",
         "payback_core":       "N/A",
@@ -2425,34 +2426,52 @@ def merge_pnl(out, cutoff):
 
 # ── Payback merge ───────────────────────────────────────────────────────────────
 def merge_payback(out, cutoff, payback_hist=16):
-    """Lee Payback.csv e inyecta payback_core, payback_lite y payback_hist en out."""
+    """Lee Payback.csv e inyecta payback_core, payback_lite y payback_hist en out.
+    En cierre de quarter (mes 3/6/9/12) usa promedio de los 3 meses del Q.
+    En meses normales usa el valor puntual del mes.
+    """
     if not PAYBACK_FILE.exists():
         print(f"⚠️  Payback CSV no encontrado: {PAYBACK_FILE}")
         return
 
-    # fecha en CSV: YYYY-MM
-    date_str = cutoff  # ya viene como "2026-03"
+    year, month = int(cutoff[:4]), int(cutoff[5:7])
+    is_quarter_end = month in (3, 6, 9, 12)
 
-    core_val = lite_val = None
+    # Meses a promediar: si es Q-end, los 3 del quarter; si no, solo el mes actual
+    if is_quarter_end:
+        q_start = month - 2
+        date_strs = [f"{year}-{m:02d}" for m in range(q_start, month + 1)]
+    else:
+        date_strs = [cutoff]
+
+    # Acumular valores por segmento
+    buckets = {"Core": [], "Lite": [], "Total": []}
     with open(PAYBACK_FILE, newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
-            if row.get("fecha", "").strip() == date_str and row.get("Type", "").strip() == "Todos":
+            if row.get("fecha", "").strip() in date_strs and row.get("Type", "").strip() == "Todos":
                 seg = row.get("Segment", "").strip()
                 val = float(row.get("valor", 0) or 0)
-                if seg == "Core":
-                    core_val = val
-                elif seg == "Lite":
-                    lite_val = val
+                if seg in buckets:
+                    buckets[seg].append(val)
+
+    def _avg(lst):
+        return round(sum(lst) / len(lst), 1) if lst else None
+
+    core_val   = _avg(buckets["Core"])
+    lite_val   = _avg(buckets["Lite"])
+    global_val = _avg(buckets["Total"])
 
     if core_val is None or lite_val is None:
-        print(f"⚠️  Payback: sin datos para {date_str}")
+        print(f"⚠️  Payback: sin datos para {date_strs}")
         return
 
-    out["payback_core"] = round(core_val, 1)
-    out["payback_lite"] = round(lite_val, 1)
-    out["payback_hist"] = payback_hist
+    out["payback_global"] = global_val if global_val is not None else "N/A"
+    out["payback_core"]   = core_val
+    out["payback_lite"]   = lite_val
+    out["payback_hist"]   = payback_hist
 
-    print(f"✅ Payback mergeado para {date_str}: Core {out['payback_core']} mo · Lite {out['payback_lite']} mo · Hist {payback_hist} mo")
+    period = f"Q avg {date_strs[0]}→{date_strs[-1]}" if is_quarter_end else cutoff
+    print(f"✅ Payback mergeado ({period}): Global {out['payback_global']} mo · Core {out['payback_core']} mo · Lite {out['payback_lite']} mo · Hist {payback_hist} mo")
 
 
 if __name__ == "__main__":

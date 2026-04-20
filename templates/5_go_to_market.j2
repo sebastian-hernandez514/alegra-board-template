@@ -89,14 +89,15 @@
     .sc-deltas .dl { font-size: 9px; color: var(--c-dim); text-transform: uppercase; letter-spacing: .04em; }
     .sc-deltas .dv { font-size: 13px; font-weight: 600; }
 
-    .nl-comments {
-      border: 0.5px solid var(--c-border); border-radius: 10px;
-      padding: 10px 14px; flex-shrink: 0; min-height: 64px;
+    .sm-mini-row {
+      border: 0.5px solid var(--c-border); border-radius: 10px; padding: 7px 14px 6px;
+      flex-shrink: 0; height: 90px; display: flex; flex-direction: column;
     }
-    .nl-comments-label {
-      font-size: 9px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: .06em; color: var(--c-dim); margin-bottom: 5px;
-    }
+    .sm-mini-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; flex-shrink: 0; }
+    .sm-mini-label { font-size: 9px; font-weight: 600; color: var(--c-dim); text-transform: uppercase; letter-spacing: .05em; }
+    .sm-mini-legend { display: flex; gap: 10px; font-size: 9px; color: var(--c-dim); }
+    .sm-mini-sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 3px; vertical-align: middle; }
+    .sm-mini-chart { position: relative; flex: 1; min-height: 0; }
     .gtm-slide .pos { color: var(--green); }
     .gtm-slide .neg { color: var(--coral); }
 
@@ -540,7 +541,7 @@
             <div class="sc-val">{{ metrics.gtm.new_logos_core }}</div>
           </div>
           <div class="sc-deltas">
-            <div class="delta"><span class="dl">MoM</span><span class="dv {{ 'pos' if metrics.gtm.new_logos_core_mom_positive else 'neg' }}">{{ metrics.gtm.new_logos_core_mom }}</span></div>
+            <div class="delta"><span class="dl">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span><span class="dv {{ 'pos' if metrics.gtm.new_logos_core_mom_positive else 'neg' }}">{{ metrics.gtm.new_logos_core_mom }}</span></div>
             <div class="delta"><span class="dl">YoY</span><span class="dv {{ 'pos' if metrics.gtm.new_logos_core_yoy_positive else 'neg' }}">{{ metrics.gtm.new_logos_core_yoy }}</span></div>
           </div>
         </div>
@@ -550,7 +551,7 @@
             <div class="sc-val">{{ metrics.gtm.new_logos_lite }}</div>
           </div>
           <div class="sc-deltas">
-            <div class="delta"><span class="dl">MoM</span><span class="dv {{ 'pos' if metrics.gtm.new_logos_lite_mom_positive else 'neg' }}">{{ metrics.gtm.new_logos_lite_mom }}</span></div>
+            <div class="delta"><span class="dl">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span><span class="dv {{ 'pos' if metrics.gtm.new_logos_lite_mom_positive else 'neg' }}">{{ metrics.gtm.new_logos_lite_mom }}</span></div>
             <div class="delta"><span class="dl">YoY</span><span class="dv {{ 'pos' if metrics.gtm.new_logos_lite_yoy_positive else 'neg' }}">{{ metrics.gtm.new_logos_lite_yoy }}</span></div>
           </div>
         </div>
@@ -566,12 +567,6 @@
           <div class="cc-head"><div class="dot l"></div><span class="cc-label">Lite · last 13 months</span></div>
           <div class="chart-wrap"><canvas id="cLite"></canvas></div>
         </div>
-      </div>
-
-      <!-- ROW 3: comments -->
-      <div class="nl-comments">
-        <div class="nl-comments-label">Comments</div>
-        {{ editorial.gtm_new_logos_comments | safe if editorial.gtm_new_logos_comments is defined else '' }}
       </div>
 
     </div><!-- /gtm-inner -->
@@ -604,7 +599,7 @@
               <span class="acq-kpi-total">{{ metrics.gtm.sm_core_total }}</span>
             </div>
             <div class="acq-kpi-right">
-              <span class="acq-kpi-var {% if metrics.gtm.sm_core_var_positive %}pos{% else %}neg{% endif %}">{{ metrics.gtm.sm_core_var }} MoM</span>
+              <span class="acq-kpi-var {% if metrics.gtm.sm_core_var_positive %}pos{% else %}neg{% endif %}">{{ metrics.gtm.sm_core_var }} {% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span>
               <span class="acq-kpi-mix">People {{ metrics.gtm.sm_core_people }} · Paid {{ metrics.gtm.sm_core_paid }} · Other {{ metrics.gtm.sm_core_other }}</span>
             </div>
           </div>
@@ -626,7 +621,7 @@
               <span class="acq-kpi-total">{{ metrics.gtm.sm_lite_total }}</span>
             </div>
             <div class="acq-kpi-right">
-              <span class="acq-kpi-var {% if metrics.gtm.sm_lite_var_positive %}pos{% else %}neg{% endif %}">{{ metrics.gtm.sm_lite_var }} MoM</span>
+              <span class="acq-kpi-var {% if metrics.gtm.sm_lite_var_positive %}pos{% else %}neg{% endif %}">{{ metrics.gtm.sm_lite_var }} {% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span>
               <span class="acq-kpi-mix">People {{ metrics.gtm.sm_lite_people }} · Paid {{ metrics.gtm.sm_lite_paid }} · Other {{ metrics.gtm.sm_lite_other }}</span>
             </div>
           </div>
@@ -715,180 +710,59 @@
     </div>
   </div>
 
+
   <div class="slide-divider">↓</div>
 
   <!-- ============================================================
-       SLIDE 5 — Contadores Performance 1/3
+       SLIDE 5 — Flywheel: Entities
        ============================================================ -->
-  <div class="slide">
-    <div class="cp-header">
-      <div>
-        <span class="title">Contadores — Performance</span>
-        <span class="sub">&nbsp;&nbsp;·&nbsp;&nbsp;Estado actual del programa</span>
-      </div>
-      <span class="cp-pill">1 / 3</span>
+  <div class="gtm-slide">
+    <div class="slide-header">
+      <span class="title">Entities: New Adds vs Net Churn</span>
+      <span class="period">{{ config.month_label }}</span>
     </div>
-    <div class="cp-insight">
-      <strong>Insight:</strong>&nbsp;Logos activos +33% YoY y Entes +24%, pero el churn mensual promedio subió a ~700 vs 600 el año pasado. Net New sigue positivo gracias a New + Recovered.
+    <div style="padding: 8px 40px 6px;">
+      <div style="font-size:11px;font-weight:700;color:#1a1a2e;margin-bottom:1px;">New Adds <span style="font-weight:400;color:#888;font-size:10px;">(New+Recovered)</span></div>
+      <div style="font-size:11px;font-weight:700;color:#c0392b;margin-bottom:4px;">Net Churn <span style="font-weight:400;color:#888;font-size:10px;">(Churn-React)</span></div>
+      <div style="position:relative;height:195px;"><canvas id="fw_entitiesLine"></canvas></div>
     </div>
-    <div class="cp-body">
-      <div class="cp-card">
-        <div class="cp-card-title">Logos activos — tendencia</div>
-        <div class="cp-kpi"><span class="val">13,487</span><span class="delta pos">+33% YoY</span></div>
-        <div class="cp-chart-wrap"><canvas id="c1"></canvas></div>
-      </div>
-      <div class="cp-card">
-        <div class="cp-card-title">Entes activos — tendencia</div>
-        <div class="cp-kpi"><span class="val">9,089</span><span class="delta pos">+24% YoY</span></div>
-        <div class="cp-chart-wrap"><canvas id="c2"></canvas></div>
-      </div>
-      <div class="cp-card">
-        <div class="cp-card-title">Ratio Logo × Contador — estable</div>
-        <div class="cp-kpi"><span class="val">1.38</span><span class="delta neutral">−1% vs máx</span></div>
-        <div class="cp-chart-wrap"><canvas id="c3"></canvas></div>
-      </div>
-      <div class="cp-card">
-        <div class="cp-card-title">Logos churned por mes — pico en 4Q25</div>
-        <div class="cp-card-sub">Últimos 12 meses &middot; promedio ~700</div>
-        <div class="cp-chart-wrap"><canvas id="c4"></canvas></div>
-      </div>
-      <div class="cp-card">
-        <div class="cp-card-title">Net New Logos — positivo sostenido</div>
-        <div class="cp-card-sub">Barras apiladas: New + Reactivated + Recovered − Churned</div>
-        <div class="cp-chart-wrap"><canvas id="c5"></canvas></div>
-        <div class="cp-legend">
-          <span><span class="sw" style="background:#185FA5;"></span>New</span>
-          <span><span class="sw" style="background:#A78BFA;"></span>Reactivated</span>
-          <span><span class="sw" style="background:#22C55E;"></span>Recovered</span>
-          <span><span class="sw" style="background:#F87171;"></span>Churned</span>
-        </div>
-      </div>
-      <div class="cp-card">
-        <div class="cp-card-title">Flywheel por país — Colombia lidera</div>
-        <div class="cp-card-sub">Entes recientes (sin Retained)</div>
-        <div class="cp-chart-wrap"><canvas id="c6"></canvas></div>
-        <div class="cp-legend">
-          <span><span class="sw" style="background:#185FA5;"></span>NEW</span>
-          <span><span class="sw" style="background:#5EEAD4;"></span>REACTIVATED</span>
-          <span><span class="sw" style="background:#E87722;"></span>RECOVERED</span>
-        </div>
-      </div>
+    <div style="height:1px;background:#e8e8e8;margin:0 40px;"></div>
+    <div style="padding:8px 40px 6px;">
+      <div style="font-size:11px;font-weight:700;color:#1a1a2e;margin-bottom:4px;">Stock Entities</div>
+      <div style="position:relative;height:160px;"><canvas id="fw_entitiesBar"></canvas></div>
     </div>
-    <div class="cp-footer">
-      <span>Fuente: Metabase · Dashboard Contadores · Abr 2026</span>
-      <span>Alegra · Confidential &nbsp; 5</span>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">5</span>
     </div>
   </div>
 
   <div class="slide-divider">↓</div>
 
   <!-- ============================================================
-       SLIDE 6 — Contadores Performance 2/3
+       SLIDE 6 — Flywheel: Logos
        ============================================================ -->
-  <div class="slide">
-    <div class="cp2-header">
-      <div>
-        <span class="title">Contadores — Performance</span>
-        <span class="sub">&nbsp;&nbsp;·&nbsp;&nbsp;MRR por evento &amp; Estacionalidad YoY</span>
-      </div>
-      <span class="cp2-pill">2 / 3</span>
+  <div class="gtm-slide">
+    <div class="slide-header">
+      <span class="title">Logos partner with accountants: New Adds vs Net Churn</span>
+      <span class="period">{{ config.month_label }}</span>
     </div>
-    <div class="cp2-insight">
-      <strong>Insight:</strong>&nbsp;MRR mensual aceleró a $41.8K en Ene-26 (+87% vs Abr-24). Patrón YoY confirma estacionalidad: Q1 fuerte en New/Deals, Net New negativo casi todo el año — requiere más retención.
+    <div style="padding: 8px 40px 6px;">
+      <div style="font-size:11px;font-weight:700;color:#1a1a2e;margin-bottom:1px;">New Adds <span style="font-weight:400;color:#888;font-size:10px;">(New+Recovered)</span></div>
+      <div style="font-size:11px;font-weight:700;color:#c0392b;margin-bottom:4px;">Net Churn <span style="font-weight:400;color:#888;font-size:10px;">(Churn-React)</span></div>
+      <div style="position:relative;height:195px;"><canvas id="fw_logosLine"></canvas></div>
     </div>
-    <div class="cp2-body">
-      <div class="cp2-card wide">
-        <div class="cp2-card-title">MRR USD por evento — New dominante, Reactivated crece 2x YoY</div>
-        <div class="cp2-card-sub">Apr 2024 – Apr 2026 · Stacked NEW + REACTIVATED + RECOVERED · sin Retained</div>
-        <div class="cp2-chart-wrap"><canvas id="mrr"></canvas></div>
-        <div class="cp2-legend">
-          <span><span class="sw" style="background:#185FA5;"></span>NEW</span>
-          <span><span class="sw" style="background:#5EEAD4;"></span>REACTIVATED</span>
-          <span><span class="sw" style="background:#E87722;"></span>RECOVERED</span>
-        </div>
-      </div>
-      <div class="cp2-card">
-        <div class="cp2-card-title">Entes activos — Año vs Año</div>
-        <div class="cp2-card-sub">2026 arrancó +15% arriba de 2025</div>
-        <div class="cp2-chart-wrap"><canvas id="entesYoY"></canvas></div>
-        <div class="cp2-legend">
-          <span><span class="sw" style="background:#22C55E;"></span>2025</span>
-          <span><span class="sw" style="background:#A78BFA;"></span>2026</span>
-          <span><span class="sw" style="background:#60A5FA;"></span>2024</span>
-        </div>
-      </div>
-      <div class="cp2-card">
-        <div class="cp2-card-title">MRR USD — Año vs Año</div>
-        <div class="cp2-card-sub">Ene-26 marcó $672K, récord histórico</div>
-        <div class="cp2-chart-wrap"><canvas id="mrrYoY"></canvas></div>
-        <div class="cp2-legend">
-          <span><span class="sw" style="background:#22C55E;"></span>2025</span>
-          <span><span class="sw" style="background:#A78BFA;"></span>2026</span>
-          <span><span class="sw" style="background:#60A5FA;"></span>2024</span>
-        </div>
-      </div>
+    <div style="height:1px;background:#e8e8e8;margin:0 40px;"></div>
+    <div style="padding:8px 40px 6px;">
+      <div style="font-size:11px;font-weight:700;color:#1a1a2e;margin-bottom:4px;">Stock Logos</div>
+      <div style="position:relative;height:160px;"><canvas id="fw_logosBar"></canvas></div>
     </div>
-    <div class="cp2-footer">
-      <span>Fuente: Metabase · Dashboard Contadores · Abr 2026</span>
-      <span>Alegra · Confidential &nbsp; 6</span>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">6</span>
     </div>
   </div>
 
-  <div class="slide-divider">↓</div>
-
-  <!-- ============================================================
-       SLIDE 7 — Contadores Performance 3/3
-       ============================================================ -->
-  <div class="slide">
-    <div class="cp3-header">
-      <div>
-        <span class="title">Contadores — Performance</span>
-        <span class="sub">&nbsp;&nbsp;·&nbsp;&nbsp;Adquisición YoY: New Logos &amp; Deals Won</span>
-      </div>
-      <span class="cp3-pill">3 / 3</span>
-    </div>
-    <div class="cp3-insight">
-      <strong>Insight:</strong>&nbsp;2026 arrancó con el mejor Q1 histórico: New Logos +44% YoY en Ene-Mar y Deals Won +75% — la tracción comercial está acelerando.
-    </div>
-    <div class="cp3-body">
-      <div class="cp3-card">
-        <div class="cp3-card-title">New Logos — Año vs Año</div>
-        <div class="cp3-kpi-row">
-          <div class="cp3-kpi"><span class="lbl">Ene-26</span><span class="val violet">741</span><span class="delta pos">+44% YoY</span></div>
-          <div class="cp3-kpi"><span class="lbl">Promedio 2025</span><span class="val">500</span></div>
-          <div class="cp3-kpi"><span class="lbl">Promedio 2024</span><span class="val" style="color:#60A5FA;">400</span></div>
-        </div>
-        <div class="cp3-chart-wrap"><canvas id="newLogos"></canvas></div>
-        <div class="cp3-legend">
-          <span><span class="sw" style="background:#22C55E;"></span>2025</span>
-          <span><span class="sw" style="background:#A78BFA;"></span>2026</span>
-          <span><span class="sw" style="background:#60A5FA;"></span>2024</span>
-        </div>
-      </div>
-      <div class="cp3-card">
-        <div class="cp3-card-title">Deals Won — Año vs Año</div>
-        <div class="cp3-kpi-row">
-          <div class="cp3-kpi"><span class="lbl">Mar-26</span><span class="val violet">680</span><span class="delta pos">+77% YoY</span></div>
-          <div class="cp3-kpi"><span class="lbl">Ene-26</span><span class="val violet">576</span></div>
-          <div class="cp3-kpi"><span class="lbl">Oct-25 récord</span><span class="val" style="color:#22C55E;">509</span></div>
-        </div>
-        <div class="cp3-chart-wrap"><canvas id="dealsWon"></canvas></div>
-        <div class="cp3-legend">
-          <span><span class="sw" style="background:#22C55E;"></span>2025</span>
-          <span><span class="sw" style="background:#A78BFA;"></span>2026</span>
-          <span><span class="sw" style="background:#60A5FA;"></span>2024</span>
-        </div>
-      </div>
-    </div>
-    <div class="cp3-footer">
-      <span>Fuente: Metabase · Dashboard Contadores · Abr 2026</span>
-      <span>Alegra · Confidential &nbsp; 7</span>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       SCRIPTS
-       ============================================================ -->
   <script>
     /* ── Slide 2: New Logos charts ── */
     const months13 = {{ metrics.gtm.chart_months | tojson }};
@@ -1239,251 +1113,130 @@
   </script>
 
   <script>
-  (function(){
-    /* ── Slide 5: Contadores 1/3 ── */
-    Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
-    Chart.defaults.font.size = 8;
-    Chart.defaults.color = '#94a3b8';
+  (function() {
+    const months = [
+      'Jan\n2024','Feb\n2024','Mar\n2024','Apr\n2024','May\n2024',
+      'Jun\n2024','Jul\n2024','Aug\n2024','Sep\n2024','Oct\n2024','Nov\n2024',
+      'Dec\n2024','Jan\n2025','Feb\n2025','Mar\n2025','Apr\n2025','May\n2025',
+      'Jun\n2025','Jul\n2025','Aug\n2025','Sep\n2025','Oct\n2025','Nov\n2025',
+      'Dec\n2025','Jan\n2026','Feb\n2026','Mar\n2026'
+    ];
 
-    const fmtK = v => {
-      if (v === 0) return '0';
-      const abs = Math.abs(v);
-      let out;
-      if (abs >= 1000) out = (abs/1000).toFixed(abs >= 10000 ? 0 : 1).replace(/\.0$/,'') + 'K';
-      else out = abs.toString();
-      return v < 0 ? '\u2212' + out : out;
+    const linePlugin = {
+      id: 'fwLineLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((ds, di) => {
+          chart.getDatasetMeta(di).data.forEach((pt, i) => {
+            const val = ds.data[i];
+            if (val == null) return;
+            ctx.save();
+            ctx.font = 'bold 9px Segoe UI';
+            ctx.fillStyle = ds.borderColor;
+            ctx.textAlign = 'center';
+            ctx.fillText(val, pt.x, pt.y + (di === 0 ? -10 : 12));
+            ctx.restore();
+          });
+        });
+      }
     };
 
-    const months25 = ['Apr-24','May-24','Jun-24','Jul-24','Aug-24','Sep-24','Oct-24','Nov-24','Dec-24','Jan-25','Feb-25','Mar-25','Apr-25','May-25','Jun-25','Jul-25','Aug-25','Sep-25','Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26','Apr-26'];
+    const barPlugin = {
+      id: 'fwBarLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        chart.getDatasetMeta(0).data.forEach((bar, i) => {
+          const val = chart.data.datasets[0].data[i];
+          if (val == null) return;
+          ctx.save();
+          ctx.font = 'bold 8.5px Segoe UI';
+          ctx.fillStyle = '#555';
+          ctx.textAlign = 'center';
+          ctx.fillText(val.toLocaleString(), bar.x, bar.y - 4);
+          ctx.restore();
+        });
+      }
+    };
 
-    const logosActivos = [10112,10280,10450,10600,10784,10900,11050,11250,11480,11700,11900,12000,12145,12280,12400,12550,12700,12900,13100,13300,13487,13600,13750,13900,8000];
-    new Chart(document.getElementById('c1'), {
-      type: 'line', data: { labels: months25, datasets: [{ data: logosActivos, borderColor: '#185FA5', backgroundColor: '#185FA5', pointRadius: 1.5, borderWidth: 1.5, tension: 0.15 }]},
-      options: mini(0, 15000, 5000)
-    });
+    // Entities
+    const entNewAdds = [254,232,257,300,366,263,305,262,261,262,303,272,363,344,313,307,298,306,312,366,406,475,478,418,443,411,455];
+    const entChurn   = [177,226,195,159,189,237,209,195,263,180,186,203,279,348,262,265,220,291,216,251,248,270,331,250,345,332,272];
+    const entStock   = [6779,6785,6847,6988,7165,7191,7287,7354,7352,7434,7551,7620,7704,7702,7753,7721,7799,7814,7910,8025,8183,8388,8535,8703,8801,8880,9063];
 
-    const entes = [7298,7350,7420,7500,7600,7700,7775,7820,7900,7980,8040,8090,8141,8180,8210,8221,8280,8350,8500,8700,8900,9050,9089,9200,5700];
-    new Chart(document.getElementById('c2'), {
-      type: 'line', data: { labels: months25, datasets: [{ data: entes, borderColor: '#22C55E', backgroundColor: '#22C55E', pointRadius: 1.5, borderWidth: 1.5, tension: 0.15 }]},
-      options: mini(0, 10000, 2500)
-    });
-
-    const ratio = [1.39,1.39,1.39,1.40,1.41,1.41,1.42,1.42,1.43,1.43,1.44,1.44,1.44,1.45,1.46,1.46,1.47,1.47,1.48,1.48,1.48,1.48,1.47,1.39,1.38];
-    new Chart(document.getElementById('c3'), {
-      type: 'line', data: { labels: months25, datasets: [{ data: ratio, borderColor: '#14b8a6', backgroundColor: '#14b8a6', pointRadius: 1.5, borderWidth: 1.5, tension: 0.1 }]},
-      options: mini(1.2, 1.6, 0.1, true)
-    });
-
-    const churnedLabels = ['May-24','Jun-24','Jul-24','Aug-24','Sep-24','Oct-24','Nov-24','Dec-24','Jan-25','Feb-25','Mar-25','Apr-25','May-25','Jun-25','Jul-25','Aug-25','Sep-25','Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26','Apr-26'];
-    const churned = [516,540,580,600,669,790,610,571,540,560,580,600,699,650,620,700,602,680,700,712,900,915,800,163];
-    new Chart(document.getElementById('c4'), {
-      type: 'bar', data: { labels: churnedLabels, datasets: [{ data: churned, backgroundColor: '#F87171', borderRadius: 1, maxBarThickness: 10 }]},
-      options: miniBars(0, 1000, 500)
-    });
-
-    const newAdds    = [500,520,540,560,600,620,580,550,560,580,600,620,650,670,680,700,720,740,760,780,800,820,830,340];
-    const reactivated= [80,90,100,110,130,150,140,135,130,125,130,140,150,160,170,180,190,200,210,220,230,240,250,120];
-    const recoveredS = [40,45,50,55,60,65,60,55,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,60];
-    const churnedNeg = churned.map(v => -v);
-    const netNewLine = newAdds.map((v,i) => v + reactivated[i] + recoveredS[i] - churned[i]);
-    new Chart(document.getElementById('c5'), {
-      type: 'bar',
-      data: { labels: churnedLabels, datasets: [
-        { label:'New',        data: newAdds,     backgroundColor:'#185FA5', stack:'pos', maxBarThickness:10, borderRadius:1 },
-        { label:'Reactivated',data: reactivated, backgroundColor:'#A78BFA', stack:'pos', maxBarThickness:10, borderRadius:1 },
-        { label:'Recovered',  data: recoveredS,  backgroundColor:'#22C55E', stack:'pos', maxBarThickness:10, borderRadius:1 },
-        { label:'Churned',    data: churnedNeg,  backgroundColor:'#F87171', stack:'neg', maxBarThickness:10, borderRadius:1 },
-        { type:'line', label:'Net New', data: netNewLine, borderColor:'#0f172b', pointRadius:1, borderWidth:1.2, tension:0.2 }
-      ]},
-      options: miniStacked(-1000, 1500, 500)
-    });
-
-    new Chart(document.getElementById('c6'), {
-      type: 'bar',
-      data: { labels: ['Colombia','Rep. Dominicana','México','Otros','Costa Rica'], datasets: [
-        { label:'NEW',         data:[280,40,32,20,9],  backgroundColor:'#185FA5', stack:'s', maxBarThickness:14, borderRadius:1 },
-        { label:'REACTIVATED', data:[110,20,18,14,5],  backgroundColor:'#5EEAD4', stack:'s', maxBarThickness:14, borderRadius:1 },
-        { label:'RECOVERED',   data:[ 36,10,12, 5,3],  backgroundColor:'#E87722', stack:'s', maxBarThickness:14, borderRadius:1 }
-      ]},
-      options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, animation:false,
-        layout:{padding:{top:4,right:30,left:0,bottom:0}},
-        plugins:{legend:{display:false},tooltip:{enabled:false}},
-        scales:{
-          x:{stacked:true,beginAtZero:true,max:500,grid:{color:'rgba(15,23,43,.05)'},border:{display:false},ticks:{color:'#94a3b8',font:{family:'DM Mono',size:8},stepSize:100}},
-          y:{stacked:true,grid:{display:false},border:{display:false},afterFit:(s)=>{s.width=92;},ticks:{color:'#334155',font:{family:'Inter',size:8.5,weight:'600'}}}
-        }
+    new Chart(document.getElementById('fw_entitiesLine'), {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          { label: 'New Adds', data: entNewAdds, borderColor: '#1a1a2e', backgroundColor: '#1a1a2e', borderWidth: 2, pointRadius: 4, tension: 0.1 },
+          { label: 'Net Churn', data: entChurn, borderColor: '#c0392b', backgroundColor: '#c0392b', borderWidth: 2, pointRadius: 4, tension: 0.1 }
+        ]
       },
-      plugins: [{ id:'flyTotals', afterDatasetsDraw(chart){
-        const{ctx}=chart; ctx.save(); ctx.font="700 9px 'DM Mono',monospace"; ctx.fillStyle='#0f172b'; ctx.textAlign='left'; ctx.textBaseline='middle';
-        const totals=[426,70,62,39,17]; const meta=chart.getDatasetMeta(2);
-        meta.data.forEach((bar,i)=>{ if(!bar)return; ctx.fillText(totals[i].toLocaleString('en-US'),bar.x+4,bar.y); }); ctx.restore();
-      }}]
-    });
-
-    function mini(min, max, stepSize, decimal) {
-      return { responsive:true, maintainAspectRatio:false, animation:false,
-        layout:{padding:{top:6,right:6,left:0,bottom:0}},
-        plugins:{legend:{display:false},tooltip:{enabled:false}},
-        scales:{
-          x:{grid:{display:false},border:{display:false},ticks:{color:'#94a3b8',font:{family:'Inter',size:7},maxRotation:0,autoSkip:true,maxTicksLimit:3}},
-          y:{min,max,grid:{color:'rgba(15,23,43,.05)'},border:{display:false},afterFit:(s)=>{s.width=28;},
-            ticks:{color:'#94a3b8',font:{family:'DM Mono',size:7.5},stepSize,padding:2,callback:v=>decimal?v.toFixed(1):fmtK(v)}}
-        }
-      };
-    }
-    function miniBars(min, max, stepSize) {
-      return { responsive:true, maintainAspectRatio:false, animation:false,
-        layout:{padding:{top:4,right:4,left:0,bottom:0}},
-        plugins:{legend:{display:false},tooltip:{enabled:false}},
-        scales:{
-          x:{grid:{display:false},border:{display:false},ticks:{color:'#94a3b8',font:{family:'Inter',size:7},maxRotation:0,autoSkip:true,maxTicksLimit:3}},
-          y:{min,max,grid:{color:'rgba(15,23,43,.05)'},border:{display:false},afterFit:(s)=>{s.width=28;},
-            ticks:{color:'#94a3b8',font:{family:'DM Mono',size:7.5},stepSize,padding:2,callback:v=>fmtK(v)}}
-        }
-      };
-    }
-    function miniStacked(min, max, stepSize) {
-      return { responsive:true, maintainAspectRatio:false, animation:false,
-        layout:{padding:{top:4,right:4,left:0,bottom:0}},
-        plugins:{legend:{display:false},tooltip:{enabled:false}},
-        scales:{
-          x:{stacked:true,grid:{display:false},border:{display:false},ticks:{color:'#94a3b8',font:{family:'Inter',size:7},maxRotation:0,autoSkip:true,maxTicksLimit:3}},
-          y:{stacked:true,min,max,grid:{color:'rgba(15,23,43,.05)'},border:{display:false},afterFit:(s)=>{s.width=32;},
-            ticks:{color:'#94a3b8',font:{family:'DM Mono',size:7.5},stepSize,padding:2,callback:v=>fmtK(v)}}
-        }
-      };
-    }
-  })();
-  </script>
-
-  <script>
-  (function(){
-    /* ── Slide 6: Contadores 2/3 ── */
-    const mrrLabels = ['Abr-24','May-24','Jun-24','Jul-24','Ago-24','Sep-24','Oct-24','Nov-24','Dic-24','Ene-25','Feb-25','Mar-25','Abr-25','May-25','Jun-25','Jul-25','Ago-25','Sep-25','Oct-25','Nov-25','Dic-25','Ene-26','Feb-26','Mar-26','Abr-26'];
-    const mrrNew   = [12000,11500,10500,13000,13500,13000,14000,14500,13500,11500,13500,13500,15000,16500,15500,15000,17500,16000,18500,22500,20500,26500,26000,22000,11000];
-    const mrrReact = [ 4500, 4000, 3500, 5500, 5500, 5000, 5500, 6000, 5500, 3500, 4500, 5500, 6500, 6000, 6500, 6000, 7500, 7000, 8500,10000, 8500,10000,11500,10000, 6000];
-    const mrrRecov = [ 2000, 1800, 1500, 3200, 2700, 2500, 2800, 3000, 2000, 2500, 4500, 3500, 3500, 4000, 3000, 3000, 3500, 3500, 4000, 4500, 4000, 5500, 4500, 3500, 2500];
-    const mrrTotals= [null,null,null,18641,null,null,null,21726,null,null,22275,null,null,17526,null,null,null,22443,null,null,29907,null,33131,41829,19636];
-
-    new Chart(document.getElementById('mrr'), {
-      type: 'bar',
-      data: { labels: mrrLabels, datasets: [
-        { label:'NEW',         data:mrrNew,   backgroundColor:'#185FA5', stack:'s', maxBarThickness:16, borderRadius:1 },
-        { label:'REACTIVATED', data:mrrReact, backgroundColor:'#5EEAD4', stack:'s', maxBarThickness:16, borderRadius:1 },
-        { label:'RECOVERED',   data:mrrRecov, backgroundColor:'#E87722', stack:'s', maxBarThickness:16, borderRadius:1 }
-      ]},
+      plugins: [linePlugin],
       options: {
-        responsive:true, maintainAspectRatio:false, animation:false,
-        layout:{padding:{top:18,right:8,left:0,bottom:0}},
-        plugins:{legend:{display:false},tooltip:{enabled:false}},
-        scales:{
-          x:{stacked:true,grid:{display:false},border:{display:false},ticks:{color:'#64748b',font:{family:'DM Sans',size:8},maxRotation:0,autoSkip:false,callback(v,i){const keep=[0,3,6,9,12,15,18,21,24];return keep.includes(i)?this.getLabelForValue(v):'';}}},
-          y:{stacked:true,beginAtZero:true,max:50000,grid:{color:'rgba(15,23,43,.05)'},border:{display:false},afterFit:(s)=>{s.width=36;},ticks:{color:'#94a3b8',font:{family:'DM Mono',size:8},stepSize:10000,padding:2,callback:v=>v===0?'0':(v/1000)+'K'}}
+        responsive: true, maintainAspectRatio: false, animation: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#555', maxRotation: 0, callback: (v, i) => months[i].split('\n') } },
+          y: { min: 0, max: 600, grid: { color: '#f0f0f0' }, ticks: { font: { size: 9 }, color: '#555', stepSize: 150 } }
         }
+      }
+    });
+
+    new Chart(document.getElementById('fw_entitiesBar'), {
+      type: 'bar',
+      data: { labels: months, datasets: [{ data: entStock, backgroundColor: '#778899', borderRadius: 2, barPercentage: 0.85 }] },
+      plugins: [barPlugin],
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#555', maxRotation: 0, callback: (v, i) => months[i].split('\n') } },
+          y: { min: 0, max: 10000, grid: { color: '#f0f0f0' }, ticks: { font: { size: 9 }, color: '#555' } }
+        }
+      }
+    });
+
+    // Logos
+    const lgNewAdds = [431,396,443,469,594,464,552,474,473,462,517,471,618,612,565,564,579,575,611,657,706,769,768,781,879,733,806];
+    const lgChurn   = [321,329,323,230,305,430,333,341,477,253,333,346,431,620,391,551,344,510,436,440,432,461,560,444,653,637,475];
+    const lgStock   = [9696,9763,9883,10122,10411,10445,10664,10797,10796,11005,11189,11314,11501,11493,11667,11681,11916,11981,12156,12373,12647,12955,13163,13500,13726,13822,14153];
+
+    new Chart(document.getElementById('fw_logosLine'), {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [
+          { label: 'New Adds', data: lgNewAdds, borderColor: '#1a1a2e', backgroundColor: '#1a1a2e', borderWidth: 2, pointRadius: 4, tension: 0.1 },
+          { label: 'Net Churn', data: lgChurn, borderColor: '#c0392b', backgroundColor: '#c0392b', borderWidth: 2, pointRadius: 4, tension: 0.1 }
+        ]
       },
-      plugins:[{ id:'mrrTotals', afterDatasetsDraw(chart){
-        const{ctx}=chart; ctx.save(); ctx.font="700 9px 'DM Mono',monospace"; ctx.fillStyle='#0f172b'; ctx.textAlign='center';
-        const topMeta=chart.getDatasetMeta(2);
-        topMeta.data.forEach((bar,i)=>{ const v=mrrTotals[i]; if(v==null)return; ctx.fillText(v.toLocaleString('en-US'),bar.x,bar.y-5); }); ctx.restore();
-      }}]
-    });
-
-    const monthsYoY=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-    const entes2024=[null,null,null,7298,7350,7420,7500,7600,7700,7775,7838,null];
-    const entes2025=[8077,8127,8141,8180,8221,8280,8350,8509,8700,8959,9050,null];
-    const entes2026=[9341,8136,null,null,null,null,null,null,null,null,null,null];
-    new Chart(document.getElementById('entesYoY'), {
-      type:'line', data:{labels:monthsYoY, datasets:[
-        {label:'2024',data:entes2024,borderColor:'#60A5FA',backgroundColor:'#60A5FA',pointRadius:2,borderWidth:1.4,tension:0.15,spanGaps:true},
-        {label:'2025',data:entes2025,borderColor:'#22C55E',backgroundColor:'#22C55E',pointRadius:2,borderWidth:1.6,tension:0.15,spanGaps:true},
-        {label:'2026',data:entes2026,borderColor:'#A78BFA',backgroundColor:'#A78BFA',pointRadius:2.5,borderWidth:2,tension:0.15,spanGaps:true}
-      ]}, options:yoyOpts(0,10000,2000)
-    });
-
-    const mrr2024=[null,null,null,427177,null,null,null,null,null,null,408319,null];
-    const mrr2025=[null,null,null,494488,510311,541529,567826,null,null,616640,null,null];
-    const mrr2026=[672258,null,null,null,null,null,null,null,null,null,null,null];
-    new Chart(document.getElementById('mrrYoY'), {
-      type:'line', data:{labels:monthsYoY, datasets:[
-        {label:'2024',data:mrr2024,borderColor:'#60A5FA',backgroundColor:'#60A5FA',pointRadius:2,borderWidth:1.4,tension:0.15,spanGaps:true},
-        {label:'2025',data:mrr2025,borderColor:'#22C55E',backgroundColor:'#22C55E',pointRadius:2,borderWidth:1.6,tension:0.15,spanGaps:true},
-        {label:'2026',data:mrr2026,borderColor:'#A78BFA',backgroundColor:'#A78BFA',pointRadius:2.5,borderWidth:2,tension:0.15,spanGaps:true}
-      ]}, options:yoyOpts(0,700000,100000)
-    });
-
-    function yoyOpts(min,max,stepSize){
-      return { responsive:true, maintainAspectRatio:false, animation:false,
-        layout:{padding:{top:8,right:8,left:0,bottom:0}},
-        plugins:{legend:{display:false},tooltip:{enabled:false}},
-        scales:{
-          x:{grid:{display:false},border:{display:false},ticks:{color:'#64748b',font:{family:'Inter',size:8.5,weight:'500'}}},
-          y:{min,max,grid:{color:'rgba(15,23,43,.05)'},border:{display:false},afterFit:(s)=>{s.width=38;},
-            ticks:{color:'#94a3b8',font:{family:'DM Mono',size:8},stepSize,padding:2,callback:v=>{if(v===0)return'0';if(v>=1000)return(v/1000).toFixed(0)+'K';return v;}}}
+      plugins: [linePlugin],
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#555', maxRotation: 0, callback: (v, i) => months[i].split('\n') } },
+          y: { min: 0, max: 1000, grid: { color: '#f0f0f0' }, ticks: { font: { size: 9 }, color: '#555', stepSize: 250 } }
         }
-      };
-    }
+      }
+    });
+
+    new Chart(document.getElementById('fw_logosBar'), {
+      type: 'bar',
+      data: { labels: months, datasets: [{ data: lgStock, backgroundColor: '#778899', borderRadius: 2, barPercentage: 0.85 }] },
+      plugins: [barPlugin],
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#555', maxRotation: 0, callback: (v, i) => months[i].split('\n') } },
+          y: { min: 0, max: 16000, grid: { color: '#f0f0f0' }, ticks: { font: { size: 9 }, color: '#555' } }
+        }
+      }
+    });
   })();
   </script>
-
-  <script>
-  (function(){
-    /* ── Slide 7: Contadores 3/3 ── */
-    const months=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-    const nl2024=[null,null,null,205,437,380,460,360,356,360,387,340];
-    const nl2025=[515,436,515,440,480,440,501,520,520,615,598,580];
-    const nl2026=[741,590,635,null,null,null,null,null,null,null,null,null];
-    const nlLabel2025=[515,null,null,null,null,null,501,null,null,597,null,null];
-    const nlLabel2026=[null,590,436,null,null,null,null,null,null,null,null,null];
-    const nlLabel2024=[null,null,null,205,437,null,null,null,356,null,387,null];
-
-    new Chart(document.getElementById('newLogos'), {
-      type:'bar', data:{labels:months, datasets:[
-        {label:'2024',data:nl2024,backgroundColor:'#60A5FA',maxBarThickness:14,borderRadius:2},
-        {label:'2025',data:nl2025,backgroundColor:'#22C55E',maxBarThickness:14,borderRadius:2},
-        {label:'2026',data:nl2026,backgroundColor:'#A78BFA',maxBarThickness:14,borderRadius:2}
-      ]}, options:barsOpts(0,800,200),
-      plugins:[topLabelPlugin('nl',[nlLabel2024,nlLabel2025,nlLabel2026],['#1E3A8A','#15803D','#5B21B6'])]
-    });
-
-    const dw2024=[null,null,null,null,70,110,135,90,86,130,119,140];
-    const dw2025=[328,345,245,380,397,400,390,360,494,509,429,450];
-    const dw2026=[576,523,680,null,null,null,null,null,null,null,null,null];
-    const dwLabel2025=[328,null,245,null,397,null,390,null,494,509,429,null];
-    const dwLabel2026=[null,523,680,null,null,null,null,null,null,null,null,null];
-    const dwLabel2024=[null,null,null,null,70,null,135,null,86,null,119,null];
-
-    new Chart(document.getElementById('dealsWon'), {
-      type:'bar', data:{labels:months, datasets:[
-        {label:'2024',data:dw2024,backgroundColor:'#60A5FA',maxBarThickness:14,borderRadius:2},
-        {label:'2025',data:dw2025,backgroundColor:'#22C55E',maxBarThickness:14,borderRadius:2},
-        {label:'2026',data:dw2026,backgroundColor:'#A78BFA',maxBarThickness:14,borderRadius:2}
-      ]}, options:barsOpts(0,800,200),
-      plugins:[topLabelPlugin('dw',[dwLabel2024,dwLabel2025,dwLabel2026],['#1E3A8A','#15803D','#5B21B6'])]
-    });
-
-    function barsOpts(min,max,stepSize){
-      return { responsive:true, maintainAspectRatio:false, animation:false,
-        layout:{padding:{top:14,right:6,left:0,bottom:0}},
-        plugins:{legend:{display:false},tooltip:{enabled:false}},
-        scales:{
-          x:{grid:{display:false},border:{color:'#e2e8f0'},ticks:{color:'#64748b',font:{family:'Inter',size:9,weight:'500'}}},
-          y:{min,max,grid:{color:'rgba(15,23,43,.05)'},border:{display:false},afterFit:(s)=>{s.width=36;},ticks:{color:'#94a3b8',font:{family:'DM Mono',size:8.5},stepSize,callback:v=>v.toLocaleString('en-US')}}
-        }
-      };
-    }
-    function topLabelPlugin(id,labelArrays,colors){
-      return { id:'lbl_'+id, afterDatasetsDraw(chart){
-        const{ctx}=chart; ctx.save(); ctx.font="700 9px 'Inter',sans-serif"; ctx.textAlign='center'; ctx.textBaseline='bottom';
-        for(let d=0;d<3;d++){
-          const meta=chart.getDatasetMeta(d); const labels=labelArrays[d];
-          meta.data.forEach((bar,i)=>{ const val=labels[i]; if(val==null||!bar)return; ctx.fillStyle=colors[d]; ctx.fillText(val.toLocaleString('en-US'),bar.x,bar.y-2); });
-        }
-        ctx.restore();
-      }};
-    }
-  })();
-  </script>
-
 
 </body>
 </html>

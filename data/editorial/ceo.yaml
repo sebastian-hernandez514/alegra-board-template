@@ -3,19 +3,22 @@
 ceo_title: "CEO Highlights & Lowlights"
 
 highlights:
+  - "We've had one of the best quarters in recent times — the trend across our key metrics (except churn) is positive and has held steady month over month."
   - "Q1 campaign performance improved across the full funnel with lower investment than Q4 and Q1 2025. PQLs grew 60% and registration-to-completed-onboarding conversion rose from 50% to 72%, driving growth in New Logos and New MRR and reinforcing the efficiency of the current growth strategy."
-  - "AI adoption across the Growth team is delivering measurable productivity gains, with 67 hours saved per week per team through AI agents. This capacity has enabled content scaling, broader market coverage (including Panama), and is informing a more aggressive growth strategy."
+  - "AI adoption across the Growth team is delivering measurable productivity gains, with 67 hours saved per week per team through AI agents."
   - "AI implementation in CE now handles ~7% of total demand, reducing manual workload and increasing operational efficiency."
   - "Both Accountants and SMB delivered strong Q1 results, with Accountants crossing the $20K MRR milestone for the first time and SMB reaching $33K (+32% vs. January). Individual attainment above 100% in Accountants reached 47.62% (10/21) by March, while SMB logo conversion improved from 80% to 89% — both teams closed the quarter above target."
-  - "Alanube crossed the $80K MRR milestone, adding $10K over the prior month — driven by the continued momentum of the Full-Cycle Partner Success program. Document processing set a new record at 26 million, reinforcing the platform's scalability trajectory."
+  - "Alanube crossed the $80K MRR milestone, adding $10K over the prior month."
   - "PODs launched to strengthen the accountant experience, improving team specialization and service quality across CE."
   - "Launched in Mexico the new Just Invoicing plan, successfully transforming the invitation model. Weekly invites tripled from 15 to 45, and ongoing process optimizations are underway to further accelerate this volume."
-  - "Alegra MCP is nearly ready to go live for clients, giving them access to more than 48 tools across invoicing, contacts, banks, and taxes. This integration enables AI agents to interact directly with the platform, unlocking a significant new layer of automation for both accountants and SMBs."
+  - "Alegra and Alanube MCP is nearly ready to go live for clients."
 
 lowlights:
   - "Churn remained elevated in Q1, in line with seasonal patterns. Root cause analysis is underway to identify key drivers; targeted retention actions are expected to follow."
-  - "MQL volume in the Dominican Republic fell short of projections despite the mandatory e-invoicing regulation. The period closed at 36% of projected MQLs — though conversion quality was strong enough to meet the New MRR target and come close to the New Logos goal."
-  - "Sales attainment across Accountants and SMB segments remains below target. In Accountants, 35%+ of the team closed Q1 below 80% of individual quota; in SMB, only 21% reached or exceeded 100% — both pointing to shared gaps in commercial enablement and performance consistency."
-  - "Average usage per account is improving but still well below the 100K monthly document target. The metric climbed from 13K in January to 42K in March, driven by the migration toward larger enterprise accounts — closing the remaining gap remains a key condition for the high-volume acquisition strategy."
+  - "We're still not seeing the expected growth in Mexico, and even though we keep testing, we still don't have a clear path to growing with accountants."
 
-financial_update: ""
+financial_update: "Q1 was a highly successful quarter for us, marked by accelerating top line growth and a major inflection point in profitability. We closed the quarter with $6.9M in revenue (up 32% YoY) and crushed our EBITDA targets, delivering a positive $710k (10.3% margin) compared to a planned loss. This momentum is driven by robust subscription inflows and remarkable operational leverage; we successfully grew revenues while decreasing our OpEx by 1% YoY, drastically improving our S&M efficiency. Consequently, our cash position is exceptionally healthy, ending at $4.1M nearly double our forecast. Cash burn dropped to a historical low of $126k for the quarter, securing our runway. We are entering Q2 with a pristine balance sheet and a clear, proven path to sustained, profitable growth."
+
+gtm_new_logos_title: "New Logos — 1Q26"
+gtm_acq_title: "Customer Acquisition — 1Q26"
+gtm_funnel_title: "Acquisition Funnel: conversion signups to Logo"

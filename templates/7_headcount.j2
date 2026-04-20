@@ -328,8 +328,8 @@
     ══════════════════════════════════════════════ */
     .pt2-inner {
       flex: 1; overflow: hidden;
-      padding: 12px 20px 10px;
-      display: flex; flex-direction: column; gap: 10px;
+      padding: 10px 20px 8px;
+      display: flex; flex-direction: column; gap: 7px;
       font-family: 'Inter', system-ui, sans-serif;
     }
     .pt2-charts {
@@ -361,17 +361,17 @@
     .pt2-sw-hires { background: #30ABA9; }
     .pt2-sw-attr  { background: #F43F5E; }
     .pt2-sw-bar   { background: #1E293B; height: 8px; border-radius: 2px; }
-    .pt2-panel-top    { position: relative; width: 100%; height: 95px;  margin-bottom: 2px; }
-    .pt2-panel-bottom { position: relative; width: 100%; height: 175px; }
+    .pt2-panel-top    { position: relative; width: 100%; height: 82px;  margin-bottom: 2px; }
+    .pt2-panel-bottom { position: relative; width: 100%; height: 152px; }
     .pt2-comments {
       background: #E9FAFA; border: 1px solid #CFF2F1;
-      border-radius: 10px; padding: 9px 14px; flex: 1 1 auto;
+      border-radius: 8px; padding: 4px 10px; flex: 0 0 auto;
     }
     .pt2-comments-title {
-      font-size: 9px; font-weight: 700; color: #0F172A;
-      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+      font-size: 7.5px; font-weight: 700; color: #0F172A;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;
     }
-    .pt2-ctext { font-size: 10px; color: #475569; line-height: 1.4; font-style: italic; }
+    .pt2-ctext { font-size: 7.8px; color: #475569; line-height: 1.25; font-style: italic; margin: 0; }
 
     /* ══════════════════════════════════════════════
        SLIDE 2 — Headcount Summary Table (hcs prefix)
@@ -803,7 +803,15 @@
 
       <section class="pt2-comments">
         <div class="pt2-comments-title">Comments</div>
-        <p class="pt2-ctext">Add highlights and lowlights here.</p>
+        <ul class="pt2-ctext" style="margin: 0; padding-left: 12px; display: flex; flex-direction: column; gap: 2px;">
+          <li>Performance Review: 100% of the team has received their performance feedback.</li>
+          <li>Recruitment Screening Automation: Automated the screening process, reducing phase lead times by 30%.</li>
+          <li>Leadership Alignment (Alanube): Internal promotion/move of Tatiana Guzman to a Leadership role to ensure performance standards and cultural alignment.</li>
+          <li>AI Training &amp; Upskilling: 4 general training sessions and several targeted workshops conducted to further strengthen AI adoption across the entire team.</li>
+          <li>Internal Documentation Migration: Successfully migrated all internal documentation from Notion to WikiAlegra.</li>
+          <li>New Hire: Jhonatan Grajales, Adoption &amp; Retention Manager (Strategic Role).</li>
+          <li>Turnover Performance: Reduced from 5.9% (Jan) to 3.9% (Mar), enhancing team stability during Q1.</li>
+        </ul>
       </section>
 
     </div>
@@ -875,7 +883,7 @@
         layout: { padding: { top: 6, right: 12, left: 4, bottom: 2 } },
         plugins: { legend: { display: false }, tooltip: { enabled: false } },
         scales: {
-          x: { grid: { display: false }, ticks: { color: '#64748B', font: { size: 9 } }, border: { color: '#E2E8F0' } },
+          x: { grid: { display: false }, ticks: { color: '#64748B', font: { size: 7.5 } }, border: { color: '#E2E8F0' } },
           y: {
             beginAtZero: true, max,
             ticks: { color: '#94A3B8', stepSize: pctAxis ? 1 : Math.ceil(max / 6), callback: v => pctAxis ? v + '%' : v },
@@ -900,7 +908,7 @@
           id: 'pt2LblLT',
           afterDatasetsDraw(chart) {
             const {ctx} = chart;
-            ctx.save(); ctx.font = '700 9.5px Inter';
+            ctx.save(); ctx.font = '600 7.5px Inter';
             const hires = chart.getDatasetMeta(0).data;
             const attr  = chart.getDatasetMeta(1).data;
             [10,11,12].forEach(i => {
@@ -930,7 +938,7 @@
           id: 'pt2LblLB',
           afterDatasetsDraw(chart) {
             const {ctx} = chart;
-            ctx.save(); ctx.font = '700 9px Inter';
+            ctx.save(); ctx.font = '600 7px Inter';
             const bars = chart.getDatasetMeta(0).data;
             [10,11,12].forEach(i => {
               const b = bars[i]; if (!b) return;
@@ -954,7 +962,7 @@
           id: 'pt2LblRT',
           afterDatasetsDraw(chart) {
             const {ctx} = chart;
-            ctx.save(); ctx.font = '700 9.5px Inter';
+            ctx.save(); ctx.font = '600 7.5px Inter';
             const pts = chart.getDatasetMeta(0).data;
             [10,11,12].forEach(i => {
               const p = pts[i]; if (!p) return;
@@ -979,7 +987,7 @@
           id: 'pt2LblRB',
           afterDatasetsDraw(chart) {
             const {ctx} = chart;
-            ctx.save(); ctx.font = '700 9px Inter';
+            ctx.save(); ctx.font = '600 7px Inter';
             const bars = chart.getDatasetMeta(0).data;
             [10,11,12].forEach(i => {
               const b = bars[i]; if (!b) return;
