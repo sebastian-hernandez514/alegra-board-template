@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Budget</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Calibri', Arial, Helvetica, sans-serif;
+    background: #fff;
+    padding: 30px 40px 30px;
+    min-width: 820px;
+  }
+
+  .top-bar {
+    height: 5px;
+    background: linear-gradient(to right, #1b9aaa, #4fc3f7);
+    margin-bottom: 22px;
+  }
+
+  .slide-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a3350;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+  }
+  .title-underline {
+    height: 1.5px;
+    background: #ccd6e0;
+    margin-bottom: 18px;
+  }
+
+  .table-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  table {
+    border-collapse: collapse;
+    font-size: 11.5px;
+    width: 700px;
+  }
+
+  th, td {
+    padding: 3px 8px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  td:first-child, th:first-child {
+    text-align: left;
+    min-width: 175px;
+  }
+
+  /* Column group headers */
+  .col-group-header th {
+    font-weight: 700;
+    font-size: 11px;
+    padding: 4px 8px;
+    border: none;
+  }
+  .col-group-header .g2026a   { background: #3a8ec8; color: #fff; }
+  .col-group-header .g2026b   { background: #5aa0d0; color: #fff; }
+  .col-group-header .gbudget  { background: #c8e0f4; color: #1a3350; border-right: 1px solid #a0bedc; }
+  .col-group-header .gytd    { background: #1a3350; color: #fff; }
+  .col-group-header .gyoy    { background: #1a3350; color: #fff; }
+  .col-group-header .empty   { background: #fff; }
+
+  /* Sub-headers */
+  .sub-header th {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-bottom: 1.5px solid #aabbd0;
+  }
+  .sub-header .lbl    { color: #3a8ec8; font-style: italic; font-weight: 400; text-align: left; }
+  .sub-header .s2026a { background: #3a8ec8; color: #fff; }
+  .sub-header .s2026b { background: #3a8ec8; color: #fff; border-right: 1px solid #c0d8ec; }
+  .sub-header .sbudget{ background: #c8e0f4; color: #1a3350; }
+  .sub-header .sytd   { background: #1a3350; color: #fff; }
+  .sub-header .syoy   { background: #1a3350; color: #fff; }
+  .sub-header .sempty { background: #fff; }
+
+  /* Data rows */
+  .data-row td { border-bottom: 0.5px solid #e8ecf0; }
+  .bold-row td { font-weight: 700; }
+  .italic-row td { font-style: italic; color: #555; font-size: 11px; }
+  .section-header td {
+    font-weight: 700;
+    font-size: 11.5px;
+    color: #1a3350;
+    padding-top: 8px;
+    padding-bottom: 2px;
+    border-bottom: none;
+  }
+  .gap-row td { padding: 2px 0; border: none; }
+
+  .green { color: #2e7d32; font-weight: 700; }
+  .red   { color: #c62828; font-weight: 700; }
+  .neg   { color: #c62828; }
+
+  .shade-act   { background: #ebf3fa; }
+  .shade-bud   { background: #f0f7ff; }
+  .shade-ytd   { background: #edf1f6; }
+
+  td.border-right, th.border-right { border-right: 1.5px solid #aabbd0; }
+  .outer-box td        { border-top: 1.5px solid #aabbd0; }
+  .outer-box-bottom td { border-bottom: 1.5px solid #aabbd0; }
+  .col-sep { width: 10px; background: #fff; border: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+<div class="slide-title">Budget</div>
+<div class="title-underline"></div>
+
+<div class="table-wrap">
+<table>
+  <colgroup>
+    <col style="width:175px">
+    <col style="width:68px"> <!-- Jan/2026 Act -->
+    <col style="width:68px"> <!-- Feb/2026 Act -->
+    <col style="width:68px"> <!-- Jan/2026 Bud -->
+    <col style="width:68px"> <!-- Feb/2026 Bud -->
+    <col style="width:10px"> <!-- sep -->
+    <col style="width:64px"> <!-- YTD 2026A -->
+    <col style="width:64px"> <!-- YTD 2026B -->
+    <col style="width:52px"> <!-- YoY -->
+  </colgroup>
+  <thead>
+    <tr class="col-group-header">
+      <th class="empty"></th>
+      <th colspan="2" class="g2026a">2026</th>
+      <th colspan="2" class="gbudget">2026 Budget</th>
+      <th class="empty" style="background:#fff;"></th>
+      <th colspan="2" class="gytd">YTD</th>
+      <th class="gyoy">YoY</th>
+    </tr>
+    <tr class="sub-header">
+      <th class="lbl">(in $Thousand)</th>
+      <th class="s2026a">Jan/2026</th>
+      <th class="s2026b border-right">Feb/2026</th>
+      <th class="sbudget">Jan/2026</th>
+      <th class="sbudget border-right">Feb/2026</th>
+      <th class="sempty" style="background:#fff;"></th>
+      <th class="sytd">2026A</th>
+      <th class="sytd">2026B</th>
+      <th class="syoy"></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- Total ARR -->
+    <tr class="data-row bold-row outer-box">
+      <td>Total ARR</td>
+      <td class="shade-act">$27.5</td>
+      <td class="shade-act border-right">$27.7</td>
+      <td class="shade-bud">$25.8</td>
+      <td class="shade-bud border-right">$26.3</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$27.7</td>
+      <td class="shade-ytd">$26.3</td>
+      <td class="green">5%</td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Y-o-Y Growth</td>
+      <td class="shade-act">40%</td>
+      <td class="shade-act border-right">30%</td>
+      <td class="shade-bud">31%</td>
+      <td class="shade-bud border-right">70%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">30%</td>
+      <td class="shade-ytd">70%</td>
+      <td></td>
+    </tr>
+    <tr class="outer-box-bottom"><td colspan="9" style="padding:0;border-bottom:1.5px solid #aabbd0;"></td></tr>
+
+    <tr class="gap-row"><td colspan="9"></td></tr>
+
+    <!-- P&L -->
+    <tr class="section-header"><td colspan="9">P&L</td></tr>
+
+    <tr class="data-row bold-row">
+      <td>Revenue</td>
+      <td class="shade-act">$2,287</td>
+      <td class="shade-act border-right">$2,266</td>
+      <td class="shade-bud">$2,119</td>
+      <td class="shade-bud border-right">$2,157</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$4,553</td>
+      <td class="shade-ytd">$4,276</td>
+      <td class="green">6%</td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Y-o-Y Growth</td>
+      <td class="shade-act">42%</td>
+      <td class="shade-act border-right">30%</td>
+      <td class="shade-bud">32%</td>
+      <td class="shade-bud border-right">23%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">36%</td>
+      <td class="shade-ytd">27%</td>
+      <td></td>
+    </tr>
+
+    <tr class="data-row bold-row">
+      <td>Gross Profit</td>
+      <td class="shade-act">$1,884</td>
+      <td class="shade-act border-right">$1,862</td>
+      <td class="shade-bud">$1,715</td>
+      <td class="shade-bud border-right">$1,747</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$3,746</td>
+      <td class="shade-ytd">$3,462</td>
+      <td class="green">8%</td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Margin - %</td>
+      <td class="shade-act">82%</td>
+      <td class="shade-act border-right">82%</td>
+      <td class="shade-bud">81%</td>
+      <td class="shade-bud border-right">81%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">82%</td>
+      <td class="shade-ytd">81%</td>
+      <td></td>
+    </tr>
+
+    <tr class="data-row">
+      <td>S&amp;M</td>
+      <td class="shade-act">628</td>
+      <td class="shade-act border-right">729</td>
+      <td class="shade-bud">812</td>
+      <td class="shade-bud border-right">795</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">1,357</td>
+      <td class="shade-ytd">1,607</td>
+      <td class="red">-16%</td>
+    </tr>
+    <tr class="data-row">
+      <td>R&amp;D</td>
+      <td class="shade-act">646</td>
+      <td class="shade-act border-right">632</td>
+      <td class="shade-bud">621</td>
+      <td class="shade-bud border-right">628</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">1,279</td>
+      <td class="shade-ytd">1,249</td>
+      <td class="green">2%</td>
+    </tr>
+    <tr class="data-row">
+      <td>G&amp;A</td>
+      <td class="shade-act">301</td>
+      <td class="shade-act border-right">343</td>
+      <td class="shade-bud">354</td>
+      <td class="shade-bud border-right">347</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">644</td>
+      <td class="shade-ytd">701</td>
+      <td class="red">-8%</td>
+    </tr>
+
+    <tr class="data-row bold-row">
+      <td>Total Operating Expenses</td>
+      <td class="shade-act">$1,575</td>
+      <td class="shade-act border-right">$1,705</td>
+      <td class="shade-bud">$1,786</td>
+      <td class="shade-bud border-right">$1,770</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$3,280</td>
+      <td class="shade-ytd">$3,557</td>
+      <td class="red">-8%</td>
+    </tr>
+
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;S&amp;M % of Rev</td>
+      <td class="shade-act">27%</td>
+      <td class="shade-act border-right">32%</td>
+      <td class="shade-bud">38%</td>
+      <td class="shade-bud border-right">37%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">30%</td>
+      <td class="shade-ytd">38%</td>
+      <td></td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;R&amp;D % of Rev</td>
+      <td class="shade-act">28%</td>
+      <td class="shade-act border-right">28%</td>
+      <td class="shade-bud">29%</td>
+      <td class="shade-bud border-right">29%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">28%</td>
+      <td class="shade-ytd">29%</td>
+      <td></td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;G&amp;A % of Rev</td>
+      <td class="shade-act">13%</td>
+      <td class="shade-act border-right">15%</td>
+      <td class="shade-bud">17%</td>
+      <td class="shade-bud border-right">16%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">14%</td>
+      <td class="shade-ytd">16%</td>
+      <td></td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Op. Expenses % of Rev</td>
+      <td class="shade-act">69%</td>
+      <td class="shade-act border-right">75%</td>
+      <td class="shade-bud">84%</td>
+      <td class="shade-bud border-right">82%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">72%</td>
+      <td class="shade-ytd">83%</td>
+      <td></td>
+    </tr>
+
+    <tr class="data-row bold-row">
+      <td>EBITDA</td>
+      <td class="shade-act">$309</td>
+      <td class="shade-act border-right">$157</td>
+      <td class="shade-bud neg">($71)</td>
+      <td class="shade-bud border-right neg">($23)</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$466</td>
+      <td class="shade-ytd neg">($94)</td>
+      <td class="green">595%</td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Margin - %</td>
+      <td class="shade-act">14%</td>
+      <td class="shade-act border-right">7%</td>
+      <td class="shade-bud neg">(3%)</td>
+      <td class="shade-bud border-right neg">(1%)</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">10%</td>
+      <td class="shade-ytd neg">(2%)</td>
+      <td></td>
+    </tr>
+
+    <tr class="data-row bold-row">
+      <td>R-40</td>
+      <td class="shade-act">53%</td>
+      <td class="shade-act border-right">37%</td>
+      <td class="shade-bud">28%</td>
+      <td class="shade-bud border-right">69%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">53%</td>
+      <td class="shade-ytd">25%</td>
+      <td class="green">28%</td>
+    </tr>
+
+    <tr class="gap-row"><td colspan="9"></td></tr>
+
+    <!-- Key BS Items -->
+    <tr class="section-header outer-box"><td colspan="9">Key BS Items</td></tr>
+    <tr class="data-row">
+      <td>Net Cash Actual</td>
+      <td class="shade-act">$3,279</td>
+      <td class="shade-act border-right">$3,734</td>
+      <td class="shade-bud">$2,430</td>
+      <td class="shade-bud border-right">$2,145</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$3,734</td>
+      <td class="shade-ytd">$2,145</td>
+      <td class="green">161%</td>
+    </tr>
+    <tr class="data-row outer-box-bottom">
+      <td>Delta MoM</td>
+      <td class="shade-act neg">($944)</td>
+      <td class="shade-act border-right">$455</td>
+      <td class="shade-bud neg">($1,793)</td>
+      <td class="shade-bud border-right neg">($286)</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd neg">(489)</td>
+      <td class="shade-ytd neg">(2,079)</td>
+      <td></td>
+    </tr>
+
+    <tr class="gap-row"><td colspan="9"></td></tr>
+
+    <!-- FX COP/USD EoP -->
+    <tr class="section-header outer-box"><td colspan="9">FX COP/USD EoP</td></tr>
+    <tr class="data-row outer-box-bottom">
+      <td>Actual</td>
+      <td class="shade-act">3,670</td>
+      <td class="shade-act border-right">3,766</td>
+      <td class="shade-bud">4,016</td>
+      <td class="shade-bud border-right">4,106</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">3,670</td>
+      <td class="shade-ytd">4,016</td>
+      <td>9%</td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+</body>
+</html>

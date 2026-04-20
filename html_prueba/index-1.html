@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Contadores — Performance · 2/3 · Alegra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #0f172b;
+    background: #e2e8f0;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh;
+  }
+  .slide {
+    width: 960px; height: 540px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 28px rgba(15,23,43,.12);
+  }
+  .cp2-header {
+    background: #0f172b;
+    height: 40px; flex: 0 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; color: #ffffff;
+  }
+  .cp2-header .title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 700;
+  }
+  .cp2-header .sub { font-size: 10.5px; color: #94a3b8; font-weight: 500; }
+  .cp2-pill {
+    background: #14b8a6; color: #0f172b;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 6px;
+  }
+  .cp2-insight {
+    flex: 0 0 30px;
+    background: #f0fdfa;
+    border-left: 3px solid #14b8a6;
+    display: flex; align-items: center;
+    padding: 0 16px;
+    font-size: 11px; color: #334155;
+    font-weight: 500;
+  }
+  .cp2-insight strong { color: #0f172b; font-weight: 700; margin-right: 4px; }
+
+  .cp2-body {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1.2fr 1fr;
+    gap: 8px; padding: 10px;
+    min-height: 0;
+  }
+  .cp2-body .wide { grid-column: 1 / span 2; }
+
+  .cp2-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 10px 6px;
+    display: flex; flex-direction: column;
+    min-height: 0;
+  }
+  .cp2-card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 700;
+    color: #0f172b; line-height: 1.2;
+  }
+  .cp2-card-sub { font-size: 9px; color: #64748b; margin-top: 2px; font-weight: 500; }
+  .cp2-chart-wrap {
+    flex: 1 1 auto;
+    position: relative; min-height: 0;
+    margin-top: 4px;
+  }
+  .cp2-legend {
+    display: flex; gap: 10px;
+    font-size: 9px; color: #64748b;
+    margin-top: 2px;
+  }
+  .cp2-legend .sw {
+    display: inline-block; width: 8px; height: 8px; border-radius: 2px;
+    margin-right: 3px; vertical-align: middle;
+  }
+  .cp2-footer {
+    flex: 0 0 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    background: #f8fafc; border-top: 1px solid #e2e8f0;
+    font-size: 9.5px; color: #64748b;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <div class="cp2-header">
+    <div>
+      <span class="title">Contadores — Performance</span>
+      <span class="sub">&nbsp;&nbsp;·&nbsp;&nbsp;MRR por evento &amp; Estacionalidad YoY</span>
+    </div>
+    <span class="cp2-pill">2 / 3</span>
+  </div>
+
+  <div class="cp2-insight">
+    <strong>Insight:</strong>&nbsp;MRR mensual aceleró a $41.8K en Ene-26 (+87% vs Abr-24). Patrón YoY confirma estacionalidad: Q1 fuerte en New/Deals, Net New negativo casi todo el año — requiere más retención.
+  </div>
+
+  <div class="cp2-body">
+    <!-- TOP: MRR por evento (wide) -->
+    <div class="cp2-card wide">
+      <div class="cp2-card-title">MRR USD por evento — New dominante, Reactivated crece 2x YoY</div>
+      <div class="cp2-card-sub">Apr 2024 – Apr 2026 · Stacked NEW + REACTIVATED + RECOVERED · sin Retained</div>
+      <div class="cp2-chart-wrap"><canvas id="mrr"></canvas></div>
+      <div class="cp2-legend">
+        <span><span class="sw" style="background:#185FA5;"></span>NEW</span>
+        <span><span class="sw" style="background:#5EEAD4;"></span>REACTIVATED</span>
+        <span><span class="sw" style="background:#E87722;"></span>RECOVERED</span>
+      </div>
+    </div>
+
+    <!-- Bottom left: Entes activos YoY -->
+    <div class="cp2-card">
+      <div class="cp2-card-title">Entes activos — Año vs Año</div>
+      <div class="cp2-card-sub">2026 arrancó +15% arriba de 2025</div>
+      <div class="cp2-chart-wrap"><canvas id="entesYoY"></canvas></div>
+      <div class="cp2-legend">
+        <span><span class="sw" style="background:#22C55E;"></span>2025</span>
+        <span><span class="sw" style="background:#A78BFA;"></span>2026</span>
+        <span><span class="sw" style="background:#60A5FA;"></span>2024</span>
+      </div>
+    </div>
+
+    <!-- Bottom right: MRR YoY -->
+    <div class="cp2-card">
+      <div class="cp2-card-title">MRR USD — Año vs Año</div>
+      <div class="cp2-card-sub">Ene-26 marcó $672K, récord histórico</div>
+      <div class="cp2-chart-wrap"><canvas id="mrrYoY"></canvas></div>
+      <div class="cp2-legend">
+        <span><span class="sw" style="background:#22C55E;"></span>2025</span>
+        <span><span class="sw" style="background:#A78BFA;"></span>2026</span>
+        <span><span class="sw" style="background:#60A5FA;"></span>2024</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cp2-footer">
+    <span>Fuente: Metabase · Dashboard Contadores · Abr 2026</span>
+    <span>Alegra · Confidential &nbsp; 2 / 3</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+  Chart.defaults.font.size = 8.5;
+  Chart.defaults.color = '#94a3b8';
+
+  // ============ TOP: MRR stacked bars (Abr24 - Abr26) ============
+  const mrrLabels = ['Abr-24','May-24','Jun-24','Jul-24','Ago-24','Sep-24','Oct-24','Nov-24','Dic-24','Ene-25','Feb-25','Mar-25','Abr-25','May-25','Jun-25','Jul-25','Ago-25','Sep-25','Oct-25','Nov-25','Dic-25','Ene-26','Feb-26','Mar-26','Abr-26'];
+  const mrrNew      = [12000,11500,10500,13000,13500,13000,14000,14500,13500,11500,13500,13500,15000,16500,15500,15000,17500,16000,18500,22500,20500,26500,26000,22000,11000];
+  const mrrReact    = [ 4500, 4000, 3500, 5500, 5500, 5000, 5500, 6000, 5500, 3500, 4500, 5500, 6500, 6000, 6500, 6000, 7500, 7000, 8500,10000, 8500,10000,11500,10000, 6000];
+  const mrrRecov    = [ 2000, 1800, 1500, 3200, 2700, 2500, 2800, 3000, 2000, 2500, 4500, 3500, 3500, 4000, 3000, 3000, 3500, 3500, 4000, 4500, 4000, 5500, 4500, 3500, 2500];
+  // highlighted totals (top of bar labels)
+  const mrrTotals  = [null,null,null,18641,null,null,null,21726,null,null,22275,null,null,17526,null,null,null,22443,null,null,29907,null,33131,41829,19636];
+
+  new Chart(document.getElementById('mrr'), {
+    type: 'bar',
+    data: {
+      labels: mrrLabels,
+      datasets: [
+        { label:'NEW',         data: mrrNew,   backgroundColor:'#185FA5', stack:'s', maxBarThickness: 16, borderRadius: 1 },
+        { label:'REACTIVATED', data: mrrReact, backgroundColor:'#5EEAD4', stack:'s', maxBarThickness: 16, borderRadius: 1 },
+        { label:'RECOVERED',   data: mrrRecov, backgroundColor:'#E87722', stack:'s', maxBarThickness: 16, borderRadius: 1 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      layout: { padding: { top: 18, right: 8, left: 0, bottom: 0 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: {
+          stacked: true,
+          grid: { display: false }, border: { display: false },
+          ticks: {
+            color: '#64748b', font: { family: 'DM Sans', size: 8 },
+            maxRotation: 0, autoSkip: false,
+            callback(v, i) {
+              // Only show some labels to avoid overlap
+              const keep = [0, 3, 6, 9, 12, 15, 18, 21, 24];
+              return keep.includes(i) ? this.getLabelForValue(v) : '';
+            }
+          }
+        },
+        y: {
+          stacked: true, beginAtZero: true, max: 50000,
+          grid: { color: 'rgba(15,23,43,.05)' }, border: { display: false },
+          afterFit: (s) => { s.width = 36; },
+          ticks: {
+            color: '#94a3b8', font: { family: 'DM Mono', size: 8 },
+            stepSize: 10000, padding: 2,
+            callback: v => v === 0 ? '0' : (v/1000) + 'K'
+          }
+        }
+      }
+    },
+    plugins: [{
+      id: 'mrrTotals',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        ctx.save();
+        ctx.font = "700 9px 'DM Mono', monospace";
+        ctx.fillStyle = '#0f172b';
+        ctx.textAlign = 'center';
+        const topMeta = chart.getDatasetMeta(2); // top stack
+        topMeta.data.forEach((bar, i) => {
+          const v = mrrTotals[i];
+          if (v == null) return;
+          ctx.fillText(v.toLocaleString('en-US'), bar.x, bar.y - 5);
+        });
+        ctx.restore();
+      }
+    }]
+  });
+
+  // ============ Bottom left: Entes activos YoY ============
+  const monthsYoY = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const entes2024 = [null,null,null,7298,7350,7420,7500,7600,7700,7775,7838,null];
+  const entes2025 = [8077,8127,8141,8180,8221,8280,8350,8509,8700,8959,9050,null];
+  const entes2026 = [9341,8136,null,null,null,null,null,null,null,null,null,null];
+
+  new Chart(document.getElementById('entesYoY'), {
+    type: 'line',
+    data: {
+      labels: monthsYoY,
+      datasets: [
+        { label:'2024', data: entes2024, borderColor:'#60A5FA', backgroundColor:'#60A5FA', pointRadius: 2, borderWidth: 1.4, tension: 0.15, spanGaps: true },
+        { label:'2025', data: entes2025, borderColor:'#22C55E', backgroundColor:'#22C55E', pointRadius: 2, borderWidth: 1.6, tension: 0.15, spanGaps: true },
+        { label:'2026', data: entes2026, borderColor:'#A78BFA', backgroundColor:'#A78BFA', pointRadius: 2.5, borderWidth: 2, tension: 0.15, spanGaps: true }
+      ]
+    },
+    options: yoyOpts(0, 10000, 2000)
+  });
+
+  // ============ Bottom right: MRR YoY ============
+  const mrr2024 = [null,null,null,427177,null,null,null,null,null,null,408319,null];
+  const mrr2025 = [null,null,null,494488,510311,541529,567826,null,null,616640,null,null];
+  const mrr2026 = [672258,null,null,null,null,null,null,null,null,null,null,null];
+
+  new Chart(document.getElementById('mrrYoY'), {
+    type: 'line',
+    data: {
+      labels: monthsYoY,
+      datasets: [
+        { label:'2024', data: mrr2024, borderColor:'#60A5FA', backgroundColor:'#60A5FA', pointRadius: 2, borderWidth: 1.4, tension: 0.15, spanGaps: true },
+        { label:'2025', data: mrr2025, borderColor:'#22C55E', backgroundColor:'#22C55E', pointRadius: 2, borderWidth: 1.6, tension: 0.15, spanGaps: true },
+        { label:'2026', data: mrr2026, borderColor:'#A78BFA', backgroundColor:'#A78BFA', pointRadius: 2.5, borderWidth: 2, tension: 0.15, spanGaps: true }
+      ]
+    },
+    options: yoyOpts(0, 700000, 100000)
+  });
+
+  function yoyOpts(min, max, stepSize) {
+    return {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      layout: { padding: { top: 8, right: 8, left: 0, bottom: 0 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: {
+          grid: { display: false }, border: { display: false },
+          ticks: { color: '#64748b', font: { family: 'Inter', size: 8.5, weight: '500' } }
+        },
+        y: {
+          min, max,
+          grid: { color: 'rgba(15,23,43,.05)' }, border: { display: false },
+          afterFit: (s) => { s.width = 38; },
+          ticks: {
+            color: '#94a3b8', font: { family: 'DM Mono', size: 8 },
+            stepSize, padding: 2,
+            callback: v => {
+              if (v === 0) return '0';
+              if (v >= 1000) return (v/1000).toFixed(0) + 'K';
+              return v;
+            }
+          }
+        }
+      }
+    };
+  }
+})();
+</script>
+
+<script data-pplx-inline-edit>
+(function(){
+  if(window===window.top)return;
+  function inlineAll(orig,clone){
+    if(orig.nodeType!==1)return;
+    try{
+      var cs=getComputedStyle(orig);
+      var t='';
+      for(var i=0;i<cs.length;i++){t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';}
+      clone.style.cssText=t;
+    }catch(e){}
+    var oc=orig.children,cc=clone.children;
+    for(var j=0;j<oc.length&&j<cc.length;j++){inlineAll(oc[j],cc[j]);}
+  }
+  function stripExternal(clone){
+    var imgs=clone.querySelectorAll('img');
+    for(var i=0;i<imgs.length;i++){
+      var s=imgs[i].getAttribute('src');
+      if(s&&!s.startsWith('data:'))imgs[i].removeAttribute('src');
+    }
+    var all=clone.querySelectorAll('*');
+    for(var i=0;i<all.length;i++){
+      var st=all[i].style.cssText;
+      if(st&&st.indexOf('url(')>=0){
+        all[i].style.cssText=st.replace(/url\(["']?(?!data:)[^)"']*["']?\)/gi,'none');
+      }
+    }
+  }
+  var scrollRaf=0;
+  function emitScroll(){
+    scrollRaf=0;
+    var x=window.scrollX||window.pageXOffset||0;
+    var y=window.scrollY||window.pageYOffset||0;
+    window.parent.postMessage({type:'INLINE_EDIT_SCROLL',scrollX:x,scrollY:y},'*');
+  }
+  window.addEventListener('scroll',function(){
+    if(scrollRaf)return;
+    scrollRaf=requestAnimationFrame(emitScroll);
+  },{passive:true,capture:true});
+  emitScroll();
+  window.addEventListener('message',function(e){
+    if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
+    var scrollX=window.scrollX||window.pageXOffset||0;
+    var scrollY=window.scrollY||window.pageYOffset||0;
+    var w=window.innerWidth,h=window.innerHeight;
+    try{
+      var clone=document.documentElement.cloneNode(true);
+      var rm=clone.querySelectorAll('script,link[rel="stylesheet"],style');
+      for(var i=0;i<rm.length;i++){rm[i].remove();}
+      inlineAll(document.documentElement,clone);
+      stripExternal(clone);
+      var html=new XMLSerializer().serializeToString(clone);
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
+        +'<foreignObject width="100%" height="100%">'
+        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
+        +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
+        +html+'</div></div></foreignObject></svg>';
+      var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+      var img=new Image();
+      img.onload=function(){
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0);
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.onerror=function(){
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.src=svgUrl;
+    }catch(err){
+      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+    }
+  });
+})();
+</script></body>
+</html>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alegra Board — Inicio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/base.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+    /* ============================================================
+       KS — Key Summary Metrics (Monthly + YTD)
+       DM Sans / DM Mono — prefix .ks- for CSS isolation
+       ============================================================ */
+    .ks-content {
+      flex: 1;
+      padding: 20px 48px 0;
+      display: flex;
+      flex-direction: column;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .ks-slide-tag {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: #999; margin-bottom: 10px;
+    }
+    .ks-headline {
+      font-size: 12px; font-weight: 500; color: #fff;
+      border-radius: 8px; padding: 9px 16px;
+      margin-bottom: 16px; line-height: 1.55; letter-spacing: 0.01em;
+    }
+    .ks-headline-blue  { background: #0e3d5c; }
+    .ks-headline-green { background: #0b4d3a; }
+    .ks-headline-red   { background: #5C2100; }
+    .ks-track-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #eaf3de; border-radius: 20px; padding: 4px 12px;
+      font-size: 11px; color: #3b6d11; font-weight: 500; margin-bottom: 14px;
+    }
+    .ks-track-dot { width: 7px; height: 7px; background: #639922; border-radius: 50%; }
+    .ks-sec-label {
+      font-size: 10px; font-weight: 600; color: #bbb;
+      text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;
+    }
+    .ks-divider { border: none; border-top: 0.5px solid #e8e6df; margin: 14px 0; }
+    /* Primary row */
+    .ks-p-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; }
+    .ks-p-cell { padding-right: 28px; }
+    .ks-p-cell:not(:first-child) { padding-left: 28px; padding-right: 0; border-left: 0.5px solid #e8e6df; }
+    .ks-p-name { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 4px; }
+    .ks-p-val    { font-size: 40px; font-weight: 500; color: #0e3d5c; line-height: 1; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .ks-p-val-sm { font-size: 34px; font-weight: 500; color: #0e3d5c; line-height: 1; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .ks-p-val-green { color: #0b4d3a; }
+    /* Delta */
+    .ks-d-compact { display: flex; flex-direction: column; gap: 3px; }
+    .ks-d-line { display: flex; align-items: baseline; font-size: 11px; line-height: 1.3; }
+    .ks-tags { display: flex; gap: 4px; flex-wrap: wrap; align-items: baseline; }
+    .ks-d-tag-pill { font-size: 10px; font-weight: 500; color: #bbb; background: #f5f4f0; border-radius: 4px; padding: 1px 5px; letter-spacing: 0.04em; font-family: 'DM Mono', monospace; }
+    .ks-d-sep { font-size: 10px; color: #ddd; margin: 0 2px; }
+    .ks-pos { color: #1d9e75; font-weight: 500; }
+    .ks-neg { color: #d85a30; font-weight: 500; }
+    .ks-neu { color: #888;    font-weight: 500; }
+    /* Secondary row */
+    .ks-sec-row { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+    .ks-sec-cell { padding-right: 24px; }
+    .ks-sec-cell:not(:first-child) { padding-left: 24px; padding-right: 0; border-left: 0.5px solid #e8e6df; }
+    .ks-sec-name { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 4px; }
+    .ks-sec-val  { font-size: 24px; font-weight: 500; color: #444; margin-bottom: 6px; letter-spacing: -0.01em; }
+    /* Tertiary */
+    .ks-ter-row { display: flex; gap: 12px; margin-bottom: 14px; }
+    .ks-ter-cell { border-radius: 10px; padding: 10px 14px; flex: 1; }
+    .ks-ter-cell-blue  { background: #f3f6f9; }
+    .ks-ter-cell-green { background: #f0f6f3; }
+    .ks-ter-name { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 4px; }
+    .ks-ter-val       { font-size: 20px; font-weight: 500; margin-bottom: 2px; letter-spacing: -0.01em; }
+    .ks-ter-val-blue  { color: #0e3d5c; }
+    .ks-ter-val-green { color: #0b4d3a; }
+    .ks-ter-val-risk  { color: #d85a30; }
+    .ks-ter-val-muted { color: #666; }
+    .ks-ter-d { font-size: 11px; color: #999; line-height: 1.5; }
+    /* Insights */
+    .ks-ins       { border-radius: 10px; padding: 12px 16px; }
+    .ks-ins-blue  { background: #eef3f8; }
+    .ks-ins-green { background: #eef5f2; }
+    .ks-ins-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: #bbb; margin-bottom: 8px; }
+    .ks-ins-item  { font-size: 11.5px; color: #4a4a47; line-height: 1.6; display: flex; gap: 8px; margin-bottom: 4px; }
+    .ks-ins-item:last-child { margin-bottom: 0; }
+    .ks-dot       { width: 5px; height: 5px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+    .ks-dot-blue  { background: #0e3d5c; }
+    .ks-dot-green { background: #0b4d3a; }
+    /* ============================================================
+       ARR Walk Summary — slide 6
+       ============================================================ */
+    .aw-sum-wrap {
+      flex: 1; padding: 6px 90px 0;
+      overflow: hidden; display: flex; flex-direction: column; gap: 4px;
+    }
+    .aw-sum-headline {
+      background: #0f172b; border-radius: 5px; padding: 7px 18px; flex-shrink: 0;
+    }
+    .aw-sum-headline p { font-size: 11.5px; font-weight: 400; color: #a8bdd0; line-height: 1.55; }
+    .aw-sum-headline strong { color: #ffffff; font-weight: 700; }
+    .aw-sum-headline .hg { color: #30b8b7; font-weight: 600; }
+    .aw-sum-headline .ha { color: #E87722; font-weight: 600; }
+
+    .aw-sum-table { width: 100%; border-collapse: collapse; }
+    .aw-sum-table thead tr { border-bottom: 1.5px solid #e2e8f0; }
+    .aw-sum-table thead th {
+      text-align: right; font-size: 9.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8;
+      padding: 3px 7px 5px; white-space: nowrap;
+    }
+    .aw-sum-table thead th:first-child { text-align: left; padding-left: 4px; width: 200px; }
+    .aw-sum-table thead th.aw-cur {
+      color: #208080; background: rgba(48,184,183,0.09); border-radius: 4px 4px 0 0;
+    }
+    .aw-sum-table thead th.aw-dh { font-size: 9px; color: #cbd5e1; }
+    .aw-sum-table thead th.aw-ytd { font-size: 9px; color: #94a3b8; font-weight: 700; }
+
+    .aw-sum-table tbody td {
+      text-align: right; padding: 0 7px; height: 17px;
+      font-family: 'DM Mono', monospace; font-size: 10px; color: #475569;
+      white-space: nowrap; vertical-align: middle; border-bottom: 1px solid #f1f5f9;
+    }
+    .aw-sum-table tbody td:first-child {
+      text-align: left; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; font-size: 11px; color: #475569; padding-left: 4px;
+    }
+    .aw-sum-table tbody td.aw-cur { background: rgba(48,184,183,0.07); color: #1a7e7f; font-weight: 600; }
+
+    tr.aw-rb td {
+      font-weight: 700 !important; color: #1e293b !important;
+      font-family: 'DM Sans', sans-serif !important; font-size: 10.5px !important;
+      border-bottom: 1.5px solid #e2e8f0 !important; height: 19px !important;
+    }
+    tr.aw-rb td:first-child { color: #0f172b !important; }
+    tr.aw-rb td.aw-cur { color: #1a7e7f !important; font-weight: 700 !important; background: rgba(48,184,183,0.09); }
+
+    tr.aw-in td:first-child { padding-left: 20px; font-size: 10.5px; font-weight: 400; color: #64748b; }
+
+    tr.aw-sh td {
+      height: 15px !important; font-family: 'DM Sans', sans-serif !important;
+      font-weight: 700 !important; font-size: 8.5px !important;
+      text-transform: uppercase; letter-spacing: 1.4px; color: #0f172b !important;
+      border-top: 1.5px solid #e2e8f0 !important; border-bottom: none !important;
+      background: #f8fafc; padding-top: 3px !important;
+    }
+    tr.aw-sh td.aw-cur { background: rgba(48,184,183,0.07); color: #1a7e7f !important; }
+    tr.aw-sh td:not(.aw-cur):not(:first-child) { background: #f8fafc; }
+
+    tr.aw-rt td {
+      height: 14px !important; font-size: 9.5px !important;
+      color: #94a3b8 !important; border-bottom: 1px solid transparent !important;
+    }
+    tr.aw-rt td:first-child { font-size: 10px !important; color: #94a3b8 !important; font-style: italic; padding-left: 20px; }
+    tr.aw-rt td.aw-cur { color: #299e9c !important; }
+    tr.aw-gap td { height: 3px; padding: 0; border: none !important; background: transparent !important; }
+
+    tr.aw-delta-sub td { font-size:10px; color:#64748b; font-weight:400; border-bottom:none; height:15px !important; }
+    tr.aw-delta-sub td:first-child { padding-left:20px; text-align:left; font-size:10px; font-weight:400; color:#64748b; }
+    tr.aw-delta-sub td.aw-cur { background:rgba(48,184,183,0.07); }
+    .awdp { display:inline-block; font-family:'DM Sans',sans-serif; font-size:9.5px; font-weight:600; border-radius:4px; padding:1px 5px; line-height:1.45; }
+    .awdp-b { background:rgba(24,95,165,0.10); color:#185FA5; }
+    .awdp-o { background:rgba(232,119,34,0.10); color:#E87722; }
+    .awdp-n { background:#f1f5f9; color:#64748b; }
+    .aw-nv { color:#E87722 !important; }
+    .aw-di { display:inline-block; width:6px; height:6px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+    .aw-di-t { background:#30b8b7; } .aw-di-b { background:#185FA5; }
+    .aw-di-o { background:#E87722; } .aw-di-s { background:#cbd5e1; }
+
+    /* ── Global Country Performance (slide 7) ── */
+    .cp-slide { display: flex; flex-direction: column; }
+    .cp-slide .slide-header { background: #0f172b; padding: 13px 40px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .cp-slide .slide-header .title { color: #fff; font-size: 15px; font-weight: 600; }
+    .cp-slide .slide-header .period { color: #14b8a6; font-size: 12px; font-weight: 500; }
+    .aw-slide .slide-header { padding: 13px 40px; }
+    .aw-slide .slide-header .title { font-size: 15px; font-weight: 600; }
+    .aw-slide .slide-header .period { font-size: 12px; }
+    .cp-inner { padding: 14px 28px 10px; display: flex; flex-direction: column; gap: 9px; }
+    .bf-cards { display: flex; border-bottom: 1px solid #eaeaea; flex-shrink: 0; }
+    .bf-card { flex: 1; padding: 13px 36px; text-align: center; }
+    .bf-card:first-child { border-right: 1px solid #eaeaea; }
+    .bf-card-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; margin-bottom: 4px; }
+    .bf-card-label.c { color: #534AB7; } .bf-card-label.l { color: #1D9E75; }
+    .bf-card-value { font-size: 32px; font-weight: 800; color: #111; margin: 2px 0; letter-spacing: -1.5px; }
+    .bf-card-sub { font-size: 11px; color: #888; }
+    .bf-pos { color: #1D9E75; } .bf-neg { color: #D85A30; }
+    .bf-table { padding: 4px 14px 0; overflow: hidden; }
+    .bf-table table { width: 100%; border-collapse: collapse; }
+    .bf-table thead th { font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #bbb; padding: 3px 8px 7px; border-bottom: 1px solid #eaeaea; }
+    .bf-table th.right { text-align: right; } .bf-table th.left { text-align: left; } .bf-table th.center { text-align: center; }
+    .bf-table tbody tr { border-bottom: 1px solid #f4f4f4; }
+    .bf-table tbody tr:last-child { border-bottom: none; }
+    .bf-table tbody tr.alert-row { background: rgba(216,90,48,0.05); }
+    .bf-table td { padding: 6px 8px; font-size: 11px; vertical-align: middle; }
+    .bf-table .metric-col { text-align: center; border-left: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; padding: 6px 12px; }
+    .bf-table .metric-name { font-size: 10px; color: #888; font-weight: 500; white-space: nowrap; }
+    .bf-table .metric-name.primary { color: #222; font-weight: 700; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-right: 5px; vertical-align: middle; }
+    .sd-green { background: #1D9E75; } .sd-red { background: #D85A30; } .sd-amber { background: #E8A020; } .sd-gray { background: #ccc; }
+    .bf-table .val { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600; color: #111; white-space: nowrap; }
+    .bf-table .val.alert { color: #D85A30; }
+    .bf-table .delta { font-size: 10px; white-space: nowrap; color: #bbb; }
+    .bf-table .pos { color: #1D9E75; } .bf-table .neg { color: #D85A30; } .bf-table .neutral { color: #444; }
+    .bf-table td.right { text-align: right; } .bf-table td.left { text-align: left; }
+    /* ============================================================
+       HL — Highlights / Lowlights (slide 2, layout expandido)
+       ============================================================ */
+    .hl-outer-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 0 28px;
+      flex: 1;
+      align-items: start;
+    }
+    .hl-items-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 14px;
+    }
+    .hl-item-sm {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 5px;
+      font-size: 9.5px;
+      line-height: 1.42;
+      color: var(--color-text-secondary);
+    }
+    .hl-item-sm .hl-dot {
+      margin-top: 5px;
+    }
+
+    /* ============================================================
+       ARR Overview (slide 4) — prefix .arr-
+       ============================================================ */
+    .arr-body {
+      flex: 1; overflow: hidden;
+      padding: 10px 32px 4px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .arr-section-bar {
+      background: var(--color-teal); color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+      text-align: center; padding: 4px 0; border-radius: 4px; margin-bottom: 2px;
+    }
+    .arr-section-bar sup { font-size: 8px; }
+    .arr-panel { display: flex; flex-direction: column; min-height: 0; }
+    .arr-panel.top    { flex: 0 0 200px; }
+    .arr-panel.bottom { flex: 1 1 auto; min-height: 0; }
+    .arr-chart-wrap { position: relative; width: 100%; flex: 1 1 auto; min-height: 0; }
+    .arr-legend {
+      display: flex; justify-content: center; gap: 16px;
+      font-family: 'DM Sans', sans-serif; font-size: 9.5px;
+      color: var(--color-text-secondary); margin-top: 2px;
+    }
+    .arr-legend .item { display: inline-flex; align-items: center; gap: 5px; }
+    .arr-legend .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+    .arr-legend .sw.line { height: 2px; width: 14px; border-radius: 1px; position: relative; }
+    .arr-legend .sw.line::after {
+      content: ""; position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      width: 4px; height: 4px; border-radius: 50%; background: inherit;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       SLIDE 1 — Cover
+       ============================================================ -->
+  <div class="slide slide-cover">
+    <div class="cover-eyebrow">Alegra · Confidential</div>
+    <div class="cover-title">{% if metrics.is_quarter_end %}Quarterly{% else %}Monthly{% endif %} Business<br>Review</div>
+    <div class="cover-subtitle">{% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %} Performance</div>
+    <div class="cover-logo">Alegra</div>
+  </div>
+
+  <div class="slide-divider">↓ &nbsp; 2 / 7</div>
+
+  <!-- ============================================================
+       SLIDE 2 — CEO Highlights / Lowlights
+       ============================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">{{ editorial.ceo_title }}</span>
+      <span class="period">{% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
+    </div>
+    <div class="slide-body" style="padding-top: 20px; padding-bottom: 16px;">
+      <div class="hl-outer-grid">
+
+        <!-- Highlights — 2 sub-columnas para 8 items -->
+        <div>
+          <div class="hl-col-title positive">✦ &nbsp;Highlights</div>
+          <div class="hl-items-2col">
+            {% for item in editorial.highlights %}
+            <div class="hl-item-sm">
+              <div class="hl-dot positive"></div>
+              <div>{{ item }}</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Lowlights -->
+        <div>
+          <div class="hl-col-title negative">▼ &nbsp;Lowlights</div>
+          {% for item in editorial.lowlights %}
+          <div class="hl-item-sm">
+            <div class="hl-dot negative"></div>
+            <div>{{ item }}</div>
+          </div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">2</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓ &nbsp; 3 / 7</div>
+
+  <!-- ============================================================
+       SLIDE 3 — Table of Contents
+       ============================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Table of Contents</span>
+      <span class="period">{% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
+    </div>
+    <div class="slide-body" style="padding-top: 32px; padding-bottom: 32px; justify-content: center;">
+      <div style="display: flex; flex-direction: column; gap: 18px; max-width: 560px; width: 100%;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-teal); letter-spacing: 1px; min-width: 24px;">01</span>
+          <span style="font-size: 15px; font-weight: 600; color: var(--color-text-primary);">Key Summary Metrics</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-teal); letter-spacing: 1px; min-width: 24px;">02</span>
+          <span style="font-size: 15px; font-weight: 600; color: var(--color-text-primary);">Discussion Topic</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-teal); letter-spacing: 1px; min-width: 24px;">03</span>
+          <span style="font-size: 15px; font-weight: 600; color: var(--color-text-primary);">ARR Walk</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-teal); letter-spacing: 1px; min-width: 24px;">04</span>
+          <span style="font-size: 15px; font-weight: 600; color: var(--color-text-primary);">Financial Overview</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-teal); letter-spacing: 1px; min-width: 24px;">05</span>
+          <span style="font-size: 15px; font-weight: 600; color: var(--color-text-primary);">Go to Market</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-teal); letter-spacing: 1px; min-width: 24px;">06</span>
+          <span style="font-size: 15px; font-weight: 600; color: var(--color-text-primary);">R&amp;D Investment</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-teal); letter-spacing: 1px; min-width: 24px;">07</span>
+          <span style="font-size: 15px; font-weight: 600; color: var(--color-text-primary);">Headcount Summary</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="font-size: 12px; font-weight: 700; color: var(--color-teal); letter-spacing: 1px; min-width: 24px;">08</span>
+          <span style="font-size: 15px; font-weight: 600; color: var(--color-text-primary);">Appendix</span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">3</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓ &nbsp; 4 / 7</div>
+
+  <!-- ============================================================
+       SLIDE 4 — ARR Overview
+       ============================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">ARR Overview — Spot vs Constant FX &amp; Net New ARR drivers</span>
+      <span class="period">{{ config.month_label }}</span>
+    </div>
+    <div class="arr-body">
+      <div class="arr-panel top">
+        <div class="arr-section-bar">ARR EoP (USD Mn)<sup>1</sup></div>
+        <div class="arr-chart-wrap"><canvas id="arrEoP"></canvas></div>
+        <div class="arr-legend">
+          <span class="item"><span class="sw" style="background:#185FA5;"></span>Spot FX</span>
+          <span class="item"><span class="sw" style="background:#94a3b8;"></span>Constant Currency FX</span>
+        </div>
+      </div>
+      <div class="arr-panel bottom">
+        <div class="arr-section-bar">Net New ARR — Breakdown (USD 000's)</div>
+        <div class="arr-chart-wrap"><canvas id="netNew"></canvas></div>
+        <div class="arr-legend">
+          <span class="item"><span class="sw" style="background:#185FA5;"></span>New Adds</span>
+          <span class="item"><span class="sw" style="background:#94a3b8;"></span>Upsells / (Downsells)</span>
+          <span class="item"><span class="sw" style="background:#5EEAD4;"></span>Disconnects</span>
+          <span class="item"><span class="sw" style="background:#0f172b;"></span>FX Appreciation / (Depreciation)</span>
+          <span class="item"><span class="sw line" style="background:#E11D48;"></span>Net New</span>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">4</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓ &nbsp; 5 / 7</div>
+
+  <!-- ============================================================
+       SLIDE 5 — Monthly Performance
+       ============================================================ -->
+  <div class="slide">
+    <div class="ks-content">
+      <div class="ks-slide-tag">{% if metrics.is_quarter_end %}{{ config.quarter_label }} Performance{% else %}Monthly performance · {{ config.month_label }}{% endif %}</div>
+      <div class="ks-headline ks-headline-blue">{{ editorial.monthly_headline }}</div>
+
+      <div class="ks-sec-label">Growth</div>
+      <div class="ks-p-row">
+        <div class="ks-p-cell">
+          <div class="ks-p-name">ARR</div>
+          <div class="ks-p-val">{{ metrics.arr_total }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span><span class="{{ 'ks-pos' if (metrics.arr_qoq_positive if metrics.is_quarter_end else metrics.arr_mom_positive) else 'ks-neg' }}">{{ metrics.arr_qoq if metrics.is_quarter_end else metrics.arr_mom }}</span><span class="ks-d-sep">·</span><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.arr_vs_budget_positive else 'ks-neg' }}">{{ metrics.arr_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.arr_yoy_positive else 'ks-neg' }}">{{ metrics.arr_yoy }}</span></div></div>
+          </div>
+        </div>
+        <div class="ks-p-cell">
+          <div class="ks-p-name">New MRR</div>
+          <div class="ks-p-val-sm">{{ metrics.new_mrr }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span><span class="{{ 'ks-pos' if (metrics.new_mrr_qoq_positive if metrics.is_quarter_end else metrics.new_mrr_mom_positive) else 'ks-neg' }}">{{ metrics.new_mrr_qoq if metrics.is_quarter_end else metrics.new_mrr_mom }}</span><span class="ks-d-sep">·</span><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.new_mrr_vs_budget_positive else 'ks-neg' }}">{{ metrics.new_mrr_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.new_mrr_yoy_positive else 'ks-neg' }}">{{ metrics.new_mrr_yoy }}</span></div></div>
+          </div>
+        </div>
+        <div class="ks-p-cell">
+          <div class="ks-p-name">New Logos</div>
+          <div class="ks-p-val-sm">{{ metrics.new_logos }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span><span class="{{ 'ks-pos' if (metrics.new_logos_qoq_positive if metrics.is_quarter_end else metrics.new_logos_mom_positive) else 'ks-neg' }}">{{ metrics.new_logos_qoq if metrics.is_quarter_end else metrics.new_logos_mom }}</span><span class="ks-d-sep">·</span><span class="ks-d-tag-pill">Bud</span><span class="ks-neu">{{ metrics.new_logos_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="ks-neu">{{ metrics.new_logos_yoy }}</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="ks-divider">
+
+      <div class="ks-sec-label">Financial Performance</div>
+      <div class="ks-sec-row">
+        <div class="ks-sec-cell">
+          <div class="ks-sec-name">Net Revenue</div>
+          <div class="ks-sec-val">{{ metrics.net_revenue }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span><span class="{{ 'ks-pos' if metrics.net_revenue_mom_positive else 'ks-neg' }}">{{ metrics.net_revenue_mom }}</span><span class="ks-d-sep">·</span><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.net_revenue_vs_budget_positive else 'ks-neg' }}">{{ metrics.net_revenue_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.net_revenue_yoy_positive else 'ks-neg' }}">{{ metrics.net_revenue_yoy }}</span></div></div>
+          </div>
+        </div>
+        <div class="ks-sec-cell">
+          <div class="ks-sec-name">Gross Margin</div>
+          <div class="ks-sec-val">{{ metrics.gross_margin }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span><span class="ks-neu">{{ metrics.gross_margin_mom }}</span><span class="ks-d-sep">·</span><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.gross_margin_vs_budget_positive else 'ks-neg' }}">{{ metrics.gross_margin_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.gross_margin_yoy_positive else 'ks-neg' }}">{{ metrics.gross_margin_yoy }}</span></div></div>
+          </div>
+        </div>
+        <div class="ks-sec-cell">
+          <div class="ks-sec-name">EBITDA Margin</div>
+          <div class="ks-sec-val">{{ metrics.ebitda_margin }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</span><span class="{{ 'ks-pos' if metrics.ebitda_margin_mom_positive else 'ks-neg' }}">{{ metrics.ebitda_margin_mom }}</span><span class="ks-d-sep">·</span><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.ebitda_margin_vs_budget_positive else 'ks-neg' }}">{{ metrics.ebitda_margin_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.ebitda_margin_yoy_positive else 'ks-neg' }}">{{ metrics.ebitda_margin_yoy }}</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="ks-divider">
+
+      <div class="ks-sec-label">Risk & Sustainability</div>
+      <div class="ks-ter-row">
+        <div class="ks-ter-cell ks-ter-cell-blue">
+          <div class="ks-ter-name">Logo Churn</div>
+          <div class="ks-ter-val ks-ter-val-risk">{{ metrics.logo_churn_core }}% core · {{ metrics.logo_churn_global }}% global</div>
+          <div class="ks-ter-d">{{ metrics.logo_churn_vs_budget_pp }}pp above budget</div>
+        </div>
+        <div class="ks-ter-cell ks-ter-cell-blue">
+          <div class="ks-ter-name">Payback</div>
+          <div class="ks-ter-val ks-ter-val-muted">{{ metrics.payback_core }} mo core</div>
+          <div class="ks-ter-d">Lite {{ metrics.payback_lite }} mo · vs {{ metrics.payback_hist }} mo avg {{ config.prev_year }}</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-source">Source: Redshift · fact_customers_mrr · {% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
+      <span class="footer-page">5</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓ &nbsp; 6 / 7</div>
+
+  <!-- ============================================================
+       SLIDE 5 — YTD Performance
+       ============================================================ -->
+  <div class="slide">
+    <div class="ks-content">
+      <div class="ks-slide-tag">YTD performance · {{ config.year }}</div>
+      <div class="ks-headline ks-headline-green">{{ editorial.ytd_headline }}</div>
+      <div><span class="ks-track-badge"><span class="ks-track-dot"></span>{{ editorial.ytd_track_label }}</span></div>
+
+      <div class="ks-sec-label">Growth</div>
+      <div class="ks-p-row">
+        <div class="ks-p-cell">
+          <div class="ks-p-name">ARR</div>
+          <div class="ks-p-val ks-p-val-green">{{ metrics.arr_total }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.arr_vs_budget_positive else 'ks-neg' }}">{{ metrics.arr_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.arr_yoy_positive else 'ks-neg' }}">{{ metrics.arr_yoy }}</span></div></div>
+          </div>
+        </div>
+        <div class="ks-p-cell">
+          <div class="ks-p-name">New MRR YTD</div>
+          <div class="ks-p-val-sm ks-p-val-green">{{ metrics.new_mrr_ytd }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.new_mrr_vs_budget_positive else 'ks-neg' }}">{{ metrics.new_mrr_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.new_mrr_ytd_yoy_positive else 'ks-neg' }}">{{ metrics.new_mrr_ytd_yoy }}</span></div></div>
+          </div>
+        </div>
+        <div class="ks-p-cell">
+          <div class="ks-p-name">New Logos YTD</div>
+          <div class="ks-p-val-sm ks-p-val-green">{{ metrics.new_logos_ytd }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">Bud</span><span class="ks-neu">{{ metrics.new_logos_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.new_logos_ytd_yoy_positive else 'ks-neg' }}">{{ metrics.new_logos_ytd_yoy }}</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="ks-divider">
+
+      <div class="ks-sec-label">Financial Performance</div>
+      <div class="ks-sec-row">
+        <div class="ks-sec-cell">
+          <div class="ks-sec-name">Net Revenue YTD</div>
+          <div class="ks-sec-val">{{ metrics.net_revenue }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.net_revenue_vs_budget_positive else 'ks-neg' }}">{{ metrics.net_revenue_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.net_revenue_yoy_positive else 'ks-neg' }}">{{ metrics.net_revenue_yoy }}</span></div></div>
+          </div>
+        </div>
+        <div class="ks-sec-cell">
+          <div class="ks-sec-name">Gross Margin</div>
+          <div class="ks-sec-val">{{ metrics.gross_margin }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.gross_margin_vs_budget_positive else 'ks-neg' }}">{{ metrics.gross_margin_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.gross_margin_yoy_positive else 'ks-neg' }}">{{ metrics.gross_margin_yoy }}</span></div></div>
+          </div>
+        </div>
+        <div class="ks-sec-cell">
+          <div class="ks-sec-name">EBITDA Margin</div>
+          <div class="ks-sec-val">{{ metrics.ebitda_margin }}</div>
+          <div class="ks-d-compact">
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">Bud</span><span class="{{ 'ks-pos' if metrics.ebitda_margin_vs_budget_positive else 'ks-neg' }}">{{ metrics.ebitda_margin_vs_budget }}</span></div></div>
+            <div class="ks-d-line"><div class="ks-tags"><span class="ks-d-tag-pill">YoY</span><span class="{{ 'ks-pos' if metrics.ebitda_margin_yoy_positive else 'ks-neg' }}">{{ metrics.ebitda_margin_yoy }}</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="ks-divider">
+
+      <div class="ks-sec-label">Customer Base</div>
+      <div class="ks-ter-row">
+        <div class="ks-ter-cell ks-ter-cell-green">
+          <div class="ks-ter-name">SMB Logos EoP</div>
+          <div class="ks-ter-val ks-ter-val-green">{{ metrics.smb_logos_eop }}</div>
+          <div class="ks-ter-d"><span class="{{ 'ks-pos' if metrics.smb_logos_yoy_positive else 'ks-neg' }}">{{ metrics.smb_logos_yoy }}</span> YoY · {{ metrics.smb_logos_net_adds }} net adds {{ config.month }}</div>
+        </div>
+        <div class="ks-ter-cell ks-ter-cell-green">
+          <div class="ks-ter-name">Accountant Logos EoP</div>
+          <div class="ks-ter-val ks-ter-val-green">{{ metrics.accountant_logos_eop }}</div>
+          <div class="ks-ter-d"><span class="{{ 'ks-pos' if metrics.accountant_logos_qoq_positive else 'ks-neg' }}">{{ metrics.accountant_logos_qoq }}</span> QoQ · {{ metrics.accountant_logos_net_adds }} net adds</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-source">Source: Redshift · fact_customers_mrr · {% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
+      <span class="footer-page">6</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓ &nbsp; 7 / 7</div>
+
+  <!-- ============================================================
+       SLIDE 6 — ARR Walk Summary
+       ============================================================ -->
+  <div class="slide aw-slide">
+    <div class="slide-header">
+      <span class="title">Net New ARR compresses to $0.2M — new additions + recoveries cover only 79% of churn in {% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
+      <span class="period">{% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
+    </div>
+
+    <div class="aw-sum-wrap">
+
+      <table class="aw-sum-table">
+        <thead>
+          <tr>
+            <th></th>
+            {% for q in metrics.arr_walk_table.quarters %}
+            <th{% if loop.last %} class="aw-cur"{% endif %}>{{ q }}</th>
+            {% endfor %}
+            <th class="aw-ytd">{{ metrics.arr_walk_table.ytd_labels[0] }}</th>
+            <th class="aw-ytd">{{ metrics.arr_walk_table.ytd_labels[1] }}</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% for section in metrics.arr_walk_table.sections %}
+          <tr class="aw-sh">
+            <td>{{ section.label }}</td>
+            {% for q in metrics.arr_walk_table.quarters %}<td{% if loop.last %} class="aw-cur"{% endif %}></td>{% endfor %}
+            <td></td><td></td>
+          </tr>
+          {% for row in section.rows %}
+          <tr class="aw-{{ row.type }}">
+            <td>{% if row.dot %}<span class="aw-di aw-di-{{ row.dot }}"></span>{% endif %}{{ row.label }}</td>
+            {% for v in row.cells %}
+            <td{% if loop.last %} class="aw-cur{% if row.nv %} aw-nv{% endif %}"{% elif row.nv %} class="aw-nv"{% endif %}>{{ v }}</td>
+            {% endfor %}
+            <td class="aw-ytd{% if row.nv %} aw-nv{% endif %}">{{ row.ytd_prev }}</td>
+            <td class="aw-ytd{% if row.nv %} aw-nv{% endif %}">{{ row.ytd_cur }}</td>
+          </tr>
+          {% if row.label == "ARR EoP (CC)" %}
+          <tr class="aw-delta-sub">
+            <td>QoQ</td>
+            {% for c in row.qoq_cells %}
+            <td{% if loop.last %} class="aw-cur"{% endif %}>{{ c.v }}</td>
+            {% endfor %}
+            <td></td><td></td>
+          </tr>
+          {% endif %}
+          {% if row.label == "ARR EoP" %}
+          <tr class="aw-delta-sub">
+            <td>QoQ</td>
+            {% for c in row.qoq_cells %}
+            <td{% if loop.last %} class="aw-cur"{% endif %}>{{ c.v }}</td>
+            {% endfor %}
+            <td></td><td></td>
+          </tr>
+          <tr class="aw-delta-sub">
+            <td>YoY</td>
+            {% for c in row.yoy_cells %}
+            <td{% if loop.last %} class="aw-cur"{% endif %}>{{ c.v }}</td>
+            {% endfor %}
+            <td></td><td></td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+          {% if not loop.last %}<tr class="aw-gap"><td colspan="8"></td></tr>{% endif %}
+          {% endfor %}
+
+        </tbody>
+      </table>
+
+    </div><!-- /.aw-sum-wrap -->
+
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-source">Source: Redshift · fact_customers_mrr · {% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
+      <span class="footer-page">7</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓ &nbsp; Global Performance</div>
+  <!-- SLIDE 7 — Global Country Performance -->
+  <div class="slide cp-slide">
+    <div class="slide-header">
+      <span class="title">🌎 Global — Core vs Lite Performance</span>
+      <span class="period">{% if metrics.is_quarter_end %}{{ config.quarter_label }}{% else %}{{ config.month_label }}{% endif %}</span>
+    </div>
+    <div class="cp-inner">
+      <div class="bf-cards">
+        <div class="bf-card">
+          <div class="bf-card-label c">● CORE</div>
+          <div class="bf-card-value">{{ metrics.global_country.core.arr }}</div>
+          <div class="bf-card-sub">ARR &nbsp;<span class="{{ 'bf-pos' if metrics.global_country.core.arr_mom_positive else 'bf-neg' }}">{{ metrics.global_country.core.arr_mom }}</span> {% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %} &nbsp;<span class="{{ 'bf-pos' if metrics.global_country.core.arr_yoy_positive else 'bf-neg' }}">{{ metrics.global_country.core.arr_yoy }}</span> YoY</div>
+        </div>
+        <div class="bf-card">
+          <div class="bf-card-label l">● LITE</div>
+          <div class="bf-card-value">{{ metrics.global_country.lite.arr }}</div>
+          <div class="bf-card-sub">ARR &nbsp;<span class="{{ 'bf-pos' if metrics.global_country.lite.arr_mom_positive else 'bf-neg' }}">{{ metrics.global_country.lite.arr_mom }}</span> {% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %} &nbsp;<span class="{{ 'bf-pos' if metrics.global_country.lite.arr_yoy_positive else 'bf-neg' }}">{{ metrics.global_country.lite.arr_yoy }}</span> YoY</div>
+        </div>
+      </div>
+      <div class="bf-table">
+        <table>
+          <thead>
+            <tr>
+              <th class="right" style="width:64px;">YoY</th>
+              <th class="right" style="width:56px;">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</th>
+              <th class="right" style="width:80px;">Value</th>
+              <th class="center" style="width:140px;">Metric</th>
+              <th class="left" style="width:80px; padding-left:16px;">Value</th>
+              <th class="right" style="width:56px;">{% if metrics.is_quarter_end %}QoQ{% else %}MoM{% endif %}</th>
+              <th class="right" style="width:64px;">YoY</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in metrics.global_country.butterfly_rows %}
+            {% set is_alert = row.metric_name in ['Net New ARR', 'Churn Rate'] %}
+            {% set dot_class = 'sd-red' if row.metric_name in ['Net New ARR', 'Churn Rate'] else ('sd-amber' if row.metric_name in ['CAC', 'Logos Growth'] else ('sd-gray' if row.metric_name == 'ARPA' else 'sd-green')) %}
+            {% set is_primary = row.metric_name in ['New ARR', 'Net New ARR', 'Churn Rate'] %}
+            {% set neutral_delta = row.metric_name == 'Investment' %}
+            {% set invert_delta = row.metric_name in ['Churn Rate', 'CAC'] %}
+            <tr{% if is_alert %} class="alert-row"{% endif %}>
+              <td class="delta {{ 'neutral' if neutral_delta else ('pos' if (not row.core.yoy_positive if invert_delta else row.core.yoy_positive) else 'neg') }} right">{{ row.core.yoy }}</td>
+              <td class="delta {{ 'neutral' if neutral_delta else ('pos' if (not row.core.mom_positive if invert_delta else row.core.mom_positive) else 'neg') }} right">{{ row.core.mom }}</td>
+              <td class="val{{ ' alert' if row.core.val_negative else '' }} right">{{ row.core.val }}</td>
+              <td class="metric-col"><span class="status-dot {{ dot_class }}"></span><span class="metric-name{{ ' primary' if is_primary else '' }}">{{ row.metric_name }}</span></td>
+              <td class="val{{ ' alert' if row.lite.val_negative else '' }} left" style="padding-left:16px;">{{ row.lite.val }}</td>
+              <td class="delta {{ 'neutral' if neutral_delta else ('pos' if (not row.lite.mom_positive if invert_delta else row.lite.mom_positive) else 'neg') }} right">{{ row.lite.mom }}</td>
+              <td class="delta {{ 'neutral' if neutral_delta else ('pos' if (not row.lite.yoy_positive if invert_delta else row.lite.yoy_positive) else 'neg') }} right">{{ row.lite.yoy }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">8</span>
+    </div>
+  </div>
+
+<script>
+(function(){
+  Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+  Chart.defaults.font.size = 9;
+  Chart.defaults.color = '#64748b';
+
+  const months = ['Jan-25','Feb-25','Mar-25','Apr-25','May-25','Jun-25','Jul-25','Aug-25','Sep-25','Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26'];
+
+  /* ---------- Panel 1: ARR EoP ---------- */
+  const arrSpot  = [19.3, 20.9, 22.4, 22.0, 22.5, 22.9, 23.5, 23.5, 24.2, 24.7, 25.6, 26.6, 27.0, 26.8, 27.3];
+  const arrConst = [21.5, 22.7, 24.2, 24.3, 24.6, 24.6, 24.9, 25.2, 25.5, 26.0, 27.0, 27.0, 26.6, 27.3, 27.3];
+
+  new Chart(document.getElementById('arrEoP'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'Spot FX',              data: arrSpot,  backgroundColor: '#185FA5', borderRadius: 2, maxBarThickness: 16 },
+        { label: 'Constant Currency FX', data: arrConst, backgroundColor: '#94a3b8', borderRadius: 2, maxBarThickness: 16 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      layout: { padding: { top: 14, right: 6, left: 4, bottom: 0 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: { grid: { display: false }, border: { display: false },
+             ticks: { color: '#64748b', font: { family: 'DM Sans', size: 9, weight: '500' } } },
+        y: { display: false, beginAtZero: true, max: 32 }
+      }
+    },
+    plugins: [{
+      id: 'arrEoPLabels',
+      afterDatasetsDraw(chart) {
+        const {ctx} = chart;
+        ctx.save();
+        ctx.font = "500 8.5px 'DM Mono', monospace";
+        ctx.textAlign = 'center';
+        const spotBars  = chart.getDatasetMeta(0).data;
+        const constBars = chart.getDatasetMeta(1).data;
+        spotBars.forEach((bar, i) => {
+          ctx.fillStyle = '#185FA5';
+          ctx.fillText(arrSpot[i].toFixed(1), bar.x, bar.y - 4);
+        });
+        constBars.forEach((bar, i) => {
+          ctx.fillStyle = '#475569';
+          ctx.fillText(arrConst[i].toFixed(1), bar.x, bar.y - 4);
+        });
+        ctx.restore();
+      }
+    }]
+  });
+
+  /* ---------- Panel 2: Net New ARR ---------- */
+  const newAdds     = [ 600,  800,  700,  800,  800,  800,  900,  800,  800,  800,  800, 1000, 1000, 1000, 1200];
+  const upsellsNet  = [   0, 1400, 1400,  300,  300,  200,  300,  200,  300,  200,  400,  800,  100, -100,    0];
+  const disconnects = [-800,-1000, -700,-1000, -800, -900, -800, -800, -800, -800, -800, -800,-1200,-1300, -800];
+  const fxImpact    = [ 300,  600,    0, -500,  300,  300,  300,    0,  500,  200,  400,    0,  500,  200, -300];
+  const netNew      = [ 100, 1600, 1400, -400,  600,  400,  600,    0,  800,  500,  900, 1000,  500, -200,  400];
+
+  new Chart(document.getElementById('netNew'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'New Adds',              data: newAdds,     backgroundColor: '#185FA5', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
+        { label: 'Upsells / (Downsells)', data: upsellsNet,  backgroundColor: '#94a3b8', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
+        { label: 'Disconnects',           data: disconnects, backgroundColor: '#5EEAD4', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
+        { label: 'FX',                    data: fxImpact,    backgroundColor: '#0f172b', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
+        { type: 'line', label: 'Net New', data: netNew,
+          borderColor: '#E11D48', backgroundColor: '#E11D48',
+          tension: 0, pointRadius: 3, borderWidth: 1.5,
+          borderDash: [4, 3], order: 0 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      layout: { padding: { top: 10, right: 6, left: 10, bottom: 0 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: { stacked: true, grid: { color: 'rgba(15,23,43,.04)', drawTicks: false },
+             border: { color: '#cbd5e1' },
+             ticks: { color: '#64748b', font: { family: 'DM Sans', size: 9, weight: '500' } } },
+        y: { stacked: true, beginAtZero: true, min: -2000, max: 2500,
+             grid: { color: 'rgba(128,128,128,.10)' }, border: { display: false },
+             ticks: { color: '#94a3b8', font: { family: 'DM Mono', size: 9 }, stepSize: 500,
+               callback: v => v === 0 ? '0' : (v < 0 ? '\u2212' : '') + Math.abs(v).toLocaleString('en-US')
+             }}
+      }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

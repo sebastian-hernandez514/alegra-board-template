@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colombia — Core vs Lite · March 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0D1117;
+    color: #E8EAF0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  .slide {
+    width: 960px;
+    background: #0D1117;
+    padding: 32px 40px 28px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #E8EAF0;
+    letter-spacing: 0.01em;
+  }
+
+  .period {
+    font-size: 11px;
+    color: #00C896;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── INSIGHT BAR ── */
+  .insight-bar {
+    background: rgba(255, 180, 0, 0.07);
+    border-left: 3px solid #FFB400;
+    border-radius: 0 5px 5px 0;
+    padding: 9px 16px;
+    margin: 14px 0 24px;
+    font-size: 12px;
+    color: #C89A00;
+    line-height: 1.5;
+  }
+
+  .insight-bar strong { color: #FFB400; font-weight: 600; }
+
+  /* ── PLAN HEADERS ── */
+  .plan-headers {
+    display: grid;
+    grid-template-columns: 220px 1fr 0.5px 1fr;
+    align-items: end;
+    margin-bottom: 18px;
+    gap: 0;
+  }
+
+  .plan-divider {
+    background: rgba(255,255,255,0.07);
+    align-self: stretch;
+    margin: 0 24px;
+  }
+
+  .plan-block { padding: 0 12px; }
+  .plan-block.core { text-align: right; padding-right: 32px; }
+  .plan-block.lite { text-align: left; padding-left: 32px; }
+
+  .plan-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .plan-block.core .plan-label { justify-content: flex-end; }
+  .plan-block.lite .plan-label { justify-content: flex-start; }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .plan-arr {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .plan-badges {
+    display: flex;
+    gap: 6px;
+  }
+
+  .plan-block.core .plan-badges { justify-content: flex-end; }
+  .plan-block.lite .plan-badges { justify-content: flex-start; }
+
+  .badge {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  .badge-pos  { background: rgba(0,200,150,0.10); color: #00C896; }
+  .badge-neg  { background: rgba(255,80,80,0.10);  color: #FF5050; }
+  .badge-warn { background: rgba(255,180,0,0.10);  color: #FFB400; }
+  .badge-neu  { background: rgba(140,140,160,0.10); color: #8C8CA0; }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #3E3E52;
+    padding: 0 10px 10px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+
+  th.right { text-align: right; }
+  th.left  { text-align: left; }
+  th.center { text-align: center; }
+
+  tbody tr {
+    border-bottom: 0.5px solid rgba(255,255,255,0.04);
+    transition: background 0.1s;
+  }
+
+  tbody tr:hover { background: rgba(255,255,255,0.025); }
+  tbody tr.alert-row { background: rgba(255,60,60,0.045); }
+  tbody tr.alert-row:hover { background: rgba(255,60,60,0.07); }
+
+  td {
+    padding: 10px 10px;
+    font-size: 12px;
+    vertical-align: middle;
+  }
+
+  /* metric center column */
+  .metric-col {
+    text-align: center;
+    border-left: 0.5px solid rgba(255,255,255,0.06);
+    border-right: 0.5px solid rgba(255,255,255,0.06);
+    padding: 10px 20px;
+  }
+
+  .metric-name {
+    font-size: 11px;
+    color: #7A7A90;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .metric-name.primary { color: #C0C2D0; font-weight: 500; }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 7px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  .sd-green { background: #00C896; }
+  .sd-red   { background: #FF5050; }
+  .sd-amber { background: #FFB400; }
+  .sd-gray  { background: #3E3E52; }
+
+  /* values */
+  .val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #E8EAF0;
+    white-space: nowrap;
+  }
+
+  .val.alert { color: #FF5050; }
+
+  /* deltas */
+  .delta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    white-space: nowrap;
+    color: #4A4A5E;
+  }
+
+  .pos { color: #00C896; }
+  .neg { color: #FF5050; }
+  .neu { color: #5E5E72; }
+
+  td.right { text-align: right; }
+  td.left  { text-align: left; }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 0.5px solid rgba(255,255,255,0.05);
+  }
+
+  .footer-brand {
+    font-size: 10px;
+    color: #2E2E3E;
+    letter-spacing: 0.06em;
+  }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: #3E3E52;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <div class="header">
+    <span class="title">🇨🇴 Colombia — Core vs Lite Performance</span>
+    <span class="period">March 2026</span>
+  </div>
+
+  <div class="insight-bar">
+    <strong>Atención:</strong> Lite registra Net New ARR negativo (−$119K, −132% QoQ) y Churn Rate sube a 5.7% con CAC creciendo +8.8% — señales de presión en retención que contrastan con el momentum positivo de Core.
+  </div>
+
+  <div class="plan-headers">
+    <div></div>
+
+    <div class="plan-block core">
+      <div class="plan-label" style="color:#8B7FF5;">
+        CORE <span class="dot" style="background:#8B7FF5;"></span>
+      </div>
+      <div class="plan-arr" style="color:#8B7FF5;">$10.6M</div>
+      <div class="plan-badges">
+        <span class="badge badge-pos">+1.8% QoQ</span>
+        <span class="badge badge-pos">+35.0% YoY</span>
+      </div>
+    </div>
+
+    <div class="plan-divider"></div>
+
+    <div class="plan-block lite">
+      <div class="plan-label" style="color:#00C896;">
+        <span class="dot" style="background:#00C896;"></span> LITE
+      </div>
+      <div class="plan-arr" style="color:#00C896;">$6.9M</div>
+      <div class="plan-badges">
+        <span class="badge badge-neu">+0.1% QoQ</span>
+        <span class="badge badge-pos">+4.9% YoY</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       TABLA DE MÉTRICAS — INICIO
+       Columnas: YoY | QoQ | Valor (CORE) | Métrica | Valor (LITE) | QoQ | YoY
+       Filas de alerta (.alert-row): Net New ARR · Churn Rate
+  ═══════════════════════════════════════════════════════════════ -->
+  <table>
+    <thead>
+      <tr>
+        <th class="right" style="width:80px;">YoY</th>
+        <th class="right" style="width:70px;">QoQ</th>
+        <th class="right" style="width:80px;">Valor</th>
+        <th class="center" style="width:160px;">Métrica</th>
+        <th class="left"  style="width:80px; padding-left:20px;">Valor</th>
+        <th class="right" style="width:70px;">QoQ</th>
+        <th class="right" style="width:80px;">YoY</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- New ARR -->
+      <tr>
+        <td class="delta pos right">+32.6%</td>
+        <td class="delta pos right">+10.2%</td>
+        <td class="val right">$771K</td>
+        <td class="metric-col">
+          <span class="status-dot sd-green"></span>
+          <span class="metric-name primary">New ARR</span>
+        </td>
+        <td class="val left" style="padding-left:20px;">$692K</td>
+        <td class="delta pos right">+42.3%</td>
+        <td class="delta pos right">+55.5%</td>
+      </tr>
+
+      <!-- Net New ARR — alert -->
+      <tr class="alert-row">
+        <td class="delta neg right">−75.8%</td>
+        <td class="delta neg right">−84.9%</td>
+        <td class="val right">$222K</td>
+        <td class="metric-col">
+          <span class="status-dot sd-red"></span>
+          <span class="metric-name primary">Net New ARR</span>
+        </td>
+        <td class="val alert left" style="padding-left:20px;">−$119K</td>
+        <td class="delta neg right">−132.4%</td>
+        <td class="delta neg right">−115.0%</td>
+      </tr>
+
+      <!-- Logos Growth -->
+      <tr>
+        <td class="delta pos right">+87.2%</td>
+        <td class="delta neg right">−43.7%</td>
+        <td class="val right">+762</td>
+        <td class="metric-col">
+          <span class="status-dot sd-amber"></span>
+          <span class="metric-name primary">Logos Growth</span>
+        </td>
+        <td class="val left" style="padding-left:20px;">+33</td>
+        <td class="delta neg right">−35.3%</td>
+        <td class="delta pos right">+105.3%</td>
+      </tr>
+
+      <!-- New Logos -->
+      <tr>
+        <td class="delta pos right">+10.6%</td>
+        <td class="delta pos right">+9.6%</td>
+        <td class="val right">1,944</td>
+        <td class="metric-col">
+          <span class="status-dot sd-green"></span>
+          <span class="metric-name">New Logos</span>
+        </td>
+        <td class="val left" style="padding-left:20px;">2,723</td>
+        <td class="delta pos right">+3.9%</td>
+        <td class="delta neg right">−13.9%</td>
+      </tr>
+
+      <!-- Investment -->
+      <tr>
+        <td class="delta pos right">+192.0%</td>
+        <td class="delta pos right">+9.9%</td>
+        <td class="val right">$550K</td>
+        <td class="metric-col">
+          <span class="status-dot sd-green"></span>
+          <span class="metric-name">Investment</span>
+        </td>
+        <td class="val left" style="padding-left:20px;">$356K</td>
+        <td class="delta pos right">+13.1%</td>
+        <td class="delta pos right">+178.4%</td>
+      </tr>
+
+      <!-- ARPA -->
+      <tr>
+        <td class="delta pos right">+8.8%</td>
+        <td class="delta neg right">−1.1%</td>
+        <td class="val right">$51</td>
+        <td class="metric-col">
+          <span class="status-dot sd-gray"></span>
+          <span class="metric-name">ARPA</span>
+        </td>
+        <td class="val left" style="padding-left:20px;">$21</td>
+        <td class="delta neg right">−2.7%</td>
+        <td class="delta pos right">+8.6%</td>
+      </tr>
+
+      <!-- CAC -->
+      <tr>
+        <td class="delta pos right">+163.9%</td>
+        <td class="delta pos right">+0.3%</td>
+        <td class="val right">$283</td>
+        <td class="metric-col">
+          <span class="status-dot sd-amber"></span>
+          <span class="metric-name">CAC</span>
+        </td>
+        <td class="val left" style="padding-left:20px;">$131</td>
+        <td class="delta pos right">+8.8%</td>
+        <td class="delta pos right">+223.4%</td>
+      </tr>
+
+      <!-- Churn Rate — alert -->
+      <tr class="alert-row">
+        <td class="delta pos right">+6.8%</td>
+        <td class="delta pos right">+37.4%</td>
+        <td class="val right">3.7%</td>
+        <td class="metric-col">
+          <span class="status-dot sd-red"></span>
+          <span class="metric-name primary">Churn Rate</span>
+        </td>
+        <td class="val alert left" style="padding-left:20px;">5.7%</td>
+        <td class="delta pos right">+12.2%</td>
+        <td class="delta neg right">−8.8%</td>
+      </tr>
+
+      <!-- Payback -->
+      <tr>
+        <td class="delta neg right">−46.8%</td>
+        <td class="delta pos right">+1.8%</td>
+        <td class="val right">6.7 mo</td>
+        <td class="metric-col">
+          <span class="status-dot sd-green"></span>
+          <span class="metric-name">Payback</span>
+        </td>
+        <td class="val left" style="padding-left:20px;">5.9 mo</td>
+        <td class="delta neg right">−22.9%</td>
+        <td class="delta neg right">−57.9%</td>
+      </tr>
+
+    </tbody>
+  </table>
+  <!-- ═══════════════════════════════════════════════════════════════
+       TABLA DE MÉTRICAS — FIN
+  ═══════════════════════════════════════════════════════════════ -->
+
+  <div class="footer">
+    <span class="footer-brand">Alegra · Confidential · 5</span>
+    <div class="legend">
+      <div class="legend-item"><span class="status-dot sd-red"></span>Alerta</div>
+      <div class="legend-item"><span class="status-dot sd-amber"></span>Atención</div>
+      <div class="legend-item"><span class="status-dot sd-green"></span>OK</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

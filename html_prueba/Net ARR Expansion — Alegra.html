@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Net ARR Expansion — Alegra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #0f172b;
+    background: #e2e8f0;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh;
+  }
+
+  .slide {
+    width: 960px; height: 540px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 28px rgba(15,23,43,.12);
+  }
+
+  /* Header */
+  .nw-header {
+    background: #0f172b;
+    height: 44px;
+    flex: 0 0 44px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    color: #ffffff;
+  }
+  .nw-header .title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .1px;
+  }
+  .nw-pill {
+    background: #14b8a6;
+    color: #0f172b;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 6px;
+    letter-spacing: .3px;
+  }
+
+  /* Subheader strip */
+  .nw-subhead {
+    flex: 0 0 28px;
+    display: flex; align-items: center;
+    padding: 0 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 11px;
+    color: #475569;
+    font-weight: 500;
+  }
+  .nw-subhead strong { color: #0f172b; font-weight: 600; margin-right: 6px; }
+  .nw-subhead .pos { color: #16a34a; font-weight: 700; margin-left: 2px; }
+
+  /* Body */
+  .nw-body {
+    flex: 1 1 auto;
+    display: flex; flex-direction: column;
+    padding: 8px 18px 0;
+    gap: 4px;
+    min-height: 0;
+  }
+
+  /* Each panel */
+  .nw-panel {
+    flex: 1 1 0;
+    display: flex; flex-direction: column;
+    min-height: 0;
+  }
+  .nw-panel-head {
+    display: flex; align-items: baseline;
+    gap: 10px;
+    padding: 2px 2px 2px;
+  }
+  .nw-panel-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f172b;
+  }
+  .nw-panel-sep { color: #cbd5e1; font-size: 10px; }
+  .nw-panel-meta { font-size: 10.5px; color: #475569; font-weight: 500; }
+  .nw-panel-meta .val { font-weight: 700; }
+  .nw-panel-meta .pos { color: #16a34a; }
+  .nw-panel-meta .neg { color: #C2410C; }
+  .nw-panel-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 9.5px;
+    color: #64748b;
+    font-style: italic;
+    margin-left: auto;
+    font-weight: 500;
+  }
+  .nw-panel-note .mk { color: #14b8a6; font-style: normal; font-weight: 700; }
+
+  .nw-chart-wrap {
+    flex: 1 1 auto;
+    position: relative;
+    min-height: 0;
+    padding: 0;
+  }
+
+  /* Footer */
+  .nw-footer {
+    flex: 0 0 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    font-size: 9.5px;
+    color: #64748b;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <div class="nw-header">
+    <span class="title">Net ARR Expansion — Breakdown by Component</span>
+    <span class="nw-pill">1Q26</span>
+  </div>
+
+  <div class="nw-subhead">
+    <strong>1Q26 Net ARR Expansion:</strong><span class="pos">+$403K</span>
+  </div>
+
+  <div class="nw-body">
+    <!-- Panel 1: Others & Pricing -->
+    <div class="nw-panel">
+      <div class="nw-panel-head">
+        <span class="nw-panel-title">Others &amp; Pricing</span>
+        <span class="nw-panel-sep">·</span>
+        <span class="nw-panel-meta">1Q26: <span class="val pos">+$704K</span></span>
+        <span class="nw-panel-note"><span class="mk">★</span> = price increase quarter &nbsp;·&nbsp; Includes discount expirations &amp; other MRR movements not driven by cross- or upselling</span>
+      </div>
+      <div class="nw-chart-wrap"><canvas id="chartOthers"></canvas></div>
+    </div>
+
+    <!-- Panel 2: Upselling -->
+    <div class="nw-panel">
+      <div class="nw-panel-head">
+        <span class="nw-panel-title">Upselling</span>
+        <span class="nw-panel-sep">·</span>
+        <span class="nw-panel-meta">1Q26: <span class="val neg">($268K)</span></span>
+        <span class="nw-panel-note">Plan tier changes within the same product — typically negative in Q1 as seasonal year-end upgrades (Q4) normalize in the following quarter</span>
+      </div>
+      <div class="nw-chart-wrap"><canvas id="chartUpsell"></canvas></div>
+    </div>
+
+    <!-- Panel 3: Crosselling -->
+    <div class="nw-panel">
+      <div class="nw-panel-head">
+        <span class="nw-panel-title">Crosselling</span>
+        <span class="nw-panel-sep">·</span>
+        <span class="nw-panel-meta">1Q26: <span class="val neg">($34K)</span></span>
+        <span class="nw-panel-note">Add-on product additions or removals by existing paying customers</span>
+      </div>
+      <div class="nw-chart-wrap"><canvas id="chartCross"></canvas></div>
+    </div>
+  </div>
+
+  <div class="nw-footer">
+    <span>Source: Finance · Mar 2026</span>
+    <span>Alegra · Confidential &nbsp; 6</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+  Chart.defaults.font.size = 9;
+  Chart.defaults.color = '#64748b';
+
+  const quarters = ['1Q24','2Q24','3Q24','4Q24','1Q25','2Q25','3Q25','4Q25','1Q26'];
+
+  // Format helpers
+  const fmtK = v => {
+    if (v === 0) return '$0';
+    const abs = Math.abs(v).toLocaleString('en-US');
+    return v < 0 ? '(\$' + abs + 'K)' : '\$' + abs + 'K';
+  };
+
+  // Data
+  const others = [1169, 366, 1734, 461, 2838, 552, 568, 790, 704];
+  const othersStar = [false, false, true, false, true, false, false, false, false]; // price increase quarters
+  const upsell = [-11, 354, 368, 635, -31, 174, 178, 751, -268];
+  const cross  = [-30, 70, -1, 6, -60, -68, -47, -32, -34];
+
+  const mkOptions = (min, max, stepSize) => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    layout: { padding: { top: 18, right: 20, left: 6, bottom: 2 } },
+    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+    scales: {
+      x: {
+        grid: { display: false },
+        border: { color: '#e2e8f0' },
+        ticks: {
+          color: '#64748b',
+          font: { family: 'DM Sans', size: 9.5, weight: '500' }
+        }
+      },
+      y: {
+        min, max,
+        grid: { color: 'rgba(15,23,43,.06)' },
+        border: { display: false },
+        afterFit: (scale) => { scale.width = 38; },
+        ticks: {
+          color: '#94a3b8',
+          font: { family: 'DM Mono', size: 8.5 },
+          stepSize,
+          autoSkip: false,
+          maxTicksLimit: 6,
+          padding: 4,
+          callback: v => {
+            if (v === 0) return '0';
+            const abs = Math.abs(v).toLocaleString('en-US');
+            return v < 0 ? '\u2212' + abs : abs;
+          }
+        }
+      }
+    }
+  });
+
+  // Reusable label plugin (value above or below each point)
+  const makeLabelPlugin = (id, color, values, opts = {}) => ({
+    id,
+    afterDatasetsDraw(chart) {
+      const {ctx} = chart;
+      const meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.font = "700 9.5px 'Inter', sans-serif";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      meta.data.forEach((pt, i) => {
+        if (!pt) return;
+        const v = values[i];
+        const label = fmtK(v);
+        // Always above the point by default
+        const dy = v >= 0 ? -11 : 11;
+        const cx = pt.x;
+        const cy = pt.y + dy;
+        ctx.fillStyle = color;
+        ctx.fillText(label, cx, cy);
+
+        // Star marker for price-increase quarters
+        if (opts.stars && opts.stars[i]) {
+          ctx.fillStyle = '#14b8a6';
+          ctx.font = "700 11px 'Inter', sans-serif";
+          ctx.fillText('★', cx + ctx.measureText(label).width/2 + 8, cy);
+          ctx.font = "700 9.5px 'Inter', sans-serif";
+        }
+      });
+      ctx.restore();
+    }
+  });
+
+  // ---------- Panel 1: Others & Pricing (teal) ----------
+  new Chart(document.getElementById('chartOthers'), {
+    type: 'line',
+    data: {
+      labels: quarters,
+      datasets: [{
+        data: others,
+        borderColor: '#14b8a6',
+        backgroundColor: '#14b8a6',
+        pointBackgroundColor: '#14b8a6',
+        pointBorderColor: '#14b8a6',
+        pointRadius: 3.5,
+        borderWidth: 2,
+        tension: 0
+      }]
+    },
+    options: mkOptions(0, 3000, 1000),
+    plugins: [ makeLabelPlugin('lblOthers', '#0f172b', others, { stars: othersStar }) ]
+  });
+
+  // ---------- Panel 2: Upselling (violet) ----------
+  new Chart(document.getElementById('chartUpsell'), {
+    type: 'line',
+    data: {
+      labels: quarters,
+      datasets: [{
+        data: upsell,
+        borderColor: '#6366F1',
+        backgroundColor: '#6366F1',
+        pointBackgroundColor: '#6366F1',
+        pointBorderColor: '#6366F1',
+        pointRadius: 3.5,
+        borderWidth: 2,
+        tension: 0
+      }]
+    },
+    options: mkOptions(-500, 1000, 500),
+    plugins: [ makeLabelPlugin('lblUpsell', '#0f172b', upsell) ]
+  });
+
+  // ---------- Panel 3: Crosselling (orange) ----------
+  new Chart(document.getElementById('chartCross'), {
+    type: 'line',
+    data: {
+      labels: quarters,
+      datasets: [{
+        data: cross,
+        borderColor: '#E87722',
+        backgroundColor: '#E87722',
+        pointBackgroundColor: '#E87722',
+        pointBorderColor: '#E87722',
+        pointRadius: 3.5,
+        borderWidth: 2,
+        tension: 0
+      }]
+    },
+    options: mkOptions(-110, 110, 50),
+    plugins: [ makeLabelPlugin('lblCross', '#0f172b', cross) ]
+  });
+})();
+</script>
+
+<script data-pplx-inline-edit>
+(function(){
+  if(window===window.top)return;
+  function inlineAll(orig,clone){
+    if(orig.nodeType!==1)return;
+    try{
+      var cs=getComputedStyle(orig);
+      var t='';
+      for(var i=0;i<cs.length;i++){t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';}
+      clone.style.cssText=t;
+    }catch(e){}
+    var oc=orig.children,cc=clone.children;
+    for(var j=0;j<oc.length&&j<cc.length;j++){inlineAll(oc[j],cc[j]);}
+  }
+  function stripExternal(clone){
+    var imgs=clone.querySelectorAll('img');
+    for(var i=0;i<imgs.length;i++){
+      var s=imgs[i].getAttribute('src');
+      if(s&&!s.startsWith('data:'))imgs[i].removeAttribute('src');
+    }
+    var all=clone.querySelectorAll('*');
+    for(var i=0;i<all.length;i++){
+      var st=all[i].style.cssText;
+      if(st&&st.indexOf('url(')>=0){
+        all[i].style.cssText=st.replace(/url\(["']?(?!data:)[^)"']*["']?\)/gi,'none');
+      }
+    }
+  }
+  var scrollRaf=0;
+  function emitScroll(){
+    scrollRaf=0;
+    var x=window.scrollX||window.pageXOffset||0;
+    var y=window.scrollY||window.pageYOffset||0;
+    window.parent.postMessage({type:'INLINE_EDIT_SCROLL',scrollX:x,scrollY:y},'*');
+  }
+  window.addEventListener('scroll',function(){
+    if(scrollRaf)return;
+    scrollRaf=requestAnimationFrame(emitScroll);
+  },{passive:true,capture:true});
+  emitScroll();
+  window.addEventListener('message',function(e){
+    if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
+    var scrollX=window.scrollX||window.pageXOffset||0;
+    var scrollY=window.scrollY||window.pageYOffset||0;
+    var w=window.innerWidth,h=window.innerHeight;
+    try{
+      var clone=document.documentElement.cloneNode(true);
+      var rm=clone.querySelectorAll('script,link[rel="stylesheet"],style');
+      for(var i=0;i<rm.length;i++){rm[i].remove();}
+      inlineAll(document.documentElement,clone);
+      stripExternal(clone);
+      var html=new XMLSerializer().serializeToString(clone);
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
+        +'<foreignObject width="100%" height="100%">'
+        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
+        +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
+        +html+'</div></div></foreignObject></svg>';
+      var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+      var img=new Image();
+      img.onload=function(){
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0);
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.onerror=function(){
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.src=svgUrl;
+    }catch(err){
+      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+    }
+  });
+})();
+</script></body>
+</html>

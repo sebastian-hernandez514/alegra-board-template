@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recent Performance</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Calibri', Arial, Helvetica, sans-serif;
+    background: #fff;
+    padding: 30px 40px 30px;
+    min-width: 820px;
+  }
+
+  /* Top accent bar */
+  .top-bar {
+    height: 5px;
+    background: linear-gradient(to right, #1b9aaa, #4fc3f7);
+    margin-bottom: 22px;
+  }
+
+  .slide-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a3350;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+  }
+  .title-underline {
+    height: 1.5px;
+    background: #ccd6e0;
+    margin-bottom: 18px;
+  }
+
+  /* Table wrapper */
+  .table-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  table {
+    border-collapse: collapse;
+    font-size: 11.5px;
+    width: 680px;
+  }
+
+  th, td {
+    padding: 3px 8px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  td:first-child, th:first-child {
+    text-align: left;
+    min-width: 175px;
+  }
+
+  /* Column group headers */
+  .col-group-header th {
+    font-weight: 700;
+    font-size: 11px;
+    padding: 4px 8px;
+    border: none;
+  }
+  .col-group-header .g2025 {
+    background: #d0d8e4;
+    color: #1a3350;
+    border-right: 1px solid #b0bbc8;
+  }
+  .col-group-header .g2026 {
+    background: #3a8ec8;
+    color: #fff;
+  }
+  .col-group-header .gytd {
+    background: #1a3350;
+    color: #fff;
+  }
+  .col-group-header .gyoy {
+    background: #1a3350;
+    color: #fff;
+  }
+  .col-group-header .empty { background: #fff; }
+
+  /* Sub-headers row */
+  .sub-header th {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-bottom: 1.5px solid #aabbd0;
+  }
+  .sub-header .lbl { color: #3a8ec8; font-style: italic; font-weight: 400; text-align: left; }
+  .sub-header .s2025 { background: #eaecf0; color: #1a3350; border-right: 1px solid #c0cdd8; }
+  .sub-header .s2026 { background: #3a8ec8; color: #fff; }
+  .sub-header .sytd { background: #1a3350; color: #fff; }
+  .sub-header .syoy { background: #1a3350; color: #fff; }
+  .sub-header .sempty { background: #fff; }
+
+  /* Data rows */
+  .data-row td { border-bottom: 0.5px solid #e8ecf0; }
+  .bold-row td { font-weight: 700; }
+  .italic-row td { font-style: italic; color: #555; font-size: 11px; }
+  .section-header td {
+    font-weight: 700;
+    font-size: 11.5px;
+    color: #1a3350;
+    padding-top: 8px;
+    padding-bottom: 2px;
+    border-bottom: none;
+  }
+  .gap-row td { padding: 2px 0; border: none; }
+
+  /* Color classes */
+  .green { color: #2e7d32; font-weight: 700; }
+  .red { color: #c62828; font-weight: 700; }
+  .neg { color: #c62828; }
+
+  /* Shaded background cols */
+  .shade-2025 { background: #f4f5f7; }
+  .shade-2026 { background: #ebf3fa; }
+  .shade-ytd { background: #edf1f6; }
+
+  /* Borders between groups */
+  td.border-right, th.border-right { border-right: 1.5px solid #aabbd0; }
+  td.border-left, th.border-left { border-left: 1.5px solid #aabbd0; }
+  .outer-box td { border-top: 1.5px solid #aabbd0; }
+  .outer-box-bottom td { border-bottom: 1.5px solid #aabbd0; }
+
+  .yoy-col { width: 52px; }
+  .col-sep { width: 10px; background: #fff; border: none !important; }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+<div class="slide-title">Recent Performance</div>
+<div class="title-underline"></div>
+
+<div class="table-wrap">
+<table>
+  <colgroup>
+    <col style="width:175px">
+    <col style="width:72px"> <!-- Jan/2025 -->
+    <col style="width:72px"> <!-- Feb/2025 -->
+    <col style="width:72px"> <!-- Jan/2026 -->
+    <col style="width:72px"> <!-- Feb/2026 -->
+    <col style="width:10px"> <!-- sep -->
+    <col style="width:64px"> <!-- YTD 2025A -->
+    <col style="width:64px"> <!-- YTD 2026A -->
+    <col style="width:52px"> <!-- YoY -->
+  </colgroup>
+  <thead>
+    <tr class="col-group-header">
+      <th class="empty"></th>
+      <th colspan="2" class="g2025">2025</th>
+      <th colspan="2" class="g2026">2026</th>
+      <th class="empty" style="background:#fff;"></th>
+      <th colspan="2" class="gytd">YTD</th>
+      <th class="gyoy">YoY</th>
+    </tr>
+    <tr class="sub-header">
+      <th class="lbl">(in $Thousand)</th>
+      <th class="s2025">Jan/2025</th>
+      <th class="s2025 border-right">Feb/2025</th>
+      <th class="s2026">Jan/2026</th>
+      <th class="s2026">Feb/2026</th>
+      <th class="sempty" style="background:#fff;"></th>
+      <th class="sytd">2025A</th>
+      <th class="sytd">2026A</th>
+      <th class="syoy"></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- Total ARR -->
+    <tr class="data-row bold-row outer-box">
+      <td>Total ARR</td>
+      <td class="shade-2025">$19.7</td>
+      <td class="shade-2025 border-right">$21.2</td>
+      <td class="shade-2026">$27.5</td>
+      <td class="shade-2026">$27.7</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$21.2</td>
+      <td class="shade-ytd">$27.7</td>
+      <td class="green">30%</td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Y-o-Y Growth</td>
+      <td class="shade-2025">31%</td>
+      <td class="shade-2025 border-right">38%</td>
+      <td class="shade-2026">40%</td>
+      <td class="shade-2026">30%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">38%</td>
+      <td class="shade-ytd">30%</td>
+      <td></td>
+    </tr>
+    <tr class="outer-box-bottom"><td colspan="9" style="padding:0;border-bottom:1.5px solid #aabbd0;"></td></tr>
+
+    <tr class="gap-row"><td colspan="9"></td></tr>
+
+    <!-- P&L -->
+    <tr class="section-header"><td colspan="9">P&L</td></tr>
+
+    <tr class="data-row bold-row">
+      <td>Revenue</td>
+      <td class="shade-2025">$1,607</td>
+      <td class="shade-2025 border-right">$1,750</td>
+      <td class="shade-2026">$2,287</td>
+      <td class="shade-2026">$2,266</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$3,357</td>
+      <td class="shade-ytd">$4,553</td>
+      <td class="green">36%</td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Y-o-Y Growth</td>
+      <td class="shade-2025">37%</td>
+      <td class="shade-2025 border-right">44%</td>
+      <td class="shade-2026">42%</td>
+      <td class="shade-2026">30%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">40%</td>
+      <td class="shade-ytd">36%</td>
+      <td></td>
+    </tr>
+
+    <tr class="data-row bold-row">
+      <td>Gross Profit</td>
+      <td class="shade-2025">$1,272</td>
+      <td class="shade-2025 border-right">$1,418</td>
+      <td class="shade-2026">$1,884</td>
+      <td class="shade-2026">$1,862</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$2,691</td>
+      <td class="shade-ytd">$3,746</td>
+      <td class="green">39%</td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Margin - %</td>
+      <td class="shade-2025">79%</td>
+      <td class="shade-2025 border-right">81%</td>
+      <td class="shade-2026">82%</td>
+      <td class="shade-2026">82%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">80%</td>
+      <td class="shade-ytd">82%</td>
+      <td></td>
+    </tr>
+
+    <tr class="data-row">
+      <td>S&amp;M</td>
+      <td class="shade-2025">907</td>
+      <td class="shade-2025 border-right">892</td>
+      <td class="shade-2026">628</td>
+      <td class="shade-2026">729</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">1,798</td>
+      <td class="shade-ytd">1,357</td>
+      <td class="red">-25%</td>
+    </tr>
+    <tr class="data-row">
+      <td>R&amp;D</td>
+      <td class="shade-2025">473</td>
+      <td class="shade-2025 border-right">481</td>
+      <td class="shade-2026">646</td>
+      <td class="shade-2026">632</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">954</td>
+      <td class="shade-ytd">1,279</td>
+      <td class="green">34%</td>
+    </tr>
+    <tr class="data-row">
+      <td>G&amp;A</td>
+      <td class="shade-2025">294</td>
+      <td class="shade-2025 border-right">346</td>
+      <td class="shade-2026">301</td>
+      <td class="shade-2026">343</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">639</td>
+      <td class="shade-ytd">644</td>
+      <td class="green">1%</td>
+    </tr>
+
+    <tr class="data-row bold-row">
+      <td>Total Operating Expenses</td>
+      <td class="shade-2025">$1,674</td>
+      <td class="shade-2025 border-right">$1,718</td>
+      <td class="shade-2026">$1,575</td>
+      <td class="shade-2026">$1,705</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$3,392</td>
+      <td class="shade-ytd">$3,280</td>
+      <td class="red">-3%</td>
+    </tr>
+
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;S&amp;M % of Rev</td>
+      <td class="shade-2025">56%</td>
+      <td class="shade-2025 border-right">51%</td>
+      <td class="shade-2026">27%</td>
+      <td class="shade-2026">32%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">54%</td>
+      <td class="shade-ytd">30%</td>
+      <td></td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;R&amp;D % of Rev</td>
+      <td class="shade-2025">29%</td>
+      <td class="shade-2025 border-right">27%</td>
+      <td class="shade-2026">28%</td>
+      <td class="shade-2026">28%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">28%</td>
+      <td class="shade-ytd">28%</td>
+      <td></td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;G&amp;A % of Rev</td>
+      <td class="shade-2025">18%</td>
+      <td class="shade-2025 border-right">20%</td>
+      <td class="shade-2026">13%</td>
+      <td class="shade-2026">15%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">19%</td>
+      <td class="shade-ytd">14%</td>
+      <td></td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Op. Expenses % of Rev</td>
+      <td class="shade-2025">104%</td>
+      <td class="shade-2025 border-right">98%</td>
+      <td class="shade-2026">69%</td>
+      <td class="shade-2026">75%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">101%</td>
+      <td class="shade-ytd">72%</td>
+      <td></td>
+    </tr>
+
+    <tr class="data-row bold-row">
+      <td>EBITDA</td>
+      <td class="shade-2025 neg">($401)</td>
+      <td class="shade-2025 border-right neg">($300)</td>
+      <td class="shade-2026">$309</td>
+      <td class="shade-2026">$157</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd neg">($701)</td>
+      <td class="shade-ytd">$466</td>
+      <td class="red">-166%</td>
+    </tr>
+    <tr class="data-row italic-row">
+      <td>&nbsp;&nbsp;Margin - %</td>
+      <td class="shade-2025 neg">(25%)</td>
+      <td class="shade-2025 border-right neg">(17%)</td>
+      <td class="shade-2026">14%</td>
+      <td class="shade-2026">7%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd neg">(21%)</td>
+      <td class="shade-ytd">10%</td>
+      <td></td>
+    </tr>
+
+    <tr class="data-row bold-row">
+      <td>R-40</td>
+      <td class="shade-2025">6%</td>
+      <td class="shade-2025 border-right">21%</td>
+      <td class="shade-2026">53%</td>
+      <td class="shade-2026">37%</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">17%</td>
+      <td class="shade-ytd">63%</td>
+      <td class="green">215%</td>
+    </tr>
+
+    <tr class="gap-row"><td colspan="9"></td></tr>
+
+    <!-- Key BS Items -->
+    <tr class="section-header outer-box"><td colspan="9">Key BS Items</td></tr>
+    <tr class="data-row">
+      <td>Net Cash Actual</td>
+      <td class="shade-2025">$5,814</td>
+      <td class="shade-2025 border-right">$5,606</td>
+      <td class="shade-2026">$3,279</td>
+      <td class="shade-2026">$3,734</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">$5,606</td>
+      <td class="shade-ytd">$3,734</td>
+      <td class="red">-47%</td>
+    </tr>
+    <tr class="data-row outer-box-bottom">
+      <td>Delta MoM</td>
+      <td class="shade-2025 neg">($161)</td>
+      <td class="shade-2025 border-right neg">($208)</td>
+      <td class="shade-2026 neg">($944)</td>
+      <td class="shade-2026">$455</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd neg">(369)</td>
+      <td class="shade-ytd neg">(489)</td>
+      <td class="red">-72%</td>
+    </tr>
+
+    <tr class="gap-row"><td colspan="9"></td></tr>
+
+    <!-- FX COP/USD EoP -->
+    <tr class="section-header outer-box"><td colspan="9">FX COP/USD EoP</td></tr>
+    <tr class="data-row outer-box-bottom">
+      <td>Actual</td>
+      <td class="shade-2025">4,170</td>
+      <td class="shade-2025 border-right">4,120</td>
+      <td class="shade-2026">3,670</td>
+      <td class="shade-2026">3,766</td>
+      <td class="col-sep"></td>
+      <td class="shade-ytd">4,120</td>
+      <td class="shade-ytd">3,670</td>
+      <td>5%</td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+</body>
+</html>

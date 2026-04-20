@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>People & Talent · Alegra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --sm-primary-50:  #E9FAFA;
+    --sm-primary-100: #CFF2F1;
+    --sm-primary-600: #30ABA9;
+    --sm-primary-700: #299E9C;
+    --sm-primary-900: #1A7E7F;
+
+    --slate-100: #F1F5F9;
+    --slate-200: #E2E8F0;
+    --slate-400: #94A3B8;
+    --slate-500: #64748B;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1E293B;
+    --slate-900: #0F172A;
+
+    --rose-500: #F43F5E;
+    --rose-600: #E11D48;
+
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--slate-100);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--slate-800);
+  }
+
+  /* Slide exact 960x540 */
+  .slide {
+    width: 960px;
+    height: 540px;
+    margin: 24px auto;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.06);
+    padding: 20px 26px 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide-title {
+    font-family: 'Lexend', 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    color: var(--slate-900);
+    margin: 0 0 8px 0;
+  }
+  .slide-title::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--slate-200);
+    margin-top: 7px;
+  }
+
+  .charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .chart-card {
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: 10px;
+    padding: 8px 10px 4px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--slate-500);
+    margin: 0 0 2px 0;
+  }
+
+  /* Two stacked panels per card */
+  .panel-top    { position: relative; width: 100%; height: 95px;  margin-bottom: 2px; }
+  .panel-bottom { position: relative; width: 100%; height: 175px; }
+
+  .legend {
+    display: flex;
+    gap: 10px;
+    font-size: 9.5px;
+    color: var(--slate-600);
+    margin-bottom: 2px;
+  }
+  .legend .sw {
+    display: inline-block;
+    width: 10px; height: 2px; border-radius: 1px;
+    margin-right: 4px; vertical-align: middle;
+  }
+  .sw.hires    { background: var(--sm-primary-600); }
+  .sw.attr     { background: var(--rose-500); }
+  .sw.turn     { background: var(--rose-500); }
+  .sw.bar      { background: var(--slate-800); height: 8px; border-radius: 2px; }
+
+  /* Comments */
+  .comments {
+    margin-top: 10px;
+    background: var(--sm-primary-50);
+    border: 1px solid var(--sm-primary-100);
+    border-radius: 10px;
+    padding: 10px 14px 12px;
+    flex: 1 1 auto;
+  }
+  .comments h3 {
+    margin: 0 0 5px 0;
+    font-family: 'Lexend', 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--slate-900);
+    text-transform: uppercase;
+  }
+  .comments p {
+    margin: 0;
+    font-size: 11.5px;
+    color: var(--slate-600);
+    line-height: 1.4;
+  }
+  .comments .placeholder {
+    color: var(--slate-400);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <h1 class="slide-title">People &amp; Talent</h1>
+
+  <div class="charts">
+    <!-- LEFT CARD: New Hires & Attrition (top line) + People EoP (bottom bars) -->
+    <div class="chart-card">
+      <div class="chart-title">New Hires &amp; Attrition &nbsp;·&nbsp; People EoP</div>
+      <div class="legend">
+        <span><span class="sw hires"></span>New Hires</span>
+        <span><span class="sw attr"></span>Attrition</span>
+        <span><span class="sw bar"></span>People EoP</span>
+      </div>
+      <div class="panel-top"><canvas id="leftTop"></canvas></div>
+      <div class="panel-bottom"><canvas id="leftBot"></canvas></div>
+    </div>
+
+    <!-- RIGHT CARD: Staff Turnover Rate (top line) + Attrition % (bottom bars) -->
+    <div class="chart-card">
+      <div class="chart-title">Staff Turnover Rate &nbsp;·&nbsp; Attrition %</div>
+      <div class="legend">
+        <span><span class="sw turn"></span>Turnover Rate</span>
+        <span><span class="sw bar"></span>Attrition %</span>
+      </div>
+      <div class="panel-top"><canvas id="rightTop"></canvas></div>
+      <div class="panel-bottom"><canvas id="rightBot"></canvas></div>
+    </div>
+  </div>
+
+  <section class="comments">
+    <h3>Comments</h3>
+    <p class="placeholder">Add highlights and lowlights here.</p>
+  </section>
+</div>
+
+<script>
+  const months = ['Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+
+  Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+  Chart.defaults.font.size = 9;
+  Chart.defaults.color = '#64748B';
+
+  // ---------- Data (from source slide) ----------
+  const newHires   = [22, 23, 18, 12,  9, 11, 11, 14, 15, 12, 19, 18,  7];
+  const attrition  = [26,  6, 18,  8, 10, 11, 13, 21, 12, 15, 13, 17, 20];
+  const peopleEoP  = [510, 530, 530, 535, 535, 525, 520, 520, 525, 520, 517, 515, 505];
+
+  const turnover   = [4.8, 1.1, 3.5, 1.5, 1.6, 1.8, 2.4, 3.5, 2.0, 3.1, 2.76, 2.96, 3.84];
+  const attrPct    = [5.3, 1.1, 3.5, 1.4, 2.3, 2.1, 2.4, 4.0, 2.1, 3.4, 3.68, 3.30, 3.96];
+
+  // ---------- Common options ----------
+  const commonLine = (max, title) => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    layout: { padding: { top: 14, right: 12, left: 4, bottom: 2 } },
+    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+    scales: {
+      x: {
+        display: false,
+        grid: { display: false }
+      },
+      y: {
+        beginAtZero: true,
+        max,
+        ticks: { color: '#94A3B8', stepSize: Math.ceil(max/4) },
+        grid: { color: '#F1F5F9' },
+        border: { display: false },
+        title: { display: true, text: title, color: '#64748B', font: { size: 8.5, weight: '600' } }
+      }
+    }
+  });
+
+  const commonBars = (max, title, pctAxis=false) => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    layout: { padding: { top: 6, right: 12, left: 4, bottom: 2 } },
+    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: '#64748B', font: { size: 9 } },
+        border: { color: '#E2E8F0' }
+      },
+      y: {
+        beginAtZero: true,
+        max,
+        ticks: {
+          color: '#94A3B8',
+          stepSize: pctAxis ? 1 : Math.ceil(max/6),
+          callback: v => pctAxis ? v + '%' : v
+        },
+        grid: { color: '#F1F5F9' },
+        border: { display: false },
+        title: { display: true, text: title, color: '#64748B', font: { size: 8.5, weight: '600' } }
+      }
+    }
+  });
+
+  // ---------- LEFT TOP: New Hires + Attrition lines ----------
+  new Chart(document.getElementById('leftTop'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        {
+          label: 'New Hires',
+          data: newHires,
+          borderColor: '#30ABA9',
+          backgroundColor: '#30ABA9',
+          tension: 0.25, pointRadius: 2, borderWidth: 2
+        },
+        {
+          label: 'Attrition',
+          data: attrition,
+          borderColor: '#F43F5E',
+          backgroundColor: '#F43F5E',
+          tension: 0.25, pointRadius: 2, borderWidth: 2
+        }
+      ]
+    },
+    options: commonLine(30, 'New Hires & Attrition'),
+    plugins: [{
+      id: 'lblLeftTop',
+      afterDatasetsDraw(chart) {
+        const {ctx} = chart;
+        ctx.save();
+        ctx.font = '700 9.5px Inter';
+
+        const hires = chart.getDatasetMeta(0).data;
+        const attr  = chart.getDatasetMeta(1).data;
+
+        // New Hires (teal) labels: below the point
+        [10,11,12].forEach(i => {
+          const p = hires[i]; if (!p) return;
+          ctx.fillStyle = '#1A7E7F';
+          ctx.textAlign = 'center';
+          ctx.fillText(newHires[i], p.x, p.y + 12);
+        });
+        // Attrition (rose) labels: above the point
+        [10,11,12].forEach(i => {
+          const p = attr[i]; if (!p) return;
+          ctx.fillStyle = '#E11D48';
+          ctx.textAlign = 'center';
+          ctx.fillText(attrition[i], p.x, p.y - 6);
+        });
+        ctx.restore();
+      }
+    }]
+  });
+
+  // ---------- LEFT BOTTOM: People EoP bars ----------
+  new Chart(document.getElementById('leftBot'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'People EoP',
+        data: peopleEoP,
+        backgroundColor: '#1E293B',
+        borderRadius: 2,
+        maxBarThickness: 22
+      }]
+    },
+    options: commonBars(600, 'People EoP'),
+    plugins: [{
+      id: 'lblLeftBot',
+      afterDatasetsDraw(chart) {
+        const {ctx} = chart;
+        ctx.save();
+        ctx.font = '700 9px Inter';
+        const bars = chart.getDatasetMeta(0).data;
+        [10,11,12].forEach(i => {
+          const b = bars[i]; if (!b) return;
+          ctx.fillStyle = '#FFFFFF';
+          ctx.textAlign = 'center';
+          ctx.fillText(peopleEoP[i], b.x, b.y + 14);
+        });
+        ctx.restore();
+      }
+    }]
+  });
+
+  // ---------- RIGHT TOP: Turnover line ----------
+  new Chart(document.getElementById('rightTop'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Turnover Rate',
+        data: turnover,
+        borderColor: '#F43F5E',
+        backgroundColor: '#F43F5E',
+        tension: 0.25, pointRadius: 2, borderWidth: 2
+      }]
+    },
+    options: commonLine(5, 'Staff Turnover Rate'),
+    plugins: [{
+      id: 'lblRightTop',
+      afterDatasetsDraw(chart) {
+        const {ctx} = chart;
+        ctx.save();
+        ctx.font = '700 9.5px Inter';
+        const pts = chart.getDatasetMeta(0).data;
+        [10,11,12].forEach(i => {
+          const p = pts[i]; if (!p) return;
+          ctx.fillStyle = '#E11D48';
+          // Alternate above/below so 2,76 and 2,96 don't touch 3,84
+          const dy = (i === 12) ? -7 : 12;
+          ctx.textAlign = 'center';
+          ctx.fillText(turnover[i].toFixed(2).replace('.', ','), p.x, p.y + dy);
+        });
+        ctx.restore();
+      }
+    }]
+  });
+
+  // ---------- RIGHT BOTTOM: Attrition % bars ----------
+  new Chart(document.getElementById('rightBot'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Attrition %',
+        data: attrPct,
+        backgroundColor: '#1E293B',
+        borderRadius: 2,
+        maxBarThickness: 22
+      }]
+    },
+    options: commonBars(6, 'Attrition %', true),
+    plugins: [{
+      id: 'lblRightBot',
+      afterDatasetsDraw(chart) {
+        const {ctx} = chart;
+        ctx.save();
+        ctx.font = '700 9px Inter';
+        const bars = chart.getDatasetMeta(0).data;
+        [10,11,12].forEach(i => {
+          const b = bars[i]; if (!b) return;
+          ctx.fillStyle = '#FFFFFF';
+          ctx.textAlign = 'center';
+          ctx.fillText(attrPct[i].toFixed(2).replace('.', ',') + '%', b.x, b.y + 14);
+        });
+        ctx.restore();
+      }
+    }]
+  });
+</script>
+
+<script data-pplx-inline-edit>
+(function(){
+  if(window===window.top)return;
+  function inlineAll(orig,clone){
+    if(orig.nodeType!==1)return;
+    try{
+      var cs=getComputedStyle(orig);
+      var t='';
+      for(var i=0;i<cs.length;i++){t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';}
+      clone.style.cssText=t;
+    }catch(e){}
+    var oc=orig.children,cc=clone.children;
+    for(var j=0;j<oc.length&&j<cc.length;j++){inlineAll(oc[j],cc[j]);}
+  }
+  function stripExternal(clone){
+    var imgs=clone.querySelectorAll('img');
+    for(var i=0;i<imgs.length;i++){
+      var s=imgs[i].getAttribute('src');
+      if(s&&!s.startsWith('data:'))imgs[i].removeAttribute('src');
+    }
+    var all=clone.querySelectorAll('*');
+    for(var i=0;i<all.length;i++){
+      var st=all[i].style.cssText;
+      if(st&&st.indexOf('url(')>=0){
+        all[i].style.cssText=st.replace(/url\(["']?(?!data:)[^)"']*["']?\)/gi,'none');
+      }
+    }
+  }
+  var scrollRaf=0;
+  function emitScroll(){
+    scrollRaf=0;
+    var x=window.scrollX||window.pageXOffset||0;
+    var y=window.scrollY||window.pageYOffset||0;
+    window.parent.postMessage({type:'INLINE_EDIT_SCROLL',scrollX:x,scrollY:y},'*');
+  }
+  window.addEventListener('scroll',function(){
+    if(scrollRaf)return;
+    scrollRaf=requestAnimationFrame(emitScroll);
+  },{passive:true,capture:true});
+  emitScroll();
+  window.addEventListener('message',function(e){
+    if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
+    var scrollX=window.scrollX||window.pageXOffset||0;
+    var scrollY=window.scrollY||window.pageYOffset||0;
+    var w=window.innerWidth,h=window.innerHeight;
+    try{
+      var clone=document.documentElement.cloneNode(true);
+      var rm=clone.querySelectorAll('script,link[rel="stylesheet"],style');
+      for(var i=0;i<rm.length;i++){rm[i].remove();}
+      inlineAll(document.documentElement,clone);
+      stripExternal(clone);
+      var html=new XMLSerializer().serializeToString(clone);
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
+        +'<foreignObject width="100%" height="100%">'
+        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
+        +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
+        +html+'</div></div></foreignObject></svg>';
+      var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+      var img=new Image();
+      img.onload=function(){
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0);
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.onerror=function(){
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.src=svgUrl;
+    }catch(err){
+      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+    }
+  });
+})();
+</script></body>
+</html>

@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alegra Board — Discussion · Churn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+/* ── base.css (identical to board_standalone) ────────────────────────── */
+:root {
+  --color-navy:          #0f172b;
+  --color-bg:            #ffffff;
+  --color-surface:       #f8fafc;
+  --color-border:        #e2e8f0;
+  --color-teal:          #14b8a6;
+  --color-teal-light:    #f0fdfa;
+  --color-positive:      #16a34a;
+  --color-negative:      #C2410C;
+  --color-neutral:       #64748b;
+  --color-text-primary:  #0f172b;
+  --color-text-secondary:#64748b;
+
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --slide-width:  960px;
+  --slide-height: 540px;
+  --slide-pad-x:  56px;
+  --slide-pad-y:  48px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-family);
+  background: #e5e7eb;
+  color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 24px;
+  min-height: 100vh;
+}
+
+.slide {
+  width: var(--slide-width);
+  height: var(--slide-height);
+  overflow: hidden;
+  background: var(--color-bg);
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.slide-header {
+  background: var(--color-navy);
+  padding: 16px var(--slide-pad-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.slide-header .title {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+  max-width: 740px;
+}
+.slide-header .period {
+  color: var(--color-teal);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.slide-body {
+  flex: 1;
+  padding: 26px var(--slide-pad-x) 18px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.slide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px var(--slide-pad-x) 14px;
+  flex-shrink: 0;
+}
+.slide-footer .footer-brand { font-size: 10px; color: var(--color-border); font-weight: 500; letter-spacing: 0.5px; }
+.slide-footer .footer-source { font-size: 9px; color: #64748b; font-style: italic; }
+.slide-footer .footer-page { font-size: 10px; color: var(--color-border); }
+
+.slide-cover {
+  background: var(--color-navy);
+  justify-content: center;
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+}
+.slide-cover .cover-eyebrow {
+  font-size: 12px; font-weight: 500; color: var(--color-teal);
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px;
+}
+.slide-cover .cover-title {
+  font-size: 38px; font-weight: 700; color: #ffffff;
+  letter-spacing: -1px; line-height: 1.1; margin-bottom: 12px;
+}
+.slide-cover .cover-subtitle {
+  font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.5);
+}
+.slide-cover .cover-logo {
+  position: absolute; bottom: 36px; right: var(--slide-pad-x);
+  font-size: 18px; font-weight: 700; color: rgba(255,255,255,0.3); letter-spacing: 1px;
+}
+
+.section-divider {
+  background: var(--color-navy);
+  justify-content: center;
+  padding: var(--slide-pad-y) var(--slide-pad-x);
+}
+.section-divider .eyebrow {
+  font-size: 11px; font-weight: 600; color: var(--color-teal);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px;
+}
+.section-divider .section-title {
+  font-size: 38px; font-weight: 700; color: #ffffff;
+  letter-spacing: -1.2px; line-height: 1.1; margin-bottom: 14px; max-width: 640px;
+}
+.section-divider .topic-label {
+  font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.40);
+}
+.section-divider .slide-num {
+  position: absolute; bottom: 24px; right: var(--slide-pad-x);
+  font-size: 10px; color: rgba(255,255,255,0.15);
+}
+
+.block-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--color-teal);
+  padding-bottom: 8px; border-bottom: 1px solid var(--color-border);
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.bullet-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.bullet-list li {
+  display: flex; gap: 10px; font-size: 13px; line-height: 1.55;
+  color: var(--color-text-secondary);
+}
+.bullet-list li::before {
+  content: "·"; color: var(--color-teal); font-weight: 700; font-size: 18px;
+  line-height: 1.2; flex-shrink: 0;
+}
+.bullet-list li strong { color: var(--color-text-primary); font-weight: 600; }
+
+.ask-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.ask-chip {
+  flex: 1; min-width: 220px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+.ask-chip strong {
+  display: block; font-size: 11px; font-weight: 700;
+  color: var(--color-navy); margin-bottom: 3px;
+}
+
+.insight-box {
+  background: var(--color-teal-light);
+  border-left: 3px solid var(--color-teal);
+  border-radius: 0 6px 6px 0;
+  padding: 10px 16px;
+  font-size: 11.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+  flex-shrink: 0;
+}
+.insight-box strong { color: var(--color-text-primary); font-weight: 600; }
+.insight-box .so-what {
+  display: inline-block;
+  font-size: 9.5px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--color-teal);
+  margin-right: 8px;
+}
+
+.data-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+.data-table thead tr { background: var(--color-navy); color: #ffffff; }
+.data-table thead th { padding: 7px 11px; font-weight: 600; text-align: right; letter-spacing: 0.3px; font-size: 10px; }
+.data-table thead th:first-child { text-align: left; }
+.data-table tbody tr:nth-child(even) { background: var(--color-surface); }
+.data-table tbody td { padding: 6px 11px; text-align: right; color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border); }
+.data-table tbody td:first-child { text-align: left; color: var(--color-text-primary); font-weight: 500; }
+.data-table tr.em td { color: var(--color-teal); font-weight: 700; }
+.data-table tr.em td:first-child { color: var(--color-navy); }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 99px;
+  font-size: 11px; font-weight: 600;
+}
+.badge.positive { background: #dcfce7; color: var(--color-positive); }
+.badge.negative { background: #ffedd5; color: var(--color-negative); }
+.badge.neutral  { background: #f1f5f9; color: var(--color-neutral); }
+.badge.teal     { background: var(--color-teal-light); color: var(--color-teal); }
+
+.slide-divider {
+  width: var(--slide-width); text-align: center;
+  font-size: 11px; color: #9ca3af; letter-spacing: 1px;
+  user-select: none;
+}
+.topic-separator {
+  width: var(--slide-width); text-align: center;
+  padding: 8px 0 4px; font-size: 10px; font-weight: 600;
+  color: #94a3b8; letter-spacing: 2px; text-transform: uppercase;
+}
+
+/* ── additions specific to churn (hero stats + charts) ───────────────── */
+.hero-stat {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;
+}
+.hero-num {
+  font-size: 48px; font-weight: 700;
+  letter-spacing: -1.6px; line-height: 1;
+  color: var(--color-navy);
+}
+.hero-num.teal { color: var(--color-teal); }
+.hero-num.red  { color: var(--color-negative); }
+.hero-unit {
+  font-size: 20px; font-weight: 600;
+  color: var(--color-neutral); letter-spacing: -0.5px;
+}
+.hero-cap {
+  font-size: 12px; color: var(--color-text-secondary);
+  line-height: 1.5; max-width: 320px;
+}
+.hero-cap strong { color: var(--color-text-primary); font-weight: 600; }
+.hero-delta {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600;
+  background: #dcfce7; color: var(--color-positive);
+  padding: 2px 8px; border-radius: 99px;
+}
+
+.chart-wrap { position: relative; flex: 1; min-height: 0; width: 100%; }
+
+/* stacked KPI column (right side of chart slides) */
+.kpi-stack { display: flex; flex-direction: column; gap: 16px; }
+.kpi-stack .kpi-item { padding-top: 14px; border-top: 1px solid var(--color-border); }
+.kpi-stack .kpi-item:first-child { border-top: none; padding-top: 0; }
+.kpi-stack .k-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 1.3px;
+  text-transform: uppercase; color: var(--color-neutral);
+  margin-bottom: 5px;
+}
+.kpi-stack .k-val {
+  font-size: 26px; font-weight: 700; letter-spacing: -0.8px;
+  line-height: 1; color: var(--color-navy); margin-bottom: 4px;
+}
+.kpi-stack .k-val.teal { color: var(--color-teal); }
+.kpi-stack .k-val.red  { color: var(--color-negative); }
+.kpi-stack .k-val.sm   { font-size: 20px; }
+.kpi-stack .k-note {
+  font-size: 10.5px; color: var(--color-text-secondary); line-height: 1.45;
+}
+.kpi-stack .k-note strong { color: var(--color-text-primary); font-weight: 600; }
+
+/* horizontal bars for categorical data */
+.hbar-set { display: flex; flex-direction: column; gap: 14px; }
+.hbar-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 48px;
+  align-items: center;
+  gap: 12px;
+}
+.hbar-name { font-size: 12px; color: var(--color-text-secondary); font-weight: 500; }
+.hbar-track { height: 8px; background: #f1f5f9; border-radius: 2px; overflow: hidden; }
+.hbar-fill { height: 100%; background: var(--color-navy); border-radius: 2px; }
+.hbar-fill.teal { background: var(--color-teal); }
+.hbar-fill.red  { background: var(--color-negative); }
+.hbar-fill.gray { background: #94a3b8; }
+.hbar-val {
+  font-size: 12px; font-weight: 700; color: var(--color-navy);
+  text-align: right; font-variant-numeric: tabular-nums;
+}
+.hbar-row.em .hbar-name { color: var(--color-text-primary); font-weight: 600; }
+.hbar-row.em .hbar-val  { color: var(--color-negative); }
+
+  </style>
+</head>
+<body>
+
+  <!-- ================================================================
+       COVER — Discussion Topic Title
+       ================================================================ -->
+  <div class="slide section-divider">
+    <div class="eyebrow">Discussion · 01</div>
+    <div class="section-title">Churn</div>
+    <div class="topic-label">GLO + CORE Segment &nbsp;·&nbsp; Q1 2026</div>
+    <div class="slide-num">1</div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 1 — ALEGRA GLOBAL CHURN · all segments
+       Q: What is total Alegra churn and permanent churn?
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Alegra at 4.8% monthly churn in Q1'26 (2025 baseline 4.65%) · Core at 3.5% remains the stability anchor, Lite ~2× higher</span>
+    </div>
+    <div class="slide-body" style="gap: 18px;">
+
+      <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 36px; flex: 1; min-height: 0;">
+
+        <div style="display: flex; flex-direction: column; min-height: 0;">
+          <div class="block-label">Monthly Alegra total churn</div>
+          <div class="chart-wrap"><canvas id="globalChart"></canvas></div>
+        </div>
+
+        <div>
+          <div class="block-label">Q1'26 · at a glance</div>
+          <div class="kpi-stack">
+            <div class="kpi-item">
+              <div class="k-label">Churn · (Retired − Reactivated) / BoP · monthly avg</div>
+              <div class="k-val teal">4.8%</div>
+              <div class="k-note">Q1'26 · 2025 baseline <strong>4.65%</strong> · trend: 5.08 → 5.27 → 4.03 (Mar strong recovery)</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">Companies flow · Q1'26 total</div>
+              <div class="k-val sm">8,164<span style="font-size:13px; color:var(--color-neutral); font-weight:500;">&nbsp;net</span></div>
+              <div class="k-note">12,408 retired − 4,244 reactivated · <strong>~28% of Q1 churn is Core</strong></div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">MRR flow · Q1'26 total</div>
+              <div class="k-val sm">$268K<span style="font-size:13px; color:var(--color-neutral); font-weight:500;">&nbsp;net Q1</span></div>
+              <div class="k-note">$384K retired − $116K reactivated · ~$89K/mo avg</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight-box">
+        <span class="so-what">So what</span>
+        Alegra-wide Q1'26 churn runs slightly above 2025 baseline (4.8% vs 4.65%) but March returned to 4.03% — sharp recovery. <strong>Core is where the defense matters most</strong> — only 28% of Q1 churn but ~39% of the active base. Next: zoom into Core's monthly flow and its real permanent impact.
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">2</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 2 — CORE CHURN · the primary Core metric
+       Q: What is our Core churn rate after reactivations?
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Core churn at 3.5% monthly avg in Q1'26 · 54 bps above 2025 baseline (2.93%) but March improved to 2.85%</span>
+    </div>
+    <div class="slide-body" style="gap: 18px;">
+
+      <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 36px; flex: 1; min-height: 0;">
+
+        <div style="display: flex; flex-direction: column; min-height: 0;">
+          <div class="block-label">Monthly Core churn</div>
+          <div class="chart-wrap"><canvas id="netChart"></canvas></div>
+        </div>
+
+        <div>
+          <div class="block-label">Q1'26 · at a glance</div>
+          <div class="kpi-stack">
+            <div class="kpi-item">
+              <div class="k-label">Churn · (Retired − Reactivated) / BoP · monthly avg</div>
+              <div class="k-val teal">3.5%</div>
+              <div class="k-note">Q1'26 · 2025 baseline <strong>2.93%</strong> · trend: 3.75 → 3.80 → 2.85 (Mar below baseline)</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">Companies flow · Q1'26 total</div>
+              <div class="k-val sm">2,315<span style="font-size:13px; color:var(--color-neutral); font-weight:500;">&nbsp;net</span></div>
+              <div class="k-note">3,479 retired − 1,164 reactivated · BoP avg 22,277</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">MRR flow · Q1'26 total</div>
+              <div class="k-val sm">$124K<span style="font-size:13px; color:var(--color-neutral); font-weight:500;">&nbsp;net Q1</span></div>
+              <div class="k-note">$176K retired − $51K reactivated · ~$41K/mo avg · ~$0.5M ARR/yr if sustained</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight-box">
+        <span class="so-what">So what</span>
+        Core Q1'26 ran 54 bps above the 2025 baseline (3.5% vs 2.93%) but <strong>March at 2.85% is already below baseline — recovery confirmed</strong>. Q1 net flow: <strong>2,315 companies and $124K MRR lost</strong>. Next: how many of these come back, and how many are permanent?
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">3</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 4 — FULL FUNNEL · Gross → Permanent (2025 closed year)
+       Q: From all yearly retirements, how many are permanent?
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Full funnel · Core 2025 closed year: 4.20% gross → 2.39% permanent · 43% of retired companies come back within 3 months</span>
+    </div>
+    <div class="slide-body" style="gap: 18px;">
+
+      <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 36px; flex: 1; min-height: 0;">
+
+        <div style="display: flex; flex-direction: column; min-height: 0;">
+          <div class="block-label">Core · Gross retirements vs Permanent</div>
+          <div class="chart-wrap"><canvas id="grossChart"></canvas></div>
+        </div>
+
+        <div>
+          <div class="block-label">Retention funnel · 2025 Core (closed window)</div>
+          <div class="hbar-set">
+            <div class="hbar-row" style="grid-template-columns: 180px 1fr 108px;">
+              <div class="hbar-name">Gross retired</div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:100%; background:var(--color-navy);"></div></div>
+              <div class="hbar-val">9,849 · 4.20%</div>
+            </div>
+            <div class="hbar-row" style="grid-template-columns: 180px 1fr 108px;">
+              <div class="hbar-name" style="color:var(--color-positive);">(−) Reactivated (+1 mo)</div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:31%; background:#86efac;"></div></div>
+              <div class="hbar-val" style="color:var(--color-positive);">3,015 · 1.29 pp</div>
+            </div>
+            <div class="hbar-row" style="grid-template-columns: 180px 1fr 108px;">
+              <div class="hbar-name" style="color:var(--color-positive);">(−) Recovered (+2/+3 mo)</div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:12%; background:#86efac;"></div></div>
+              <div class="hbar-val" style="color:var(--color-positive);">1,222 · 0.52 pp</div>
+            </div>
+            <div class="hbar-row em" style="grid-template-columns: 180px 1fr 108px;">
+              <div class="hbar-name" style="color:var(--color-teal);">= Permanent</div>
+              <div class="hbar-track"><div class="hbar-fill teal" style="width:57%;"></div></div>
+              <div class="hbar-val" style="color:var(--color-teal);">5,612 · 2.39%</div>
+            </div>
+          </div>
+          <div style="margin-top: 14px; font-size: 11px; color: var(--color-text-secondary); line-height: 1.55;">
+            Of every 100 retired in 2025: <strong style="color:var(--color-text-primary);">31 return at month +1</strong> · 12 at months +2/+3 · <strong style="color:var(--color-text-primary);">57 stay permanent</strong>.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight-box">
+        <span class="so-what">So what</span>
+        In the closed 2025 year, <strong>43% of Core retirements returned within 3 months</strong> — the permanent slice is ~57% of gross, the real LTV compression. Next: what <em>type</em> of churn composes this permanent loss — payments or voluntary?
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">4</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 6 — CHURN POR SEGMENTO · where
+       Q: What composes Core churn, and how does it compare to Lite?
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Two-thirds of Core exits are a payments issue that auto-resolves — voluntary is smaller but permanent</span>
+    </div>
+    <div class="slide-body" style="gap: 20px;">
+
+      <div style="display: grid; grid-template-columns: 1.55fr 1fr; gap: 36px; flex: 1; min-height: 0;">
+
+        <div style="display: flex; flex-direction: column; min-height: 0;">
+          <div class="block-label">Core churn · companies per month · voluntary vs involuntary</div>
+          <div class="chart-wrap"><canvas id="volInvolChart"></canvas></div>
+        </div>
+
+        <div>
+          <div class="block-label">Core mix · Q1'26</div>
+          <div class="kpi-stack">
+            <div class="kpi-item">
+              <div class="k-label">Involuntary (delinquent)</div>
+              <div class="k-val">63%</div>
+              <div class="k-note">Payment failure · 47% auto-recovers</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">Voluntary</div>
+              <div class="k-val sm red">37%</div>
+              <div class="k-note">Active cancel · strategic focus</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">Core vs Lite · benchmark</div>
+              <div class="k-val sm teal">~2×</div>
+              <div class="k-note">2025 baseline: Lite 5.8% vs Core 2.93% · structural quality gap</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight-box">
+        <span class="so-what">So what</span>
+        Within Core, management focus belongs on the <strong>37% voluntary</strong> — smaller in volume but permanent in impact. Lite runs ~2× Core's rate on 2025 baseline, confirming Core as the stability moat. Next: who are these voluntary leavers, and when do they signal?
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">5</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 4 — ANTIGÜEDAD + PERFIL · who + how they behaved
+       Q: Who leaves, what was their health, usage, invoicing, and stated reason?
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">The typical Core leaver is a year-two+ veteran with falling usage and invoices — visible 90 days before exit</span>
+    </div>
+    <div class="slide-body" style="gap: 16px;">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 44px; flex: 1; min-height: 0; align-items: start;">
+
+        <div>
+          <div class="block-label">Core churn · share by tenure</div>
+          <div class="hbar-set">
+            <div class="hbar-row">
+              <div class="hbar-name">M1 – M3</div>
+              <div class="hbar-track"><div class="hbar-fill gray" style="width:16.0%;"></div></div>
+              <div class="hbar-val">16.0%</div>
+            </div>
+            <div class="hbar-row">
+              <div class="hbar-name">M4 – M6</div>
+              <div class="hbar-track"><div class="hbar-fill gray" style="width:14.5%;"></div></div>
+              <div class="hbar-val">14.5%</div>
+            </div>
+            <div class="hbar-row">
+              <div class="hbar-name">M7 – M12</div>
+              <div class="hbar-track"><div class="hbar-fill gray" style="width:16.3%;"></div></div>
+              <div class="hbar-val">16.3%</div>
+            </div>
+            <div class="hbar-row em">
+              <div class="hbar-name">M13+</div>
+              <div class="hbar-track"><div class="hbar-fill red" style="width:53.2%;"></div></div>
+              <div class="hbar-val">53.2%</div>
+            </div>
+          </div>
+          <div style="margin-top: 12px; font-size: 11px; color: var(--color-text-secondary); line-height: 1.5;">
+            Within M13+, <strong style="color:var(--color-text-primary);">monthly plans churn at 7.46% vs 2.02% annual</strong> — a 3.7× structural gap.
+          </div>
+        </div>
+
+        <div>
+          <div class="block-label">Pre-exit behavior · what we observe</div>
+          <div class="kpi-stack">
+            <div class="kpi-item">
+              <div class="k-label">Flagged on CHS at exit</div>
+              <div class="k-val red">72%</div>
+              <div class="k-note"><strong>Critical or At-risk</strong> · our score saw most before they left</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">Product usage · final month</div>
+              <div class="k-val sm">78%</div>
+              <div class="k-note">had ≤5 transactions · low &amp; declining</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">Invoice volume · 6 mo before exit</div>
+              <div class="k-val sm">54 → 29<span style="font-size:13px; color:var(--color-neutral); font-weight:500;">&nbsp;/mo</span></div>
+              <div class="k-note"><strong>−46%</strong> decline · voluntary Core churners · visible months before exit</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="display: flex; gap: 18px; align-items: center; padding: 10px 14px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 6px;">
+        <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 1.3px; color: var(--color-neutral); text-transform: uppercase; white-space: nowrap;">Top stated reasons · Q56</div>
+        <div style="flex: 1; display: flex; gap: 20px; font-size: 11.5px; color: var(--color-text-secondary); flex-wrap: wrap;">
+          <span><strong style="color: var(--color-text-primary);">"Sporadic use"</strong> &nbsp;35%</span>
+          <span>"Other / no reason" &nbsp;36%</span>
+          <span>"Switched provider" &nbsp;12%</span>
+          <span>"Economic" &nbsp;10%</span>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <span class="so-what">So what</span>
+        The exit is <strong>detectable 90 days in advance</strong> — at-risk CHS, low usage, dropping invoices. And the customer's words align: 35% self-report "sporadic use". Next: the clearest behavioral signal — how invoice volume decays before exit.
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">6</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 7 NEW — PRE-EXIT SIGNAL · invoice decline
+       Q: How clearly does the signal show up before voluntary churn?
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Invoice volume decays 6 months before voluntary exit · 54 → 29/mo (−46%) — delinquent churners show no such pattern</span>
+    </div>
+    <div class="slide-body" style="gap: 18px;">
+
+      <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 36px; flex: 1; min-height: 0;">
+
+        <div style="display: flex; flex-direction: column; min-height: 0;">
+          <div class="block-label">Avg invoices per month · Core voluntary vs delinquent · M−6 → M−1 before churn</div>
+          <div class="chart-wrap"><canvas id="invoiceChart"></canvas></div>
+        </div>
+
+        <div>
+          <div class="block-label">Pre-exit signal</div>
+          <div class="kpi-stack">
+            <div class="kpi-item">
+              <div class="k-label">Voluntary decline · 6 months</div>
+              <div class="k-val red">−46%</div>
+              <div class="k-note">From 54 to 29 invoices/mo · progressive, visible from M−6 · delinquent slope is flatter (36 → 24)</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">Zero invoices in final month</div>
+              <div class="k-val sm red">45%</div>
+              <div class="k-note">Of voluntary Core churners · <strong>stopped invoicing entirely</strong> · delinquent only 28%</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">Actionable detection window</div>
+              <div class="k-val sm teal">90+ days</div>
+              <div class="k-note">Voluntary churners separate from baseline by M−3 at the latest · clear early-warning signal</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight-box">
+        <span class="so-what">So what</span>
+        The pre-exit signal is <strong>real and actionable</strong> — voluntary churners disengage progressively over 6 months, and <strong>45% stop invoicing entirely in their final month</strong>. By M−3 the gap vs baseline is unmistakable — the evidence base for <strong>Action 03 (M−3 early warning)</strong>. Next: where does this churn concentrate structurally?
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">7</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 8 — SECTORS · where is churn concentrated
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Construction leads Core Q1'26 churn at 8.7% · Agriculture, Transport and Education at ~5% — Commerce holds the volume, not the rate</span>
+    </div>
+    <div class="slide-body" style="gap: 18px;">
+
+      <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 36px; flex: 1; min-height: 0;">
+
+        <div style="display: flex; flex-direction: column; min-height: 0;">
+          <div class="block-label">Core churn rate by sector · Q1'26 monthly avg</div>
+          <div class="chart-wrap"><canvas id="sectorChart"></canvas></div>
+        </div>
+
+        <div>
+          <div class="block-label">Core sector dynamics · Q1'26</div>
+          <div class="kpi-stack">
+            <div class="kpi-item">
+              <div class="k-label">Structural outlier</div>
+              <div class="k-val red">Construction</div>
+              <div class="k-note">8.7% Q1 Core churn · <strong>~2.5× the Core avg</strong> (3.5%) — cyclical business exposure</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">High-rate cluster</div>
+              <div class="k-val sm red">4.4–5.1%</div>
+              <div class="k-note">Agriculture, Transport, Education, Industry · physical/field businesses with digital friction</div>
+            </div>
+            <div class="kpi-item">
+              <div class="k-label">Largest absolute volume</div>
+              <div class="k-val sm">Commerce</div>
+              <div class="k-note">Rate only 3.4% but the biggest slice of Core base · moves the headline by volume, not rate</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight-box">
+        <span class="so-what">So what</span>
+        Sector alone doesn't determine churn — but it determines <strong>structural vulnerability</strong>. Construction is a cyclical outlier at 2.5× Core's Q1 avg; Agriculture/Transport/Education/Industry form a 4.4–5.1% cluster. Next: the single biggest convertible retention lever — annual plans.
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">8</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 9 — ANNUITIES · renewal outcomes month-by-month
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Core annual renewals · 83% retained in Q1'26 (869 of 1,044) · 175 didn't renew — convertible retention lever for M13+ monthlies</span>
+    </div>
+    <div class="slide-body" style="gap: 18px;">
+
+      <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 36px; flex: 1; min-height: 0;">
+
+        <div style="display: flex; flex-direction: column; min-height: 0;">
+          <div class="block-label">Core annual renewal outcomes · monthly share · Jan 2025 → Mar 2026</div>
+          <div class="chart-wrap"><canvas id="renewalChart"></canvas></div>
+        </div>
+
+        <div>
+          <div class="block-label">Q1'26 · Core annual expirations</div>
+          <div class="hbar-set">
+            <div class="hbar-row" style="grid-template-columns: 170px 1fr 108px;">
+              <div class="hbar-name">Due to renew</div>
+              <div class="hbar-track"><div class="hbar-fill" style="width:100%; background:var(--color-navy);"></div></div>
+              <div class="hbar-val">1,044</div>
+            </div>
+            <div class="hbar-row" style="grid-template-columns: 170px 1fr 108px;">
+              <div class="hbar-name" style="color:var(--color-positive);">✓ Renewed annual</div>
+              <div class="hbar-track"><div class="hbar-fill teal" style="width:80%;"></div></div>
+              <div class="hbar-val" style="color:var(--color-positive);">838 · 80%</div>
+            </div>
+            <div class="hbar-row" style="grid-template-columns: 170px 1fr 108px;">
+              <div class="hbar-name" style="color:var(--color-neutral);">↓ Downgraded to monthly</div>
+              <div class="hbar-track"><div class="hbar-fill gray" style="width:3%;"></div></div>
+              <div class="hbar-val" style="color:var(--color-neutral);">31 · 3%</div>
+            </div>
+            <div class="hbar-row em" style="grid-template-columns: 170px 1fr 108px;">
+              <div class="hbar-name" style="color:var(--color-negative);">✗ Did not renew</div>
+              <div class="hbar-track"><div class="hbar-fill red" style="width:17%;"></div></div>
+              <div class="hbar-val" style="color:var(--color-negative);">175 · 17%</div>
+            </div>
+          </div>
+          <div style="margin-top: 14px; font-size: 11px; color: var(--color-text-secondary); line-height: 1.55;">
+            2025 avg Core annual-renewal <strong style="color:var(--color-text-primary);">81.8%</strong> · Q1'26 at <strong style="color:var(--color-text-primary);">80.3%</strong> · volume growing from ~260/mo in 2025 to ~350/mo in Q1'26.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight-box">
+        <span class="so-what">So what</span>
+        <strong>~17% of Core annuals didn't renew in Q1'26 — 175 companies lost</strong>. Core annuals that renew churn at 27% by M12; monthlies at 44% (17pp LTV gap). The real upside is <strong>converting M13+ monthlies to annual</strong>. Next: do the customer's stated reasons match the behavioral data — and where are we blind?
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">9</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 9 — MATCH DATA VS MOTIVOS · the diagnostic
+       Q: Does what they say match what they did?
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">The customer's stated reason aligns with the behavioral data — but our CHS misses 21.8% of voluntary exits</span>
+    </div>
+    <div class="slide-body" style="gap: 18px;">
+
+      <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 36px; flex: 1; min-height: 0; align-items: start;">
+
+        <div>
+          <div class="block-label">Stated reason × behavioral match</div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>What the customer says</th>
+                <th>What the data shows</th>
+                <th style="text-align:center;">Match</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>"Sporadic use" <span style="color:var(--color-neutral); font-weight:400;">· 35%</span></td>
+                <td>78% had ≤5 transactions final month</td>
+                <td style="text-align:center;"><span class="badge positive">✓</span></td>
+              </tr>
+              <tr>
+                <td>"Switched provider" <span style="color:var(--color-neutral); font-weight:400;">· 12%</span></td>
+                <td>Siigo leads · 20% of named competitors</td>
+                <td style="text-align:center;"><span class="badge positive">✓</span></td>
+              </tr>
+              <tr>
+                <td>"Economic reasons" <span style="color:var(--color-neutral); font-weight:400;">· 10%</span></td>
+                <td>53% Critical CHS on the Delinquent track</td>
+                <td style="text-align:center;"><span class="badge positive">✓</span></td>
+              </tr>
+              <tr class="em">
+                <td>"Other / no reason" <span style="color:var(--color-neutral); font-weight:400;">· 36%</span></td>
+                <td>21.8% were "Healthy" on our CHS at exit</td>
+                <td style="text-align:center;"><span class="badge negative">gap</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <div class="block-label">Deep dive · the "Other" row</div>
+
+          <div class="hero-stat"><div class="hero-num red">21.8%</div></div>
+          <div class="hero-cap" style="margin-bottom: 14px;">of voluntary exits rated <strong>"Healthy"</strong> on CHS at exit — the blind spot.</div>
+
+          <div style="padding-top: 12px; border-top: 1px solid var(--color-border);">
+            <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 1.3px; color: var(--color-neutral); text-transform: uppercase; margin-bottom: 7px;">Free-text · n=1,130 Core</div>
+            <div style="font-size: 11px; color: var(--color-text-secondary); line-height: 1.8;">
+              <div><strong style="color: var(--color-text-primary);">"Business closed"</strong> &nbsp;16%</div>
+              <div>"Admin change" &nbsp;5% &nbsp;·&nbsp; "Moved to competitor" &nbsp;1%</div>
+            </div>
+            <div style="font-size: 10.5px; color: var(--color-neutral); margin-top: 6px; font-style: italic;">76% still unspecified — the real blind spot.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight-box">
+        <span class="so-what">So what</span>
+        The diagnosis is complete — behavior, sector, plan-type, and motives all align on the same three gaps: <strong>CHS blind spot, engagement signal window, and monthly→annual conversion</strong>. Next: the 2026 plan.
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">10</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ================================================================
+       SLIDE 10 — THREE STRUCTURAL ACTIONS · the 2026 plan + ASKS
+       Q: What is the 2026 plan, and what do we ask?
+       ================================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Three structural actions target ~$500K ARR for 2026 — independently executable on a stable base</span>
+    </div>
+    <div class="slide-body" style="gap: 18px;">
+
+      <!-- Three-action evidence row -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; flex: 1; min-height: 0; align-items: stretch;">
+
+        <!-- Action 01: Close CHS blind spot -->
+        <div style="padding: 4px 24px 4px 0;">
+          <div class="block-label">Action 01 &nbsp;·&nbsp; CHS blind spot</div>
+          <div style="margin-top: 12px;">
+            <div class="hero-stat"><div class="hero-num red">21.8%</div></div>
+            <div class="hero-cap" style="margin-bottom: 12px;">voluntary Core exits rated <strong>"Healthy"</strong> at exit.</div>
+          </div>
+          <div style="font-size: 11px; color: var(--color-text-secondary); line-height: 1.55; border-top: 1px dashed var(--color-border); padding-top: 10px;">
+            CHS doesn't detect intent. Integrate <strong style="color:var(--color-text-primary);">NPS + support + invoice</strong> signals to close the measurement gap.
+          </div>
+        </div>
+
+        <!-- Action 02: Monthly → Annual -->
+        <div style="padding: 4px 24px; border-left: 1px solid var(--color-border);">
+          <div class="block-label">Action 02 &nbsp;·&nbsp; Monthly → Annual</div>
+          <div style="margin-top: 12px;">
+            <div class="hero-stat"><div class="hero-num teal">17<span class="hero-unit" style="color:var(--color-teal);">&nbsp;pp</span></div></div>
+            <div class="hero-cap" style="margin-bottom: 12px;">lower M12 churn for annual · <strong>doubles expected lifetime</strong>.</div>
+          </div>
+          <div style="font-size: 11px; color: var(--color-text-secondary); line-height: 1.55; border-top: 1px dashed var(--color-border); padding-top: 10px;">
+            Q1'26 Core renewal <strong style="color:var(--color-text-primary);">80.3%</strong> · 2025 baseline <strong style="color:var(--color-text-primary);">81.8%</strong>. Structured upgrade incentive before M12.
+          </div>
+        </div>
+
+        <!-- Action 03: M-3 Early Warning -->
+        <div style="padding: 4px 0 4px 24px; border-left: 1px solid var(--color-border);">
+          <div class="block-label">Action 03 &nbsp;·&nbsp; M−3 early warning</div>
+          <div style="margin-top: 12px;">
+            <div class="hero-stat"><div class="hero-num teal">90<span class="hero-unit">&nbsp;d</span></div></div>
+            <div class="hero-cap" style="margin-bottom: 12px;"><strong>detection window</strong> — usage + invoice signal exit before decision.</div>
+          </div>
+          <div style="font-size: 11px; color: var(--color-text-secondary); line-height: 1.55; border-top: 1px dashed var(--color-border); padding-top: 10px;">
+            <strong style="color:var(--color-text-primary);">78%</strong> had ≤5 transactions the final month. Proactive CS intervention at the signal.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Ask chips with $ + timing + owner -->
+      <div>
+        <div class="block-label" style="margin-bottom: 10px;">Asks of the Board &nbsp;·&nbsp; combined ~$500K ARR &nbsp;·&nbsp; independently executable</div>
+        <div class="ask-row">
+          <div class="ask-chip">
+            <strong>Endorse CHS blind-spot program</strong>
+            Integrate NPS + support + invoice signals into CHS model.
+            <div style="margin-top:7px; display: flex; justify-content: space-between; align-items: center; font-size:10px; font-weight:600;">
+              <span style="color:var(--color-teal);">~$150K ARR</span>
+              <span style="color:var(--color-neutral); font-weight:500;">Q2 2026 · Eng + CS</span>
+            </div>
+          </div>
+          <div class="ask-chip">
+            <strong>Fund monthly → annual incentive</strong>
+            1–2 month free upgrade offer, targeting M13+ monthly.
+            <div style="margin-top:7px; display: flex; justify-content: space-between; align-items: center; font-size:10px; font-weight:600;">
+              <span style="color:var(--color-teal);">~$60K ARR</span>
+              <span style="color:var(--color-neutral); font-weight:500;">Q2–Q3 · CS + Product</span>
+            </div>
+          </div>
+          <div class="ask-chip">
+            <strong>Build M−3 early-warning workflow</strong>
+            Usage + invoice triggers · proactive CS outreach.
+            <div style="margin-top:7px; display: flex; justify-content: space-between; align-items: center; font-size:10px; font-weight:600;">
+              <span style="color:var(--color-teal);">~$300K ARR</span>
+              <span style="color:var(--color-neutral); font-weight:500;">Q3 2026 · CS + Data</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">11</span>
+    </div>
+  </div>
+
+  <script>
+    Chart.defaults.font.family = "'Inter', sans-serif";
+
+    const MONTHS = ['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar'];
+
+    // Monthly flow · Churn = (Retired − Reactivated) / BoP · Permanent = Churn − Recovered
+    // Reactivated in month X = prior cohort (X−1) returning · Recovered in X = X−2/X−3 cohort returning
+    const coreGross     = [4.40, 4.95, 4.38, 4.58, 4.32, 4.04, 3.72, 3.96, 3.94, 3.93, 4.21, 4.11, 5.31, 5.37, 4.94];
+    const coreNet       = [3.12, 3.74, 2.70, 3.48, 2.83, 2.85, 2.49, 3.03, 2.86, 2.67, 2.82, 2.54, 3.75, 3.80, 2.85];
+    const corePermanent = [2.87, 3.33, 2.29, 2.86, 2.23, 2.36, 2.07, 2.44, 2.34, 2.22, 2.19, 1.71, 3.43, 3.39, 2.21];
+
+    // Alegra-wide (all segments) · Jan 2025 → Mar 2026
+    const globalGross     = [6.97, 7.82, 6.78, 7.42, 6.45, 6.59, 6.06, 6.19, 5.88, 5.88, 6.20, 6.52, 7.48, 7.54, 6.83];
+    const globalNet       = [5.07, 6.08, 4.41, 5.78, 4.02, 4.85, 4.17, 4.64, 4.02, 4.15, 4.26, 4.29, 5.08, 5.27, 4.03];
+    const globalPermanent = [3.97, 4.85, 3.17, 4.43, 2.60, 3.57, 2.88, 3.42, 2.66, 2.77, 2.58, 2.48, 4.02, 3.99, 2.60];
+
+    // Annual-renewal outcomes · Core · monthly absolute counts
+    const renewAnnualCount = [226, 209, 222, 206, 240, 170, 195, 168, 174, 178, 219, 253, 308, 264, 266];
+    const renewDowngCount  = [10, 8, 8, 10, 8, 12, 14, 8, 11, 13, 11, 8, 15, 9, 7];
+    const renewNoneCount   = [35, 35, 26, 22, 36, 48, 36, 32, 32, 34, 57, 29, 58, 69, 48];
+
+    // Sectors · Core vs Lite churn rate · Q1'26 monthly avg · sorted desc by Core
+    const sectorLabels = ['Construction','Agriculture','Transport','Education','Industry','Health','Services','Gastronomy','Commerce','Technology'];
+    const sectorCore   = [8.69, 5.11, 4.82, 4.54, 4.39, 4.06, 4.06, 3.69, 3.44, 3.39];
+    const sectorLite   = [11.96, 8.42, 8.57, 8.05, 8.23, 6.42, 8.30, 6.61, 7.23, 8.64];
+
+    // Invoice decline · Core voluntary vs delinquent · months before churn (M−6 → M−1)
+    const invoiceMonths = ['M−6','M−5','M−4','M−3','M−2','M−1'];
+    const invoiceVol    = [54, 49, 44, 42, 38, 29];   // voluntary · avg invoices/mo
+    const invoiceDel    = [36, 31, 29, 28, 29, 24];   // delinquent · avg invoices/mo
+
+    // ── CHURN + PERMANENT · SLIDE (Core) ───────────────────────────
+    new Chart(document.getElementById('netChart'), {
+      type: 'line',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          { label: 'Churn', data: coreNet, borderColor: '#14b8a6', backgroundColor: 'rgba(20,184,166,0.12)', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#14b8a6', pointBorderColor: '#ffffff', pointBorderWidth: 1.5, tension: 0.35, fill: true }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 6, right: 4, bottom: 0 } },
+        interaction: { mode: 'index', intersect: false, axis: 'x' },
+        plugins: {
+          legend: { display: true, position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 14, boxHeight: 2, padding: 10, color: '#64748b' } },
+          tooltip: {
+            enabled: true, backgroundColor: '#0f172b', padding: 12,
+            titleFont: { size: 12, weight: '600' }, titleColor: '#ffffff',
+            bodyFont: { size: 11 }, bodyColor: '#ffffff',
+            displayColors: true, boxPadding: 4, cornerRadius: 6,
+            borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+            callbacks: {
+              title: items => items[0].label,
+              label: ctx => `  ${ctx.dataset.label}: ${ctx.raw}%`
+            }
+          }
+        },
+        scales: {
+          y: { min: 0, max: 6, grid: { color: '#f1f5f9', drawBorder: false }, border: { display: false }, ticks: { callback: v => v + '%', font: { size: 10 }, color: '#94a3b8', stepSize: 1 } },
+          x: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8', maxRotation: 0 } }
+        }
+      }
+    });
+
+    // ── CHURN + PERMANENT · GLOBAL (all segments) ──────────────────
+    new Chart(document.getElementById('globalChart'), {
+      type: 'line',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          { label: 'Churn', data: globalNet, borderColor: '#14b8a6', backgroundColor: 'rgba(20,184,166,0.12)', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#14b8a6', pointBorderColor: '#ffffff', pointBorderWidth: 1.5, tension: 0.35, fill: true }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 6, right: 4, bottom: 0 } },
+        interaction: { mode: 'index', intersect: false, axis: 'x' },
+        plugins: {
+          legend: { display: true, position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 14, boxHeight: 2, padding: 10, color: '#64748b' } },
+          tooltip: {
+            enabled: true, backgroundColor: '#0f172b', padding: 12,
+            titleFont: { size: 12, weight: '600' }, titleColor: '#ffffff',
+            bodyFont: { size: 11 }, bodyColor: '#ffffff',
+            displayColors: true, boxPadding: 4, cornerRadius: 6,
+            borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+            callbacks: {
+              title: items => items[0].label,
+              label: ctx => `  ${ctx.dataset.label}: ${ctx.raw}%`
+            }
+          }
+        },
+        scales: {
+          y: { min: 0, max: 7, grid: { color: '#f1f5f9', drawBorder: false }, border: { display: false }, ticks: { callback: v => v + '%', font: { size: 10 }, color: '#94a3b8', stepSize: 1 } },
+          x: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8', maxRotation: 0 } }
+        }
+      }
+    });
+
+    // ── INVOICE DECLINE · Core voluntary vs delinquent · M−6 → M−1 ──
+    new Chart(document.getElementById('invoiceChart'), {
+      type: 'line',
+      data: {
+        labels: invoiceMonths,
+        datasets: [
+          { label: 'Voluntary', data: invoiceVol, borderColor: '#C2410C', backgroundColor: 'rgba(194,65,12,0.10)', borderWidth: 2.5, pointRadius: 3, pointHoverRadius: 6, pointBackgroundColor: '#C2410C', pointBorderColor: '#ffffff', pointBorderWidth: 1.5, tension: 0.3, fill: true },
+          { label: 'Delinquent', data: invoiceDel, borderColor: '#64748b', backgroundColor: 'rgba(100,116,139,0.06)', borderWidth: 2, borderDash: [5,4], pointRadius: 2.5, pointHoverRadius: 6, pointBackgroundColor: '#64748b', pointBorderColor: '#ffffff', pointBorderWidth: 1.5, tension: 0.3, fill: false }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 6, right: 4, bottom: 0 } },
+        interaction: { mode: 'index', intersect: false, axis: 'x' },
+        plugins: {
+          legend: { display: true, position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 14, boxHeight: 2, padding: 10, color: '#64748b' } },
+          tooltip: {
+            enabled: true, backgroundColor: '#0f172b', padding: 12,
+            titleFont: { size: 12, weight: '600' }, titleColor: '#ffffff',
+            bodyFont: { size: 11 }, bodyColor: '#ffffff',
+            displayColors: true, boxPadding: 4, cornerRadius: 6,
+            borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+            callbacks: { label: ctx => `  ${ctx.dataset.label}: ${ctx.raw} invoices/mo` }
+          }
+        },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#f1f5f9', drawBorder: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8' } },
+          x: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8' } }
+        }
+      }
+    });
+
+    // ── SECTORS · Core vs Lite churn rate Mar 2026 ─────────────────
+    new Chart(document.getElementById('sectorChart'), {
+      type: 'bar',
+      data: {
+        labels: sectorLabels,
+        datasets: [
+          { label: 'Core', data: sectorCore, backgroundColor: '#C2410C', hoverBackgroundColor: '#9a3412', borderRadius: 2, barPercentage: 0.82, categoryPercentage: 0.82 },
+          { label: 'Lite', data: sectorLite, backgroundColor: '#94a3b8', hoverBackgroundColor: '#64748b', borderRadius: 2, barPercentage: 0.82, categoryPercentage: 0.82 }
+        ]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 6, right: 8, bottom: 0, left: 0 } },
+        plugins: {
+          legend: { display: true, position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 10, boxHeight: 10, padding: 10, color: '#64748b' } },
+          tooltip: {
+            enabled: true, backgroundColor: '#0f172b', padding: 12,
+            titleFont: { size: 12, weight: '600' }, titleColor: '#ffffff',
+            bodyFont: { size: 11 }, bodyColor: '#ffffff',
+            displayColors: true, boxPadding: 4, cornerRadius: 6,
+            borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+            callbacks: { label: ctx => `  ${ctx.dataset.label}: ${ctx.raw}%` }
+          }
+        },
+        scales: {
+          x: { beginAtZero: true, grid: { color: '#f1f5f9', drawBorder: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8', callback: v => v + '%' } },
+          y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#64748b', autoSkip: false, padding: 4 }, afterFit: (scale) => { scale.width = 96; } }
+        }
+      }
+    });
+
+    // ── ANNUITIES · Renewal outcomes · absolute-count stacked bar ──
+    new Chart(document.getElementById('renewalChart'), {
+      type: 'bar',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          { label: 'Renewed annual', data: renewAnnualCount, backgroundColor: '#14b8a6', hoverBackgroundColor: '#0d9488', borderRadius: 2, stack: 'a', barPercentage: 0.78, categoryPercentage: 0.9 },
+          { label: 'Downgraded',     data: renewDowngCount,  backgroundColor: '#94a3b8', hoverBackgroundColor: '#64748b', borderRadius: 2, stack: 'a', barPercentage: 0.78, categoryPercentage: 0.9 },
+          { label: 'Not renewed',    data: renewNoneCount,   backgroundColor: '#C2410C', hoverBackgroundColor: '#9a3412', borderRadius: 2, stack: 'a', barPercentage: 0.78, categoryPercentage: 0.9 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 6, right: 4, bottom: 0 } },
+        interaction: { mode: 'index', intersect: false, axis: 'x' },
+        plugins: {
+          legend: { display: true, position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 10, boxHeight: 10, padding: 10, color: '#64748b' } },
+          tooltip: {
+            enabled: true, backgroundColor: '#0f172b', padding: 12,
+            titleFont: { size: 12, weight: '600' }, titleColor: '#ffffff',
+            bodyFont: { size: 11 }, bodyColor: '#ffffff',
+            displayColors: true, boxPadding: 4, cornerRadius: 6,
+            borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+            callbacks: {
+              label: ctx => `  ${ctx.dataset.label}: ${ctx.raw.toLocaleString()}`,
+              footer: items => {
+                const i = items[0].dataIndex;
+                return `  Due to renew: ${(renewAnnualCount[i] + renewDowngCount[i] + renewNoneCount[i]).toLocaleString()}`;
+              }
+            },
+            footerFont: { size: 11, weight: '600' }, footerColor: '#14b8a6', footerMarginTop: 6
+          }
+        },
+        scales: {
+          y: { stacked: true, beginAtZero: true, grid: { color: '#f1f5f9', drawBorder: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8' } },
+          x: { stacked: true, grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8', maxRotation: 0 } }
+        }
+      }
+    });
+
+    // ── GROSS vs PERMANENT · Core · 2025 closed year only ──────────
+    new Chart(document.getElementById('grossChart'), {
+      type: 'line',
+      data: {
+        labels: MONTHS.slice(0, 12),
+        datasets: [
+          { label: 'Gross retired', data: coreGross.slice(0, 12), borderColor: '#0f172b', backgroundColor: 'rgba(15,23,43,0.05)', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#0f172b', pointBorderColor: '#ffffff', pointBorderWidth: 1.5, tension: 0.35, fill: false },
+          { label: 'Permanent',     data: corePermanent.slice(0, 12), borderColor: '#14b8a6', backgroundColor: 'rgba(20,184,166,0.14)', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#14b8a6', pointBorderColor: '#ffffff', pointBorderWidth: 1.5, tension: 0.35, fill: true }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 6, right: 4, bottom: 0 } },
+        interaction: { mode: 'index', intersect: false, axis: 'x' },
+        plugins: {
+          legend: { display: true, position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 14, boxHeight: 2, padding: 10, color: '#64748b' } },
+          tooltip: {
+            enabled: true, backgroundColor: '#0f172b', padding: 12,
+            titleFont: { size: 12, weight: '600' }, titleColor: '#ffffff',
+            bodyFont: { size: 11 }, bodyColor: '#ffffff',
+            displayColors: true, boxPadding: 4, cornerRadius: 6,
+            borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+            callbacks: {
+              title: items => items[0].label,
+              label: ctx => `  ${ctx.dataset.label}: ${ctx.raw}%`
+            }
+          }
+        },
+        scales: {
+          y: { min: 0, max: 7, grid: { color: '#f1f5f9', drawBorder: false }, border: { display: false }, ticks: { callback: v => v + '%', font: { size: 10 }, color: '#94a3b8', stepSize: 1 } },
+          x: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8', maxRotation: 0 } }
+        }
+      }
+    });
+
+    // ── Core voluntary vs involuntary · churn rate % ──────────────
+    const coreDel = [482, 557, 438, 497, 458, 457, 402, 449, 455, 495, 554, 606, 720, 737, 714];
+    const coreVol = [320, 360, 374, 365, 360, 320, 322, 336, 337, 307, 324, 274, 449, 457, 395];
+
+    // Split each month's churn rate proportionally by company counts
+    const coreDelRate = coreDel.map((d, i) => +((coreNet[i] * d) / (d + coreVol[i])).toFixed(2));
+    const coreVolRate = coreVol.map((v, i) => +((coreNet[i] * v) / (coreDel[i] + v)).toFixed(2));
+
+    new Chart(document.getElementById('volInvolChart'), {
+      type: 'line',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          { label: 'Involuntary', data: coreDelRate, borderColor: '#64748b', backgroundColor: 'rgba(100,116,139,0.08)', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#64748b', pointBorderColor: '#ffffff', pointBorderWidth: 1.5, tension: 0.35, fill: false },
+          { label: 'Voluntary',   data: coreVolRate, borderColor: '#C2410C', backgroundColor: 'rgba(194,65,12,0.08)', borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, pointBackgroundColor: '#C2410C', pointBorderColor: '#ffffff', pointBorderWidth: 1.5, tension: 0.35, fill: false }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 6, right: 4, bottom: 0 } },
+        interaction: { mode: 'index', intersect: false, axis: 'x' },
+        plugins: {
+          legend: { display: true, position: 'top', align: 'end', labels: { font: { size: 10 }, boxWidth: 14, boxHeight: 2, padding: 10, color: '#64748b' } },
+          tooltip: {
+            enabled: true, backgroundColor: '#0f172b', padding: 12,
+            titleFont: { size: 12, weight: '600' }, titleColor: '#ffffff',
+            bodyFont: { size: 11 }, bodyColor: '#ffffff',
+            displayColors: true, boxPadding: 4, cornerRadius: 6,
+            borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+            callbacks: {
+              title: items => items[0].label,
+              label: ctx => {
+                const i = ctx.dataIndex;
+                const count = ctx.dataset.label === 'Involuntary' ? coreDel[i] : coreVol[i];
+                return `  ${ctx.dataset.label}: ${ctx.raw}%  ·  ${count.toLocaleString()} companies`;
+              },
+              footer: items => {
+                const i = items[0].dataIndex;
+                const totalRate = +(coreDelRate[i] + coreVolRate[i]).toFixed(2);
+                const totalCount = coreDel[i] + coreVol[i];
+                return `  Total: ${totalRate}%  ·  ${totalCount.toLocaleString()} companies`;
+              }
+            },
+            footerFont: { size: 11, weight: '600' },
+            footerColor: '#14b8a6',
+            footerMarginTop: 6
+          }
+        },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#f1f5f9', drawBorder: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8', callback: v => v + '%', stepSize: 1 } },
+          x: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 10 }, color: '#94a3b8', maxRotation: 0 } }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

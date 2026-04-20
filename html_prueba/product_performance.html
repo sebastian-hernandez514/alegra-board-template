@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Performance</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Calibri', Arial, Helvetica, sans-serif;
+    background: #fff;
+    padding: 30px 40px 30px;
+    min-width: 860px;
+  }
+
+  .top-bar {
+    height: 5px;
+    background: linear-gradient(to right, #1b9aaa, #4fc3f7);
+    margin-bottom: 22px;
+  }
+
+  .slide-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a3350;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+  }
+  .title-underline {
+    height: 1.5px;
+    background: #ccd6e0;
+    margin-bottom: 22px;
+  }
+
+  .table-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  table {
+    border-collapse: collapse;
+    font-size: 11.5px;
+    width: 780px;
+  }
+
+  th, td {
+    padding: 3px 10px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  td:first-child, th:first-child {
+    text-align: left;
+    min-width: 180px;
+  }
+
+  /* Header row */
+  .col-header th {
+    background: #1a3350;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+  .col-header th:first-child {
+    background: #fff;
+  }
+
+  /* Section product rows */
+  .product-row td {
+    font-weight: 700;
+    font-size: 11.5px;
+    color: #1a1a1a;
+    background: #f0f4f8;
+    border-top: 1px solid #c8d4e0;
+    border-bottom: 0.5px solid #dde6ef;
+    padding: 4px 10px;
+  }
+  .product-row td:first-child {
+    color: #1a3350;
+  }
+
+  /* Sub-metric rows */
+  .metric-row td {
+    font-style: italic;
+    font-size: 11px;
+    border-bottom: 0.5px solid #edf1f5;
+    padding: 2.5px 10px;
+  }
+
+  /* Spacer */
+  .spacer-row td {
+    padding: 4px 0;
+    border: none;
+    background: #fff;
+  }
+
+  /* Total rows */
+  .total-row td {
+    font-weight: 700;
+    font-size: 11.5px;
+    border-top: 1.5px solid #aabbd0;
+    border-bottom: 0.5px solid #dde6ef;
+    padding: 4px 10px;
+  }
+
+  /* Section header above table */
+  .section-label td {
+    font-weight: 700;
+    font-size: 11px;
+    color: #1a3350;
+    background: #e8eef5;
+    border-top: 1.5px solid #aabbd0;
+    border-bottom: 1px solid #c8d4e0;
+    padding: 4px 10px;
+  }
+
+  /* Color classes */
+  .teal   { color: #1b9aaa; font-style: italic; }
+  .red-it { color: #e53935; font-style: italic; }
+  .blue-it{ color: #2979c7; font-style: italic; }
+  .plain  { color: #333; }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+<div class="slide-title">Product Performance</div>
+<div class="title-underline"></div>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr class="col-header">
+      <th></th>
+      <th>Oct-25</th>
+      <th>Nov-25</th>
+      <th>Dec-25</th>
+      <th>Jan-26</th>
+      <th>Feb-26</th>
+      <th>Mar-26</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- Section label -->
+    <tr class="section-label">
+      <td colspan="8">Active Suscriptions (Thousands)</td>
+    </tr>
+
+    <!-- ACCOUNTING -->
+    <tr class="product-row">
+      <td>Accounting</td>
+      <td>45.80</td><td>46.21</td><td>46.93</td><td>47.38</td><td>47.46</td><td>47.27</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;as % of total Logos</td>
+      <td class="teal">83.12%</td><td class="teal">83.11%</td><td class="teal">83.36%</td><td class="teal">83.56%</td><td class="teal">83.56%</td><td class="teal">83.22%</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;Churn rate %</td>
+      <td class="teal">4.17%</td><td class="teal">4.32%</td><td class="teal">4.18%</td><td class="teal">4.45%</td><td class="teal">5.29%</td><td class="teal">5.31%</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;Avg Ticket New Additions</td>
+      <td class="blue-it">$22.66</td><td class="blue-it">$23.78</td><td class="blue-it">$23.48</td><td class="blue-it">$27.51</td><td class="blue-it">$25.65</td><td class="blue-it">$27.40</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;% of Core Subscribers</td>
+      <td class="red-it">35.00%</td><td class="red-it">35.00%</td><td class="red-it">35.00%</td><td class="red-it">35.00%</td><td class="red-it">35.00%</td><td class="red-it">35.00%</td>
+    </tr>
+    <tr class="spacer-row"><td colspan="8"></td></tr>
+
+    <!-- POS -->
+    <tr class="product-row">
+      <td>POS</td>
+      <td>10.88</td><td>11.01</td><td>11.05</td><td>11.11</td><td>11.29</td><td>11.21</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;as % of total Logos</td>
+      <td class="teal">19.75%</td><td class="teal">19.80%</td><td class="teal">19.63%</td><td class="teal">19.59%</td><td class="teal">19.88%</td><td class="teal">19.74%</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;Churn rate %</td>
+      <td class="teal">5.28%</td><td class="teal">5.01%</td><td class="teal">5.59%</td><td class="teal">4.89%</td><td class="teal">5.39%</td><td class="teal">6.60%</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;Avg Ticket New Additions</td>
+      <td class="blue-it">$17.15</td><td class="blue-it">$15.43</td><td class="blue-it">$14.69</td><td class="blue-it">$17.38</td><td class="blue-it">$14.76</td><td class="blue-it">$17.68</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;% of Core Subscribers</td>
+      <td class="red-it">35.00%</td><td class="red-it">35.00%</td><td class="red-it">35.00%</td><td class="red-it">35.00%</td><td class="red-it">35.00%</td><td class="red-it">35.00%</td>
+    </tr>
+    <tr class="spacer-row"><td colspan="8"></td></tr>
+
+    <!-- PAYROLL -->
+    <tr class="product-row">
+      <td>Payroll</td>
+      <td>8.33</td><td>8.41</td><td>8.46</td><td>8.61</td><td>8.75</td><td>8.65</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;as % of total Logos</td>
+      <td class="teal">15.12%</td><td class="teal">15.13%</td><td class="teal">15.03%</td><td class="teal">15.19%</td><td class="teal">15.40%</td><td class="teal">15.23%</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;Churn rate %</td>
+      <td class="teal">3.13%</td><td class="teal">2.94%</td><td class="teal">3.20%</td><td class="plain">3.07</td><td class="teal">3.58%</td><td class="teal">5.31%</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;Avg Ticket New Additions</td>
+      <td class="blue-it">$11.45</td><td class="blue-it">$10.96</td><td class="blue-it">$10.17</td><td class="blue-it">$10.20</td><td class="blue-it">$11.77</td><td class="blue-it">$13.89</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;% of Core Subscribers</td>
+      <td class="red-it">50.00%</td><td class="red-it">50.00%</td><td class="red-it">50.00%</td><td class="red-it">50.00%</td><td class="red-it">50.00%</td><td class="red-it">50.00%</td>
+    </tr>
+    <tr class="spacer-row"><td colspan="8"></td></tr>
+
+    <!-- INVOICING -->
+    <tr class="product-row">
+      <td>Invoicing</td>
+      <td>1.22</td><td>1.17</td><td>1.11</td><td>1.07</td><td>0.94</td><td>0.92</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;as % of total Logos</td>
+      <td class="teal">2.21%</td><td class="teal">2.10%</td><td class="teal">1.97%</td><td class="teal">1.89%</td><td class="teal">1.65%</td><td class="teal">1.62%</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;Churn rate %</td>
+      <td class="teal">12.68%</td><td class="teal">7.68%</td><td class="teal">7.38%</td><td class="teal">7.57%</td><td class="teal">14.74%</td><td class="teal">5.73%</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;Avg Ticket New Additions</td>
+      <td class="blue-it">$13.12</td><td class="blue-it">$13.89</td><td class="blue-it">$13.44</td><td class="blue-it">$13.12</td><td class="blue-it">$12.91</td><td class="blue-it">$12.93</td>
+    </tr>
+    <tr class="metric-row">
+      <td>&nbsp;&nbsp;% of Core Subscribers</td>
+      <td class="red-it">19.00%</td><td class="red-it">19.00%</td><td class="red-it">19.00%</td><td class="red-it">19.00%</td><td class="red-it">19.00%</td><td class="red-it">19.00%</td>
+    </tr>
+
+    <tr class="spacer-row"><td colspan="8"></td></tr>
+
+    <!-- Totals -->
+    <tr class="total-row">
+      <td>Total Suscriptions</td>
+      <td>67.60</td><td>68.00</td><td>68.00</td><td>68.60</td><td>68.90</td><td>68.90</td>
+    </tr>
+    <tr class="total-row">
+      <td>Total Logos</td>
+      <td>55.1</td><td>55.6</td><td>56.3</td><td>56.7</td><td>56.8</td><td>56.8</td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+</body>
+</html>

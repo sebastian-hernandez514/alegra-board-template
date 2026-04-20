@@ -1,0 +1,22 @@
+# ARR Walk — Editorial content (Board asks per product + Alanube insight)
+# Llenar antes del board. Máximo 3 asks por producto.
+
+products:
+  - id: core
+    action_title: "Core acelera en LatAm — ¿sostenemos la expansión en MX ante la presión de Contalink?"
+    asks:
+      - title: "Churn threshold"
+        text: "Net churn Core superó 1.2% mensual en MX en Feb — ¿autorizamos presupuesto defensivo o priorizamos nuevos adds?"
+      - title: "Expansión Q2"
+        text: "Pipeline Q2 muestra 3 cuentas Enterprise en CO. ¿Activamos track dedicado o seguimos PLG?"
+
+  - id: lite
+    action_title: "Lite lidera new adds — validar si la base freemium está convirtiendo a Core"
+    asks:
+      - title: "Conversión a Core"
+        text: "Cohort Lite Jan-26: 6% convirtió a Core en 90 días. ¿Es suficiente o ajustamos el trigger de upsell?"
+      - title: "Límite freemium MX"
+        text: "El piloto de contador freemium canibaliza ~8% de Lite paying. ¿El Board avala el trade-off?"
+
+alanube_title: "Alanube ARR Walk — Documentos electrónicos"
+alanube_insight: "Alanube mantiene crecimiento en nuevas cuentas. El principal riesgo es la tasa de onboarding: <strong>cuentas activas emitiendo</strong> debe superar el 70% antes de Q2 para evitar churn estructural."

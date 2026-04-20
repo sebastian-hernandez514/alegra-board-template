@@ -1,0 +1,79 @@
+# Discussion Topics — Board {{ config.month_label }}
+# Llenar antes del board. Máximo 3 temas.
+# layout: "two_col" (contexto + propuesta) o "table" (benchmark/comparativa)
+
+topics:
+
+  - title_plain: "GTM Strategy for Accountants"
+    title: "GTM Strategy<br>for Accountants"
+    action_title: "¿Convertimos el canal contador a freemium? Piloto MX activo — el Board debe avalar el escalamiento"
+    layout: two_col
+    col1_label: "Context"
+    col1_bullets:
+      - "Accountants are the top SMB referral channel in MX and CO — yet current model requires them to pay a $990 MXN/mo plan, creating friction at acquisition."
+      - "Contalink gaining traction via tax-compliance features (RFC certification). Weak SMB offering but growing brand awareness among accountants."
+      - "Alegra advantage: full SMB stack (inventory, POS, CRM) that Contalink lacks — but we're not leveraging it as a pull for accountant acquisition."
+    col2_label: "Proposed Model Shift"
+    col2_bullets:
+      - "<strong>Current:</strong> Accountant pays $990 MXN/mo · SMB freemium with 10 invoices/mo limit."
+      - "<strong>Proposed:</strong> Accountant free ($0) · Revenue share ~$10 USD per activated SMB · SMB pays standard Alegra plans."
+      - "Pilot running in MX since Jan 2026 — 3 cohorts activated, early data in 6 weeks."
+    asks:
+      - title: "Endorse pilot scope"
+        text: "Validate expanding to 50 accountants in MX before scaling to CO and PE markets."
+      - title: "Revenue share economics"
+        text: "Align on $10 USD/activation threshold — is this sustainable given current CAC payback targets?"
+      - title: "Risk: cannibalization"
+        text: "Assess downside if existing paying accountants migrate to free tier."
+
+  - title_plain: "Product Benchmark in Mexico"
+    title: "Product Benchmark<br>in Mexico"
+    action_title: "Alegra lidera en SMB (POS, inventario, CRM) pero pierde en cumplimiento SAT — brecha crítica a cerrar en Q2"
+    layout: table
+    table_headers: ["Feature", "Alegra MX", "Contalink", "Gap / Opportunity"]
+    table_rows:
+      - feature: "XML download from SAT"
+        col_a: {text: "Partial", type: "neutral"}
+        col_b: {text: "Strong", type: "positive"}
+        gap: "Reliability fixes in progress · auto-sync launching Q2"
+      - feature: "Inventory management"
+        col_a: {text: "Strong", type: "positive"}
+        col_b: {text: "Weak", type: "negative"}
+        gap: "Alegra leads — key differentiator for SMB with physical products"
+      - feature: "POS integration"
+        col_a: {text: "Strong", type: "positive"}
+        col_b: {text: "None", type: "negative"}
+        gap: "Clear advantage — needs stronger GTM messaging"
+      - feature: "Multi-company (accountant view)"
+        col_a: {text: "Beta", type: "neutral"}
+        col_b: {text: "Mature", type: "positive"}
+        gap: "Closing gap — multi-cuenta launching Q1 2026"
+      - feature: "SAT compliance / RFC"
+        col_a: {text: "Partial", type: "neutral"}
+        col_b: {text: "Strong", type: "positive"}
+        gap: "Compliance gap driving accountant preference for Contalink"
+      - feature: "CRM / pipeline"
+        col_a: {text: "Strong", type: "positive"}
+        col_b: {text: "None", type: "negative"}
+        gap: "Untapped differentiator — not surfaced in sales conversations"
+    insight: "Alegra leads on SMB depth (POS, inventory, CRM) but lags on accountant-specific compliance workflows. Priority: close SAT/RFC gap in Q2 and amplify GTM messaging around SMB stack advantages."
+
+  - title_plain: "AI in Product"
+    title: "AI in Product:<br>Current Usage &amp; Next Steps"
+    action_title: "IA en producción con adopción limitada — ¿aceleramos el Financial Advisor agent ante la presión de Fintoc y Xepelin?"
+    layout: two_col
+    col1_label: "What's live today"
+    col1_bullets:
+      - "<strong>Invoice reader:</strong> Auto-extraction of supplier invoices from PDF/XML. Used by ~12% of Core users monthly."
+      - "<strong>Smart categorization:</strong> ML-based expense classification. Accuracy at 87% — improving with usage data."
+      - "<strong>Anomaly detection:</strong> Flags unusual transactions for review. Low adoption — discoverability issue."
+    col2_label: "Next 2 quarters (Agents roadmap)"
+    col2_bullets:
+      - "<strong>Q2 — Reconciliation agent:</strong> Auto-match bank transactions to invoices. Est. 3h/month saved per accountant."
+      - "<strong>Q2 — Collections copilot:</strong> AI-drafted payment reminders with tone adaptation. Pilot in CO."
+      - "<strong>Q3 — Financial advisor agent:</strong> Monthly cash flow summary + alerts for SMB owners. Differentiation play."
+    asks:
+      - title: "Prioritization input"
+        text: "Should we accelerate the Financial Advisor agent given competitive pressure from Fintoc and Xepelin entering the SMB space?"
+      - title: "Investment signal"
+        text: "Current AI/ML team is 3 engineers. Do we need to hire ahead of the Q3 roadmap or can we leverage external APIs?"

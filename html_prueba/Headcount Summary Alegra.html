@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Headcount Summary · Alegra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Smile primary (teal) */
+    --sm-primary-50:  #E9FAFA;
+    --sm-primary-100: #CFF2F1;
+    --sm-primary-200: #B8ECE9;
+    --sm-primary-300: #98E4E0;
+    --sm-primary-400: #72D5D1;
+    --sm-primary-500: #30B8B7;
+    --sm-primary-600: #30ABA9;
+    --sm-primary-700: #299E9C;
+    --sm-primary-800: #208080;
+    --sm-primary-900: #1A7E7F;
+
+    /* Slate neutrals */
+    --slate-50:  #F8FAFC;
+    --slate-100: #F1F5F9;
+    --slate-200: #E2E8F0;
+    --slate-300: #CBD5E1;
+    --slate-400: #94A3B8;
+    --slate-500: #64748B;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1E293B;
+    --slate-900: #0F172A;
+
+    /* Semantic */
+    --success-500: #22C55E;
+    --success-700: #15803D;
+    --rose-500:    #F43F5E;
+    --rose-700:    #BE123C;
+    --amber-500:   #F59E08;
+
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--slate-100);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--slate-800);
+  }
+
+  .slide {
+    width: 1280px;
+    min-height: 720px;
+    margin: 24px auto;
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.06);
+    padding: 36px 40px 32px;
+    position: relative;
+  }
+
+  .slide-title {
+    font-family: 'Lexend', 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    color: var(--slate-900);
+    margin: 0 0 18px 0;
+  }
+
+  .slide-title::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--slate-200);
+    margin-top: 14px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* ---------- Table ---------- */
+  .table-wrap {
+    border: 1px solid var(--slate-200);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--white);
+  }
+
+  table.hc {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    color: var(--slate-700);
+  }
+
+  table.hc thead th {
+    font-weight: 600;
+    text-align: center;
+    padding: 6px 6px;
+    background: var(--slate-50);
+    color: var(--slate-600);
+    border-bottom: 1px solid var(--slate-200);
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  table.hc thead tr.sup th {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--slate-700);
+    background: var(--slate-100);
+    padding: 5px 4px;
+    border-bottom: 1px solid var(--slate-200);
+  }
+
+  table.hc thead tr.sup th.teal {
+    background: var(--sm-primary-100);
+    color: var(--sm-primary-900);
+  }
+
+  table.hc thead tr.main th {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 8px 4px;
+    color: var(--slate-700);
+    border-right: 1px solid var(--slate-200);
+  }
+  table.hc thead tr.main th:last-child { border-right: none; }
+
+  table.hc thead tr.main th.label {
+    text-align: left;
+    padding-left: 12px;
+    color: var(--slate-800);
+    background: var(--slate-50);
+    font-weight: 700;
+    width: 180px;
+  }
+
+  table.hc thead tr.main th.teal {
+    background: var(--sm-primary-50);
+    color: var(--sm-primary-900);
+  }
+
+  table.hc tbody td {
+    padding: 6px 4px;
+    text-align: center;
+    border-bottom: 1px solid var(--slate-100);
+    border-right: 1px solid var(--slate-100);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  table.hc tbody td:last-child { border-right: none; }
+
+  table.hc tbody td.label {
+    text-align: left;
+    padding-left: 12px;
+    color: var(--slate-700);
+    font-weight: 500;
+  }
+
+  /* Category rows */
+  tr.category td {
+    background: var(--slate-800);
+    color: var(--white);
+    font-weight: 700;
+    padding: 8px 4px;
+    border-bottom: 1px solid var(--slate-900);
+    border-right-color: rgba(255,255,255,0.08);
+  }
+  tr.category td.label { padding-left: 12px; }
+
+  /* Highlight columns (Closing, Share, MoM, YoY, Var) — teal background */
+  td.hl, th.hl { background: var(--sm-primary-50); }
+  tr.category td.hl { background: var(--sm-primary-800); color: var(--white); }
+
+  /* Active team row */
+  tr.active td {
+    background: var(--slate-900);
+    color: var(--white);
+    font-weight: 700;
+    padding: 10px 4px;
+  }
+  tr.active td.hl { background: var(--sm-primary-900); color: var(--white); }
+  tr.active td.label { padding-left: 12px; }
+
+  /* Separator divider between category blocks */
+  tr.spacer td {
+    padding: 0;
+    height: 4px;
+    background: var(--white);
+    border: none;
+  }
+
+  /* Small right table (Fcst / Actual vs Fcst / %Pred) */
+  .side-metrics {
+    margin-top: 8px;
+  }
+
+  /* Color-coding semantic cells */
+  .pos { color: var(--success-700); font-weight: 600; }
+  .neg { color: var(--rose-700); font-weight: 600; }
+  .neu { color: var(--slate-500); }
+
+  /* Interns column subtle highlight */
+  .col-interns { background: var(--slate-50); }
+  tr.category .col-interns { background: var(--slate-700); }
+  tr.active .col-interns { background: var(--slate-800); }
+
+  /* ---------- Right side KPI cards ---------- */
+  .kpis {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .kpi {
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: 12px;
+    padding: 14px 16px;
+    position: relative;
+  }
+
+  .kpi::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 12px; bottom: 12px;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--sm-primary-600);
+  }
+
+  .kpi h4 {
+    margin: 0 0 6px 0;
+    font-family: 'Lexend', 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--slate-900);
+    letter-spacing: -0.01em;
+  }
+
+  .kpi p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--slate-600);
+  }
+
+  .kpi .big {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--slate-900);
+    font-family: 'Lexend','Inter',sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  .kpi .chip {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: var(--sm-primary-100);
+    color: var(--sm-primary-900);
+    vertical-align: middle;
+  }
+
+  /* ---------- Comments ---------- */
+  .comments {
+    margin-top: 22px;
+    background: var(--sm-primary-50);
+    border: 1px solid var(--sm-primary-100);
+    border-radius: 14px;
+    padding: 18px 22px 18px 22px;
+  }
+
+  .comments h3 {
+    margin: 0 0 10px 0;
+    font-family: 'Lexend', 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--slate-900);
+    text-transform: uppercase;
+  }
+
+  .comments .block {
+    margin-bottom: 10px;
+  }
+  .comments .block:last-child { margin-bottom: 0; }
+
+  .comments .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--slate-700);
+    margin-bottom: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .comments .tag .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    display: inline-block;
+  }
+  .tag.high .dot { background: var(--success-500); }
+  .tag.low  .dot { background: var(--amber-500); }
+
+  .comments p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--slate-700);
+  }
+
+  /* Footer-ish subtle footer bar */
+  .brand-footer {
+    margin-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10.5px;
+    color: var(--slate-400);
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <h1 class="slide-title">Headcount Summary</h1>
+
+  <div class="layout">
+    <!-- ========== LEFT: Big table ========== -->
+    <div>
+      <div class="table-wrap">
+        <table class="hc">
+          <thead>
+            <tr class="sup">
+              <th></th>
+              <th colspan="3">Q4/25</th>
+              <th class="teal" colspan="5">Mar-26</th>
+              <th colspan="3">Forecast view</th>
+              <th>Interns</th>
+            </tr>
+            <tr class="main">
+              <th class="label">Headcount by Technical<br/>Team and P&amp;L Category</th>
+              <th>Dec-25</th>
+              <th>Mar-25</th>
+              <th>Feb-25</th>
+              <th class="teal">Closing</th>
+              <th class="teal">Share</th>
+              <th class="teal">MoM%</th>
+              <th class="teal">YoY%</th>
+              <th class="teal">Var HC<br/>vs LY</th>
+              <th>Fcst 26</th>
+              <th>Actual vs<br/>Fcst</th>
+              <th>% Pred</th>
+              <th class="col-interns">Interns</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <!-- Cost of Revenue -->
+            <tr class="category">
+              <td class="label">Cost of Revenue</td>
+              <td>123</td><td>96</td><td>124</td>
+              <td class="hl">115</td><td class="hl">23%</td><td class="hl">-7.3%</td><td class="hl">19.8%</td><td class="hl">19</td>
+              <td>132</td><td>-17</td><td>87.1%</td>
+              <td class="col-interns">1</td>
+            </tr>
+            <tr>
+              <td class="label">Customer Experience</td>
+              <td>113</td><td>88</td><td>114</td>
+              <td class="hl">106</td><td class="hl">21%</td><td class="hl neg">-7.0%</td><td class="hl pos">20.5%</td><td class="hl">18</td>
+              <td>122</td><td class="neg">-16</td><td>86.9%</td>
+              <td class="col-interns">1</td>
+            </tr>
+            <tr>
+              <td class="label">Collection</td>
+              <td>10</td><td>8</td><td>10</td>
+              <td class="hl">9</td><td class="hl">2%</td><td class="hl neg">-10.0%</td><td class="hl pos">12.5%</td><td class="hl">1</td>
+              <td>10</td><td class="neg">-1</td><td>90.0%</td>
+              <td class="col-interns">0</td>
+            </tr>
+
+            <tr class="spacer"><td colspan="13"></td></tr>
+
+            <!-- Customer Acquisition Costs -->
+            <tr class="category">
+              <td class="label">Customer Acquisition Costs</td>
+              <td>130</td><td>128</td><td>130</td>
+              <td class="hl">131</td><td class="hl">26%</td><td class="hl">0.8%</td><td class="hl">2.3%</td><td class="hl">3</td>
+              <td>153</td><td>-22</td><td>85.6%</td>
+              <td class="col-interns">3</td>
+            </tr>
+            <tr>
+              <td class="label">Growth</td>
+              <td>49</td><td>53</td><td>44</td>
+              <td class="hl">44</td><td class="hl">9%</td><td class="hl neu">0.0%</td><td class="hl neg">-17.0%</td><td class="hl">-9</td>
+              <td>60</td><td class="neg">-16</td><td>73.3%</td>
+              <td class="col-interns">3</td>
+            </tr>
+            <tr>
+              <td class="label">Accountants</td>
+              <td>4</td><td>5</td><td>5</td>
+              <td class="hl">4</td><td class="hl">1%</td><td class="hl neg">-20.0%</td><td class="hl"></td><td class="hl">-1</td>
+              <td>5</td><td class="neg">-1</td><td>80.0%</td>
+              <td class="col-interns">0</td>
+            </tr>
+            <tr>
+              <td class="label">Sales</td>
+              <td>72</td><td>68</td><td>76</td>
+              <td class="hl">78</td><td class="hl">15%</td><td class="hl pos">2.6%</td><td class="hl pos">14.7%</td><td class="hl">10</td>
+              <td>81</td><td class="neg">-3</td><td>96.3%</td>
+              <td class="col-interns">0</td>
+            </tr>
+            <tr>
+              <td class="label">Strategic Relationships</td>
+              <td>5</td><td>2</td><td>5</td>
+              <td class="hl">5</td><td class="hl">1%</td><td class="hl neu">0.0%</td><td class="hl"></td><td class="hl">3</td>
+              <td>7</td><td class="neg">-2</td><td>71.4%</td>
+              <td class="col-interns">0</td>
+            </tr>
+
+            <tr class="spacer"><td colspan="13"></td></tr>
+
+            <!-- Product & Development -->
+            <tr class="category">
+              <td class="label">Product &amp; Development</td>
+              <td>213</td><td>147</td><td>206</td>
+              <td class="hl">208</td><td class="hl">41%</td><td class="hl">1.0%</td><td class="hl">41.5%</td><td class="hl">61</td>
+              <td>216</td><td>-8</td><td>96.3%</td>
+              <td class="col-interns">0</td>
+            </tr>
+            <tr>
+              <td class="label">Development</td>
+              <td>147</td><td>94</td><td>145</td>
+              <td class="hl">147</td><td class="hl">28%</td><td class="hl pos">1.4%</td><td class="hl pos">56.4%</td><td class="hl">53</td>
+              <td>150</td><td class="neg">-3</td><td>98.0%</td>
+              <td class="col-interns">0</td>
+            </tr>
+            <tr>
+              <td class="label">Product</td>
+              <td>66</td><td>53</td><td>61</td>
+              <td class="hl">61</td><td class="hl">12%</td><td class="hl neu">0.0%</td><td class="hl pos">15.1%</td><td class="hl">8</td>
+              <td>66</td><td class="neg">-5</td><td>92.4%</td>
+              <td class="col-interns">0</td>
+            </tr>
+
+            <tr class="spacer"><td colspan="13"></td></tr>
+
+            <!-- General & Administration -->
+            <tr class="category">
+              <td class="label">General &amp; Administration</td>
+              <td>53</td><td>47</td><td>55</td>
+              <td class="hl">51</td><td class="hl">10%</td><td class="hl">-7.3%</td><td class="hl">8.5%</td><td class="hl">4</td>
+              <td>70</td><td>-19</td><td>72.9%</td>
+              <td class="col-interns">4</td>
+            </tr>
+            <tr>
+              <td class="label">Data</td>
+              <td>19</td><td>17</td><td>19</td>
+              <td class="hl">17</td><td class="hl">3%</td><td class="hl neg">-10.5%</td><td class="hl neu">0.0%</td><td class="hl">0</td>
+              <td>30</td><td class="neg">-13</td><td>56.7%</td>
+              <td class="col-interns">3</td>
+            </tr>
+            <tr>
+              <td class="label">Finance</td>
+              <td>22</td><td>16</td><td>24</td>
+              <td class="hl">23</td><td class="hl">4%</td><td class="hl neg">-4.2%</td><td class="hl pos">43.8%</td><td class="hl">7</td>
+              <td>25</td><td class="neg">-2</td><td>92.0%</td>
+              <td class="col-interns">0</td>
+            </tr>
+            <tr>
+              <td class="label">People</td>
+              <td>4</td><td>6</td><td>4</td>
+              <td class="hl">3</td><td class="hl">1%</td><td class="hl neg">-25.0%</td><td class="hl neg">-50.0%</td><td class="hl">-3</td>
+              <td>6</td><td class="neg">-3</td><td>50.0%</td>
+              <td class="col-interns">1</td>
+            </tr>
+            <tr>
+              <td class="label">Strategy Direction</td>
+              <td>2</td><td>2</td><td>2</td>
+              <td class="hl">2</td><td class="hl">0%</td><td class="hl neu">0.0%</td><td class="hl neu">0.0%</td><td class="hl">0</td>
+              <td>2</td><td>0</td><td>100.0%</td>
+              <td class="col-interns">0</td>
+            </tr>
+            <tr>
+              <td class="label">Talent Acquisition</td>
+              <td>6</td><td>6</td><td>6</td>
+              <td class="hl">6</td><td class="hl">1%</td><td class="hl neu">0.0%</td><td class="hl neu">0.0%</td><td class="hl">0</td>
+              <td>7</td><td class="neg">-1</td><td>85.7%</td>
+              <td class="col-interns">0</td>
+            </tr>
+
+            <tr class="spacer"><td colspan="13"></td></tr>
+
+            <!-- Active team -->
+            <tr class="active">
+              <td class="label">Active team</td>
+              <td>519</td><td>418</td><td>515</td>
+              <td class="hl">505</td><td class="hl">98%</td><td class="hl">-1.9%</td><td class="hl">20.8%</td><td class="hl">87</td>
+              <td>571</td><td>-66</td><td>88.4%</td>
+              <td class="col-interns">8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== RIGHT: KPI cards ========== -->
+    <aside class="kpis">
+      <div class="kpi">
+        <h4>Total Headcount</h4>
+        <p><span class="big">505</span> <span class="chip">+8 interns</span><br/>
+          <span style="font-size:12px;color:var(--slate-500);">46% Women · 54% Men</span>
+        </p>
+      </div>
+
+      <div class="kpi">
+        <h4>New Hires</h4>
+        <p><span class="big">7</span> <span style="font-size:12px;color:var(--slate-500);">in March</span><br/>
+          <span style="font-size:12px;color:var(--slate-500);">38 YTD</span>
+        </p>
+      </div>
+
+      <div class="kpi">
+        <h4>Total Attrition</h4>
+        <p><span class="big">20</span><br/>
+          <span style="font-size:12px;color:var(--slate-500);">18 resignation · 7 dismissal · 2 interns</span>
+        </p>
+      </div>
+
+      <div class="kpi">
+        <h4>Staff Turnover Rate</h4>
+        <p><span class="big">3.84</span><br/>
+          <span style="font-size:12px;color:var(--slate-500);">FY 2025 average: 2.96</span>
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ========== Comments ========== -->
+  <section class="comments">
+    <h3>Comments</h3>
+
+    <div class="block">
+      <div class="tag high"><span class="dot"></span>Highlights</div>
+      <p>Employee migration to Alegra Holdings completed successfully, ensuring continuity and compliance. Payroll automation and contractor migration planning continued to move forward.</p>
+    </div>
+
+    <div class="block">
+      <div class="tag low"><span class="dot"></span>Lowlights</div>
+      <p>Argentina migration remains on hold due to labor reform changes and pending guidance.</p>
+    </div>
+  </section>
+
+  <div class="brand-footer">
+    <span>Alegra · People Report</span>
+    <span>Mar-26</span>
+  </div>
+</div>
+
+<script data-pplx-inline-edit>
+(function(){
+  if(window===window.top)return;
+  function inlineAll(orig,clone){
+    if(orig.nodeType!==1)return;
+    try{
+      var cs=getComputedStyle(orig);
+      var t='';
+      for(var i=0;i<cs.length;i++){t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';}
+      clone.style.cssText=t;
+    }catch(e){}
+    var oc=orig.children,cc=clone.children;
+    for(var j=0;j<oc.length&&j<cc.length;j++){inlineAll(oc[j],cc[j]);}
+  }
+  function stripExternal(clone){
+    var imgs=clone.querySelectorAll('img');
+    for(var i=0;i<imgs.length;i++){
+      var s=imgs[i].getAttribute('src');
+      if(s&&!s.startsWith('data:'))imgs[i].removeAttribute('src');
+    }
+    var all=clone.querySelectorAll('*');
+    for(var i=0;i<all.length;i++){
+      var st=all[i].style.cssText;
+      if(st&&st.indexOf('url(')>=0){
+        all[i].style.cssText=st.replace(/url\(["']?(?!data:)[^)"']*["']?\)/gi,'none');
+      }
+    }
+  }
+  var scrollRaf=0;
+  function emitScroll(){
+    scrollRaf=0;
+    var x=window.scrollX||window.pageXOffset||0;
+    var y=window.scrollY||window.pageYOffset||0;
+    window.parent.postMessage({type:'INLINE_EDIT_SCROLL',scrollX:x,scrollY:y},'*');
+  }
+  window.addEventListener('scroll',function(){
+    if(scrollRaf)return;
+    scrollRaf=requestAnimationFrame(emitScroll);
+  },{passive:true,capture:true});
+  emitScroll();
+  window.addEventListener('message',function(e){
+    if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
+    var scrollX=window.scrollX||window.pageXOffset||0;
+    var scrollY=window.scrollY||window.pageYOffset||0;
+    var w=window.innerWidth,h=window.innerHeight;
+    try{
+      var clone=document.documentElement.cloneNode(true);
+      var rm=clone.querySelectorAll('script,link[rel="stylesheet"],style');
+      for(var i=0;i<rm.length;i++){rm[i].remove();}
+      inlineAll(document.documentElement,clone);
+      stripExternal(clone);
+      var html=new XMLSerializer().serializeToString(clone);
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
+        +'<foreignObject width="100%" height="100%">'
+        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
+        +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
+        +html+'</div></div></foreignObject></svg>';
+      var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+      var img=new Image();
+      img.onload=function(){
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0);
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.onerror=function(){
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.src=svgUrl;
+    }catch(err){
+      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+    }
+  });
+})();
+</script></body>
+</html>

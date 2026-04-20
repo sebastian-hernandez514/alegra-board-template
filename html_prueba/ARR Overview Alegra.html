@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ARR Overview · Alegra Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  /* ---------- Design system tokens ---------- */
+  :root {
+    --color-navy: #0f172b;
+    --color-teal: #14b8a6;
+    --color-teal-light: #f0fdfa;
+    --color-bg: #ffffff;
+    --color-surface: #f8fafc;
+    --color-border: #e2e8f0;
+
+    --color-positive: #16a34a;
+    --color-negative: #C2410C;
+    --color-neutral: #64748b;
+    --color-text-primary: #0f172b;
+    --color-text-secondary: #64748b;
+
+    /* Chart series */
+    --series-spot: #185FA5;    /* Spot FX — blue */
+    --series-const: #94a3b8;   /* Constant FX — grey */
+    --series-new-adds: #185FA5;
+    --series-upsells: #94a3b8;
+    --series-disconnects: #5EEAD4;  /* teal light */
+    --series-fx: #0f172b;
+    --series-net-new: #E11D48;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: #e5e7eb;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--color-text-primary);
+  }
+
+  /* ---------- Slide (960×540 exact) ---------- */
+  .slide {
+    width: 960px;
+    height: 540px;
+    margin: 24px auto;
+    background: var(--color-bg);
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide-header {
+    background: var(--color-navy);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .slide-header .title {
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .slide-header .period {
+    color: var(--color-teal);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .slide-body {
+    flex: 1;
+    overflow: hidden;
+    padding: 10px 32px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .slide-footer {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: 6px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9.5px;
+    color: var(--color-text-secondary);
+    flex-shrink: 0;
+  }
+
+  /* ---------- Section headers (teal pill bar, like source) ---------- */
+  .arr-section-bar {
+    background: var(--color-teal);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-align: center;
+    padding: 4px 0;
+    border-radius: 4px;
+    margin-bottom: 2px;
+  }
+  .arr-section-bar sup { font-size: 8px; }
+
+  .arr-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .arr-panel.top    { flex: 0 0 200px; }
+  .arr-panel.bottom { flex: 1 1 auto; min-height: 0; }
+
+  .arr-chart-wrap {
+    position: relative;
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  /* ---------- Custom legend ---------- */
+  .arr-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9.5px;
+    color: var(--color-text-secondary);
+    margin-top: 2px;
+  }
+  .arr-legend .item { display: inline-flex; align-items: center; gap: 5px; }
+  .arr-legend .sw {
+    display: inline-block;
+    width: 10px; height: 10px; border-radius: 2px;
+  }
+  .arr-legend .sw.line {
+    height: 2px; width: 14px; border-radius: 1px; position: relative;
+  }
+  .arr-legend .sw.line::after {
+    content: ""; position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    width: 4px; height: 4px; border-radius: 50%;
+    background: inherit;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <div class="slide-header">
+    <span class="title">ARR Overview — Spot vs Constant FX &amp; Net New ARR drivers</span>
+    <span class="period">Mar 2026</span>
+  </div>
+
+  <div class="slide-body">
+    <!-- ===================== Panel 1: ARR EoP ===================== -->
+    <div class="arr-panel top">
+      <div class="arr-section-bar">ARR EoP (USD Mn)<sup>1</sup></div>
+      <div class="arr-chart-wrap"><canvas id="arrEoP"></canvas></div>
+      <div class="arr-legend">
+        <span class="item"><span class="sw" style="background:var(--series-spot);"></span>Spot FX</span>
+        <span class="item"><span class="sw" style="background:var(--series-const);"></span>Constant Currency FX</span>
+      </div>
+    </div>
+
+    <!-- ===================== Panel 2: Net New ARR Breakdown ===================== -->
+    <div class="arr-panel bottom">
+      <div class="arr-section-bar">Net New ARR — Breakdown (USD 000's)</div>
+      <div class="arr-chart-wrap"><canvas id="netNew"></canvas></div>
+      <div class="arr-legend">
+        <span class="item"><span class="sw" style="background:var(--series-new-adds);"></span>New Adds</span>
+        <span class="item"><span class="sw" style="background:var(--series-upsells);"></span>Upsells / (Downsells)</span>
+        <span class="item"><span class="sw" style="background:var(--series-disconnects);"></span>Disconnects</span>
+        <span class="item"><span class="sw" style="background:var(--series-fx);"></span>FX Appreciation / (Depreciation)</span>
+        <span class="item"><span class="sw line" style="background:var(--series-net-new);"></span>Net New</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>(1) Assumes a fixed FX exchange ratio for USD/COP and USD/MXN as of Mar/2026. &nbsp; Source: Finance · Mar 2026</span>
+    <span>Alegra · Confidential &nbsp; 5</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+  Chart.defaults.font.size = 9;
+  Chart.defaults.color = '#64748b';
+
+  const months = ['Jan-25','Feb-25','Mar-25','Apr-25','May-25','Jun-25','Jul-25','Aug-25','Sep-25','Oct-25','Nov-25','Dec-25','Jan-26','Feb-26','Mar-26'];
+
+  // --------- Panel 1 data ---------
+  const arrSpot  = [19.3, 20.9, 22.4, 22.0, 22.5, 22.9, 23.5, 23.5, 24.2, 24.7, 25.6, 26.6, 27.0, 26.8, 27.3];
+  const arrConst = [21.5, 22.7, 24.2, 24.3, 24.6, 24.6, 24.9, 25.2, 25.5, 26.0, 27.0, 27.0, 26.6, 27.3, 27.3];
+
+  new Chart(document.getElementById('arrEoP'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'Spot FX',              data: arrSpot,  backgroundColor: '#185FA5', borderRadius: 2, maxBarThickness: 16 },
+        { label: 'Constant Currency FX', data: arrConst, backgroundColor: '#94a3b8', borderRadius: 2, maxBarThickness: 16 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: { padding: { top: 14, right: 6, left: 4, bottom: 0 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { display: false },
+          ticks: {
+            color: '#64748b',
+            font: { family: 'DM Sans', size: 9, weight: '500' }
+          }
+        },
+        y: {
+          display: false,
+          beginAtZero: true,
+          max: 32
+        }
+      }
+    },
+    plugins: [{
+      id: 'arrEoPLabels',
+      afterDatasetsDraw(chart) {
+        const {ctx} = chart;
+        ctx.save();
+        ctx.font = "500 8.5px 'DM Mono', monospace";
+        ctx.textAlign = 'center';
+
+        const spotBars  = chart.getDatasetMeta(0).data;
+        const constBars = chart.getDatasetMeta(1).data;
+
+        spotBars.forEach((bar, i) => {
+          ctx.fillStyle = '#185FA5';
+          ctx.fillText(arrSpot[i].toFixed(1), bar.x, bar.y - 4);
+        });
+        constBars.forEach((bar, i) => {
+          ctx.fillStyle = '#475569';
+          ctx.fillText(arrConst[i].toFixed(1), bar.x, bar.y - 4);
+        });
+        ctx.restore();
+      }
+    }]
+  });
+
+  // --------- Panel 2 data (USD 000's) ---------
+  // Stacked positives and negatives — Chart.js handles signed stacking per-sign.
+  const newAdds     = [ 600,  800,  700,  800,  800,  800,  900,  800,  800,  800,  800, 1000, 1000, 1000, 1200];
+  const upsellsNet  = [   0, 1400, 1400,  300,  300,  200,  300,  200,  300,  200,  400,  800,  100, -100,    0];
+  const disconnects = [-800,-1000, -700,-1000, -800, -900, -800, -800, -800, -800, -800, -800,-1200,-1300, -800];
+  const fxImpact    = [ 300,  600,    0, -500,  300,  300,  300,    0,  500,  200,  400,    0,  500,  200, -300];
+  const netNew      = [ 100, 1600, 1400, -400,  600,  400,  600,    0,  800,  500,  900, 1000,  500, -200,  400];
+
+  new Chart(document.getElementById('netNew'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'New Adds',              data: newAdds,     backgroundColor: '#185FA5', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
+        { label: 'Upsells / (Downsells)', data: upsellsNet,  backgroundColor: '#94a3b8', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
+        { label: 'Disconnects',           data: disconnects, backgroundColor: '#5EEAD4', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
+        { label: 'FX',                    data: fxImpact,    backgroundColor: '#0f172b', stack: 'abs', borderRadius: 1, maxBarThickness: 26 },
+        {
+          type: 'line',
+          label: 'Net New',
+          data: netNew,
+          borderColor: '#E11D48',
+          backgroundColor: '#E11D48',
+          tension: 0,
+          pointRadius: 3,
+          pointBackgroundColor: '#E11D48',
+          borderWidth: 1.5,
+          borderDash: [4, 3],
+          order: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: { padding: { top: 10, right: 6, left: 10, bottom: 0 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: {
+          stacked: true,
+          grid: { color: 'rgba(15,23,43,.04)', drawTicks: false },
+          border: { color: '#cbd5e1' },
+          ticks: {
+            color: '#64748b',
+            font: { family: 'DM Sans', size: 9, weight: '500' }
+          }
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          min: -2000,
+          max: 2500,
+          grid: { color: 'rgba(128,128,128,.10)' },
+          border: { display: false },
+          ticks: {
+            color: '#94a3b8',
+            font: { family: 'DM Mono', size: 9 },
+            stepSize: 500,
+            callback: v => {
+              if (v === 0) return '0';
+              const abs = Math.abs(v).toLocaleString('en-US');
+              return v < 0 ? '\u2212' + abs : abs;  // minus sign U+2212
+            }
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+
+<script data-pplx-inline-edit>
+(function(){
+  if(window===window.top)return;
+  function inlineAll(orig,clone){
+    if(orig.nodeType!==1)return;
+    try{
+      var cs=getComputedStyle(orig);
+      var t='';
+      for(var i=0;i<cs.length;i++){t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';}
+      clone.style.cssText=t;
+    }catch(e){}
+    var oc=orig.children,cc=clone.children;
+    for(var j=0;j<oc.length&&j<cc.length;j++){inlineAll(oc[j],cc[j]);}
+  }
+  function stripExternal(clone){
+    var imgs=clone.querySelectorAll('img');
+    for(var i=0;i<imgs.length;i++){
+      var s=imgs[i].getAttribute('src');
+      if(s&&!s.startsWith('data:'))imgs[i].removeAttribute('src');
+    }
+    var all=clone.querySelectorAll('*');
+    for(var i=0;i<all.length;i++){
+      var st=all[i].style.cssText;
+      if(st&&st.indexOf('url(')>=0){
+        all[i].style.cssText=st.replace(/url\(["']?(?!data:)[^)"']*["']?\)/gi,'none');
+      }
+    }
+  }
+  var scrollRaf=0;
+  function emitScroll(){
+    scrollRaf=0;
+    var x=window.scrollX||window.pageXOffset||0;
+    var y=window.scrollY||window.pageYOffset||0;
+    window.parent.postMessage({type:'INLINE_EDIT_SCROLL',scrollX:x,scrollY:y},'*');
+  }
+  window.addEventListener('scroll',function(){
+    if(scrollRaf)return;
+    scrollRaf=requestAnimationFrame(emitScroll);
+  },{passive:true,capture:true});
+  emitScroll();
+  window.addEventListener('message',function(e){
+    if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
+    var scrollX=window.scrollX||window.pageXOffset||0;
+    var scrollY=window.scrollY||window.pageYOffset||0;
+    var w=window.innerWidth,h=window.innerHeight;
+    try{
+      var clone=document.documentElement.cloneNode(true);
+      var rm=clone.querySelectorAll('script,link[rel="stylesheet"],style');
+      for(var i=0;i<rm.length;i++){rm[i].remove();}
+      inlineAll(document.documentElement,clone);
+      stripExternal(clone);
+      var html=new XMLSerializer().serializeToString(clone);
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
+        +'<foreignObject width="100%" height="100%">'
+        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
+        +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
+        +html+'</div></div></foreignObject></svg>';
+      var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+      var img=new Image();
+      img.onload=function(){
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0);
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.onerror=function(){
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.src=svgUrl;
+    }catch(err){
+      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+    }
+  });
+})();
+</script></body>
+</html>

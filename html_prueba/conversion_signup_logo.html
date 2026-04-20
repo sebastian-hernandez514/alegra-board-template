@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conversión: Sign up → Logo | Alegra Board</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 24px;
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+}
+.slide-wrap {
+  width: 960px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.slide-header {
+  background: #0f172b;
+  padding: 16px 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.slide-title { color: #fff; font-size: 20px; font-weight: 600; }
+.slide-period { color: #14b8a6; font-size: 13px; font-weight: 500; }
+.slide-body {
+  flex: 1;
+  padding: 24px 40px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.chart-card {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 14px 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.chart-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chart-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f172b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.legend-row {
+  display: flex;
+  gap: 14px;
+  font-size: 10.5px;
+  color: #64748b;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.slide-footer {
+  padding: 8px 56px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  background: #0f172b;
+}
+.footer-brand { font-size: 10px; color: #e2e8f0; }
+.footer-source { font-size: 9px; color: #64748b; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="slide-wrap">
+  <div class="slide-header">
+    <span class="slide-title">Conversión: Sign up → Logo — CVR, Sign ups y New Logos</span>
+    <span class="slide-period">Mar 2025 – Mar 2026</span>
+  </div>
+
+  <div class="slide-body">
+    <div class="chart-grid">
+
+      <!-- Colombia -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <span class="chart-card-title">Colombia</span>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-swatch" style="background:#14b8a6"></span>CVR %</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#334155"></span>Sign ups</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#185FA5"></span>New Logos</span>
+          </div>
+        </div>
+        <div style="position:relative;height:200px;">
+          <canvas id="col" role="img" aria-label="Colombia CVR Sign ups New Logos Mar 2025 a Mar 2026">CVR entre 5.6% y 21.6%; Sign ups entre 6,507 y 23,310; Logos entre 1,217 y 1,634.</canvas>
+        </div>
+      </div>
+
+      <!-- México -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <span class="chart-card-title">México</span>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-swatch" style="background:#14b8a6"></span>CVR %</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#334155"></span>Sign ups</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#185FA5"></span>New Logos</span>
+          </div>
+        </div>
+        <div style="position:relative;height:200px;">
+          <canvas id="mex" role="img" aria-label="México CVR Sign ups New Logos Mar 2025 a Mar 2026">CVR entre 1.6% y 4.6%; Sign ups entre 3,496 y 11,053; Logos entre 162 y 224.</canvas>
+        </div>
+      </div>
+
+      <!-- República Dominicana -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <span class="chart-card-title">República Dominicana</span>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-swatch" style="background:#14b8a6"></span>CVR %</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#334155"></span>Sign ups</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#185FA5"></span>New Logos</span>
+          </div>
+        </div>
+        <div style="position:relative;height:200px;">
+          <canvas id="rd" role="img" aria-label="República Dominicana CVR Sign ups New Logos Mar 2025 a Mar 2026">CVR entre 0.9% y 10.7%; Sign ups entre 1,919 y 16,157; Logos entre 124 y 255.</canvas>
+        </div>
+      </div>
+
+      <!-- Costa Rica -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <span class="chart-card-title">Costa Rica</span>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-swatch" style="background:#14b8a6"></span>CVR %</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#334155"></span>Sign ups</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#185FA5"></span>New Logos</span>
+          </div>
+        </div>
+        <div style="position:relative;height:200px;">
+          <canvas id="cr" role="img" aria-label="Costa Rica CVR Sign ups New Logos Mar 2025 a Mar 2026">CVR entre 1.9% y 12.3%; Sign ups entre 721 y 4,231; Logos entre 48 y 115.</canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span class="footer-brand">Alegra · Confidential</span>
+    <span class="footer-source">Fuente: Amplitude · Corte Mar 2026</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const labels = ['Mar 25','Abr 25','May 25','Jun 25','Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26'];
+
+const TEAL      = '#14b8a6';
+const TEAL_BG   = 'rgba(20,184,166,0.12)';
+const NAVY      = 'rgba(51,65,85,0.25)';
+const BLUE      = 'rgba(24,95,165,0.60)';
+
+function makeChart(id, cvr, signups, logos) {
+  const ctx = document.getElementById(id).getContext('2d');
+  new Chart(ctx, {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'line',
+          label: 'CVR %',
+          data: cvr,
+          yAxisID: 'yCVR',
+          borderColor: TEAL,
+          backgroundColor: TEAL_BG,
+          fill: true,
+          tension: 0.3,
+          pointRadius: 3,
+          pointBackgroundColor: TEAL,
+          borderWidth: 2,
+          order: 1
+        },
+        {
+          type: 'bar',
+          label: 'Sign ups',
+          data: signups,
+          yAxisID: 'ySignups',
+          backgroundColor: NAVY,
+          borderWidth: 0,
+          order: 3
+        },
+        {
+          type: 'bar',
+          label: 'New Logos',
+          data: logos,
+          yAxisID: 'yLogos',
+          backgroundColor: BLUE,
+          borderWidth: 0,
+          order: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              if (ctx.dataset.label === 'CVR %') return 'CVR: ' + ctx.parsed.y.toFixed(1) + '%';
+              return ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString('es-CO');
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            font: { family: 'DM Mono', size: 9 },
+            color: '#64748b',
+            maxRotation: 45,
+            autoSkip: false
+          },
+          grid: { display: false },
+          border: { color: '#e2e8f0' }
+        },
+        yCVR: {
+          type: 'linear',
+          position: 'left',
+          ticks: {
+            font: { family: 'DM Mono', size: 9 },
+            color: '#14b8a6',
+            callback: v => v.toFixed(0) + '%'
+          },
+          grid: { color: '#e2e8f0', lineWidth: 0.5 },
+          border: { color: '#e2e8f0' }
+        },
+        ySignups: {
+          type: 'linear',
+          position: 'right',
+          ticks: {
+            font: { family: 'DM Mono', size: 9 },
+            color: '#64748b',
+            callback: v => v >= 1000 ? (v / 1000).toFixed(0) + 'K' : v
+          },
+          grid: { display: false },
+          border: { display: false }
+        },
+        yLogos: {
+          type: 'linear',
+          display: false
+        }
+      }
+    }
+  });
+}
+
+makeChart('col',
+  [12.1, 13.2, 21.6, 13.4, 21.3, 9.0, 8.8, 15.7, 15.8, 5.6, 8.1, 7.9, 6.5],
+  [10963, 17013, 20984, 13582, 12202, 15053, 23310, 18445, 11363, 10354, 6507, 7548, 9043],
+  [1452, 1383, 1374, 1217, 1475, 1319, 1298, 1458, 1525, 1404, 1605, 1422, 1634]
+);
+
+makeChart('mex',
+  [3.2, 2.8, 2.9, 2.9, 1.6, 3.7, 4.6, 4.6, 3.9, 4.4, 2.3, 2.1, 2.2],
+  [11053, 4640, 8029, 8219, 4802, 4680, 6365, 9325, 6836, 3496, 4864, 6960, 7789],
+  [171, 179, 182, 173, 223, 184, 202, 215, 191, 162, 213, 205, 224]
+);
+
+makeChart('rd',
+  [10.7, 3.0, 2.9, 2.8, 2.4, 1.9, 8.0, 1.7, 1.6, 1.0, 6.9, 0.9, 6.9],
+  [14509, 16157, 4650, 7417, 7973, 5642, 8789, 8943, 5454, 1919, 2230, 2535, 3196],
+  [138, 124, 144, 153, 162, 139, 210, 139, 151, 133, 239, 174, 255]
+);
+
+makeChart('cr',
+  [12.3, 5.0, 3.6, 3.8, 3.5, 3.4, 6.8, 3.1, 3.2, 2.4, 8.2, 7.8, 1.9],
+  [1541, 1589, 3553, 2077, 2044, 2234, 3002, 4231, 2483, 1236, 721, 749, 883],
+  [112, 115, 48, 56, 84, 74, 65, 81, 84, 56, 92, 72, 84]
+);
+</script>
+</body>
+</html>

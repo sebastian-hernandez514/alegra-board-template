@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARR Walk - Alanube</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    padding: 28px 32px 24px;
+    min-width: 900px;
+  }
+  .slide-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+  }
+  .main-layout {
+    display: flex;
+    gap: 22px;
+    align-items: flex-start;
+  }
+  .table-section { flex: 1; min-width: 0; }
+  .comments-section { width: 245px; flex-shrink: 0; }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+  }
+  th, td {
+    padding: 2.5px 4px;
+    text-align: right;
+    white-space: nowrap;
+    font-size: 9.5px;
+  }
+  td:first-child, th:first-child {
+    text-align: left;
+    min-width: 145px;
+    max-width: 170px;
+    white-space: normal;
+    font-size: 9.5px;
+  }
+
+  /* Header rows */
+  .header-main th {
+    background: #fff;
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 9px;
+    padding: 4px;
+  }
+  .header-main th.q-col { background: #2d6fc7; color: #fff; font-weight: 700; font-size: 9px; }
+  .header-main th.month-col { background: #4a8fdb; color: #fff; font-weight: 700; font-size: 9px; }
+  .header-main th.mom-col { background: #4a8fdb; color: #fff; font-weight: 700; font-size: 9px; }
+  .header-main th.ytd-col { background: #7aaad6; color: #fff; font-weight: 700; font-size: 9px; }
+  .header-main th.spacer { background: #fff; border: none; width: 5px; padding: 0; }
+
+  /* Section labels */
+  .section-label td {
+    color: #2d6fc7;
+    font-weight: 700;
+    font-size: 9.5px;
+    padding: 7px 4px 2px;
+    text-align: left;
+  }
+
+  /* Data rows */
+  .data-row td { border-bottom: 0.5px solid #ebebeb; }
+  .indent td:first-child { padding-left: 10px; }
+  .bold-row td { font-weight: 700; }
+  .top-border td { border-top: 1.5px solid #aaa; }
+
+  /* Colors */
+  .neg { color: #cc0000; }
+  .spacer-col { width: 5px; padding: 0 !important; border: none !important; background: #fff; }
+  .gap-row td { padding: 3px 0; border: none; }
+
+  /* Comments */
+  .comments-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #222;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .comments-box {
+    background: #edf3fb;
+    border-radius: 12px;
+    padding: 16px 15px;
+    font-size: 11px;
+    line-height: 1.7;
+    color: #1a1a1a;
+  }
+  .comments-box p { margin-bottom: 11px; }
+  .comments-box p:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<div class="slide-title">ARR Walk - Alanube</div>
+
+<div class="main-layout">
+  <div class="table-section">
+    <table>
+      <thead>
+        <tr class="header-main">
+          <th>Consolidated Alanube</th>
+          <th class="q-col">1Q25</th>
+          <th class="q-col">2Q25</th>
+          <th class="q-col">3Q25</th>
+          <th class="q-col">4Q25</th>
+          <th class="spacer"></th>
+          <th class="month-col">Jan-26</th>
+          <th class="month-col">Feb-26</th>
+          <th class="mom-col">MoM A%</th>
+          <th class="spacer"></th>
+          <th class="ytd-col">YTD 2024</th>
+          <th class="ytd-col">YTD 2025</th>
+          <th class="ytd-col">YTD 2026</th>
+          <th class="ytd-col">YTD Δ%</th>
+          <th class="ytd-col">YTD Δ%</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Logo Walk -->
+        <tr class="section-label"><td colspan="15">Logo Walk</td></tr>
+
+        <tr class="data-row bold-row">
+          <td>Logos BoP</td><td>79</td><td>95</td><td>137</td><td>151</td><td class="spacer-col"></td><td>193</td><td>198</td><td>3%</td><td class="spacer-col"></td><td>20</td><td>79</td><td>193</td><td>295%</td><td>144%</td>
+        </tr>
+        <tr class="data-row indent">
+          <td>New Logos</td><td>17</td><td>46</td><td>16</td><td>49</td><td class="spacer-col"></td><td>5</td><td>36</td><td>620%</td><td class="spacer-col"></td><td>6</td><td>8</td><td>41</td><td>33%</td><td>413%</td>
+        </tr>
+        <tr class="data-row indent">
+          <td>Recovered Logos</td><td>--</td><td>--</td><td>1</td><td>1</td><td class="spacer-col"></td><td>2</td><td>1</td><td>-50%</td><td class="spacer-col"></td><td>2</td><td>--</td><td>3</td><td>-100%</td><td></td>
+        </tr>
+        <tr class="data-row indent">
+          <td>Churned Logos</td><td>1</td><td>4</td><td>3</td><td>8</td><td class="spacer-col"></td><td class="neg">(2)</td><td class="neg">(2)</td><td>0%</td><td class="spacer-col"></td><td>4</td><td>--</td><td>4</td><td>-100%</td><td></td>
+        </tr>
+        <tr class="data-row bold-row top-border">
+          <td>Logos EoP</td><td>95</td><td>137</td><td>151</td><td>193</td><td class="spacer-col"></td><td>198</td><td>233</td><td>18%</td><td class="spacer-col"></td><td>24</td><td>87</td><td>233</td><td>263%</td><td>168%</td>
+        </tr>
+
+        <tr class="gap-row"><td colspan="15"></td></tr>
+
+        <!-- ARR Walk -->
+        <tr class="section-label"><td colspan="15">ARR Walk (MM)</td></tr>
+
+        <tr class="data-row bold-row">
+          <td>ARR BoP</td><td>0.30</td><td>0.33</td><td>0.44</td><td>0.51</td><td class="spacer-col"></td><td>0.63</td><td>0.62</td><td>-3%</td><td class="spacer-col"></td><td>0.04</td><td>0.30</td><td>0.63</td><td>675%</td><td>109%</td>
+        </tr>
+        <tr class="data-row indent">
+          <td>New ARR</td><td>0.03</td><td>0.08</td><td>0.04</td><td>0.04</td><td class="spacer-col"></td><td>0.01</td><td>0.04</td><td>593%</td><td class="spacer-col"></td><td>0.02</td><td>0.01</td><td>0.04</td><td>-58%</td><td>425%</td>
+        </tr>
+        <tr class="data-row indent">
+          <td>Recovered ARR</td><td>--</td><td>--</td><td>0.00</td><td>0.00</td><td class="spacer-col"></td><td>0.00</td><td>0.01</td><td>282%</td><td class="spacer-col"></td><td>0.00</td><td>--</td><td>0.01</td><td>-100%</td><td></td>
+        </tr>
+        <tr class="data-row indent">
+          <td>Expansion ARR</td><td>0.09</td><td>0.09</td><td>0.16</td><td>0.40</td><td class="spacer-col"></td><td>0.07</td><td>0.27</td><td>272%</td><td class="spacer-col"></td><td>0.00</td><td>0.08</td><td>0.35</td><td>159%</td><td>356%</td>
+        </tr>
+        <tr class="data-row indent">
+          <td>Contraction ARR</td><td class="neg">(0.10)</td><td class="neg">(0.04)</td><td class="neg">(0.14)</td><td class="neg">(0.30)</td><td class="spacer-col"></td><td class="neg">(0.10)</td><td class="neg">(0.08)</td><td>-20%</td><td class="spacer-col"></td><td class="neg">(0.00)</td><td class="neg">(0.08)</td><td class="neg">(0.18)</td><td>4247%</td><td>112%</td>
+        </tr>
+        <tr class="data-row indent">
+          <td>Churned ARR</td><td class="neg">(0.00)</td><td class="neg">(0.01)</td><td class="neg">(0.00)</td><td class="neg">(0.00)</td><td class="spacer-col"></td><td class="neg">(0.00)</td><td class="neg">(0.00)</td><td>-40%</td><td class="spacer-col"></td><td class="neg">(0.00)</td><td class="neg">(0.01)</td><td>--</td><td class="neg">-100%</td><td></td>
+        </tr>
+        <tr class="data-row indent">
+          <td>Fx</td><td>0.01</td><td>0.00</td><td>0.01</td><td>0.01</td><td class="spacer-col"></td><td>0.01</td><td>0.01</td><td>-72%</td><td class="spacer-col"></td><td class="neg">(0.00)</td><td>0.01</td><td>0.01</td><td>3379%</td><td>-21%</td>
+        </tr>
+        <tr class="data-row bold-row top-border">
+          <td>ARR EoP</td><td>0.33</td><td>0.44</td><td>0.51</td><td>0.63</td><td class="spacer-col"></td><td>0.62</td><td>0.85</td><td>38%</td><td class="spacer-col"></td><td>0.08</td><td>0.31</td><td>0.85</td><td>283%</td><td>174%</td>
+        </tr>
+        <tr class="data-row">
+          <td>OTR (One-Time Revenue) - Thousands</td><td>20.5</td><td>24.0</td><td>22.6</td><td>14.4</td><td class="spacer-col"></td><td>1.0</td><td>4.2</td><td>323%</td><td class="spacer-col"></td><td>6.2</td><td>17.4</td><td>5.2</td><td>182%</td><td>-70%</td>
+        </tr>
+
+        <tr class="gap-row"><td colspan="15"></td></tr>
+
+        <!-- Finance Metrics -->
+        <tr class="section-label"><td colspan="15">Finance Metrics</td></tr>
+
+        <tr class="data-row">
+          <td>ARR Growth Rate QoQ (%)</td><td>9%</td><td>34%</td><td>14%</td><td>25%</td><td class="spacer-col"></td><td class="neg">(24%)</td><td>35%</td><td>249%</td><td class="spacer-col"></td><td>205%</td><td>9%</td><td>35%</td><td>-96%</td><td>303%</td>
+        </tr>
+        <tr class="data-row">
+          <td>ARR Growth Rate YoY (%)</td><td>256%</td><td>78%</td><td>94%</td><td>109%</td><td class="spacer-col"></td><td>70%</td><td>174%</td><td>150%</td><td class="spacer-col"></td><td>0%</td><td>283%</td><td>174%</td><td></td><td>-39%</td>
+        </tr>
+        <tr class="data-row">
+          <td>Avg. ARR per Logo</td><td>$315</td><td>$131</td><td>$100</td><td>$82</td><td class="spacer-col"></td><td>$260</td><td>$308</td><td>19%</td><td class="spacer-col"></td><td>$232</td><td>$328</td><td>$284</td><td>42%</td><td>-13%</td>
+        </tr>
+        <tr class="data-row">
+          <td>Avg. Monthly Churn Rate (%)</td><td>0.4%</td><td>1.4%</td><td>0.7%</td><td>1.8%</td><td class="spacer-col"></td><td class="neg">(1.0%)</td><td class="neg">(1.0%)</td><td>-3%</td><td class="spacer-col"></td><td>10.0%</td><td>0.0%</td><td>1.0%</td><td>-100%</td><td></td>
+        </tr>
+
+        <tr class="gap-row"><td colspan="15"></td></tr>
+
+        <!-- Operation Metrics -->
+        <tr class="section-label"><td colspan="15">Operation Metrics</td></tr>
+
+        <tr class="data-row">
+          <td>Avg. Monthly Processed Documents (MM)</td><td>8.1</td><td>8.3</td><td>9.4</td><td>12.2</td><td class="spacer-col"></td><td>11.1</td><td>22.5</td><td>103%</td><td class="spacer-col"></td><td>0.3</td><td>5.4</td><td>11.2</td><td>1882%</td><td>109%</td>
+        </tr>
+        <tr class="data-row">
+          <td>Monthly Documents per Logo (k)</td><td>85.8</td><td>60.8</td><td>62.5</td><td>63.0</td><td class="spacer-col"></td><td>56.2</td><td>96.7</td><td>72%</td><td class="spacer-col"></td><td>11.3</td><td>61.7</td><td>48.2</td><td>447%</td><td>-22%</td>
+        </tr>
+        <tr class="data-row">
+          <td>Price per Document</td><td>0.3</td><td>0.6</td><td>0.7</td><td>0.8</td><td class="spacer-col"></td><td>0.9</td><td>0.7</td><td>-20%</td><td class="spacer-col"></td><td>0.6</td><td>0.4</td><td>1.5</td><td>-30%</td><td>251%</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Comments -->
+  <div class="comments-section">
+    <div class="comments-title">Comments</div>
+    <div class="comments-box">
+      <p>In February, 36 new accounts were activated—the highest number in Alanube's history—driving a <strong>38% increase in ARR</strong>.</p>
+      <p>This ARR growth <strong>has the potential to be even higher</strong>, as only 5 of these 36 accounts have started issuing documents while the rest are currently <strong>paying the minimum fee</strong>. Therefore, we expect a significant revenue uplift in the coming months as these accounts become fully active</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

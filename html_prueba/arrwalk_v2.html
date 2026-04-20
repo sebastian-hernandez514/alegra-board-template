@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alegra — ARR Walk · Q1 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary-50:  #E9FAFA;
+    --primary-100: #CFF2F1;
+    --primary-200: #B8ECE9;
+    --primary-400: #72D5D1;
+    --primary-500: #30B8B7;
+    --primary-700: #299E9C;
+    --primary-800: #208080;
+    --primary-900: #1A7E7F;
+
+    --slate-50:  #F8FAFC;
+    --slate-100: #F1F5F9;
+    --slate-200: #E2E8F0;
+    --slate-300: #CBD5E1;
+    --slate-400: #94A3B8;
+    --slate-500: #64748B;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1E293B;
+    --slate-900: #0F172A;
+
+    --green-50:  #F0FDF4;
+    --green-100: #DCFCE7;
+    --green-500: #22C55E;
+    --green-600: #16A34A;
+    --green-700: #15803D;
+
+    --rose-50:  #FFF1F2;
+    --rose-500: #F43F5E;
+    --rose-600: #E11D48;
+
+    --amber-50:  #FFFBEB;
+    --amber-400: #FBBF24;
+    --amber-500: #F59E08;
+    --amber-600: #D97706;
+
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #C8CDD3;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: var(--white);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    border-radius: 2px;
+  }
+
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--primary-500);
+  }
+
+  /* ── HEADER ── */
+  .header-row {
+    padding: 18px 48px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .header-row h1 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--slate-400);
+  }
+
+  .header-row .qtr {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary-700);
+  }
+
+  /* ── HEADLINE BAR ── */
+  .headline-bar {
+    margin: 8px 48px 0;
+    background: #0D2137;
+    border-radius: 6px;
+    padding: 9px 20px;
+  }
+
+  .headline-bar p {
+    font-size: 12px;
+    font-weight: 400;
+    color: #A8BDD0;
+    line-height: 1.5;
+  }
+
+  .headline-bar strong { color: var(--white); font-weight: 700; }
+  .headline-bar .hg { color: var(--primary-400); font-weight: 600; }
+  .headline-bar .ha { color: var(--amber-400); font-weight: 600; }
+
+  /* ── TABLE WRAPPER ── */
+  .table-wrap {
+    padding: 10px 48px 0;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  /* ── THEAD ── */
+  thead tr {
+    border-bottom: 1.5px solid var(--slate-200);
+  }
+
+  thead th {
+    text-align: right;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--slate-400);
+    padding: 4px 8px 6px;
+    white-space: nowrap;
+  }
+
+  thead th:first-child {
+    text-align: left;
+    padding-left: 6px;
+    width: 196px;
+  }
+
+  thead th.cur {
+    color: var(--primary-700);
+    background: rgba(48,184,183,0.08);
+    border-radius: 4px 4px 0 0;
+    font-weight: 700;
+  }
+
+  thead th.ytd {
+    color: var(--slate-500);
+    font-weight: 700;
+    font-size: 9.5px;
+  }
+
+  /* ── TBODY BASE ── */
+  tbody td {
+    text-align: right;
+    padding: 0 8px;
+    height: 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--slate-600);
+    white-space: nowrap;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--slate-100);
+  }
+
+  tbody td:first-child {
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    color: var(--slate-600);
+    font-size: 11.5px;
+    padding-left: 6px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  /* Current quarter highlight */
+  tbody td.cur {
+    background: rgba(48,184,183,0.07);
+    color: var(--primary-800);
+    font-weight: 600;
+  }
+
+  tbody td.ytd {
+    font-weight: 500;
+    color: var(--slate-600);
+  }
+
+  /* ── DELTA PILL ── */
+  .dp {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 1px 5px;
+    line-height: 1.45;
+    letter-spacing: 0px;
+  }
+
+  /* Match diapo: positivo = teal bg suave, negativo = rose, neutro = gris */
+  .dp-g { background: rgba(48,184,183,0.12); color: var(--primary-700); }
+  .dp-r { background: rgba(244,63,94,0.10);  color: var(--rose-600);    }
+  .dp-n { background: var(--slate-100);       color: var(--slate-500);   }
+  .dp-a { background: rgba(251,191,36,0.15);  color: var(--amber-600);   }
+
+  /* ── DOT INDICATOR ── */
+  .dot-ind {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-g  { background: var(--primary-500); }
+  .dot-r  { background: var(--rose-500);    }
+  .dot-a  { background: var(--amber-400);   }
+  .dot-s  { background: var(--slate-300);   }
+
+  /* ── BOLD / SUMMARY ROWS ── */
+  tr.rb td {
+    font-weight: 700 !important;
+    color: var(--slate-900) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 11.5px !important;
+    border-bottom: 1.5px solid var(--slate-200) !important;
+    height: 24px !important;
+  }
+
+  tr.rb td:first-child { font-weight: 700 !important; color: var(--slate-800) !important; }
+  tr.rb td.cur { color: var(--primary-700) !important; font-weight: 700 !important; background: rgba(48,184,183,0.07); }
+  tr.rb td.ytd { color: var(--slate-900) !important;  font-weight: 700 !important; }
+
+  /* ── INDENT ── */
+  tr.in td:first-child {
+    padding-left: 20px;
+    color: var(--slate-500);
+    font-size: 11px;
+    font-weight: 400;
+  }
+
+  /* ── SECTION HEADER ── */
+  tr.sh td {
+    height: 20px !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 9px !important;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: #0D2137 !important;
+    border-top: 1.5px solid var(--slate-200) !important;
+    border-bottom: none !important;
+    background: var(--slate-50);
+    padding-top: 5px !important;
+  }
+
+  tr.sh td.cur { background: rgba(48,184,183,0.07); color: var(--primary-800) !important; }
+  tr.sh td:not(.cur):not(:first-child) { background: var(--slate-50); }
+
+  /* ── RATE / SECONDARY ROWS ── */
+  tr.rt td {
+    height: 18px !important;
+    font-size: 10px !important;
+    color: var(--slate-400) !important;
+    border-bottom: 1px solid transparent !important;
+  }
+
+  tr.rt td:first-child {
+    font-size: 10.5px !important;
+    color: var(--slate-400) !important;
+    font-style: italic;
+    padding-left: 20px;
+  }
+
+  tr.rt td.cur { color: var(--primary-700) !important; }
+
+  /* ── NEGATIVE VALUES ── */
+  .nv { color: var(--rose-500) !important; }
+
+  /* ── GAP ROWS ── */
+  tr.gap td { padding: 0; height: 3px; border: none !important; background: transparent !important; }
+
+  /* ── FOOTER ── */
+  .ft {
+    padding: 0 48px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+  }
+
+  .ft-left { font-size: 8px; color: var(--slate-400); max-width: 750px; line-height: 1.5; }
+  .ft-right { display: flex; align-items: center; gap: 14px; }
+  .ft-brand { font-size: 13px; font-weight: 700; color: var(--primary-500); }
+  .ft-brand .dot-brand {
+    display: inline-block; width: 4px; height: 4px;
+    background: var(--primary-400); border-radius: 50%;
+    vertical-align: super; margin-left: 0.5px;
+  }
+  .ft-page { font-size: 10px; color: var(--slate-400); font-weight: 500; }
+
+  /* ── DELTA COLUMNS (YoY / QoQ headers) ── */
+  thead th.dh {
+    font-size: 9px;
+    color: var(--slate-300);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <div class="header-row">
+    <h1>ARR Walk</h1>
+    <span class="qtr">Q1'25 → Q1'26 · 5-Quarter Trailing</span>
+  </div>
+
+  <div class="headline-bar">
+    <p>
+      ARR de <strong>$17.8M → $26.8M</strong> en 2 años <span class="hg">(+20% YoY spot)</span>.
+      En constant currency <strong>$27.1M</strong> <span class="hg">(+11% YoY CC)</span> — FX favorable explica ~40% del crecimiento spot.
+      <span class="ha">Net New ARR comprimido a $0.2M</span> por caída en additions y net expansion plana.
+    </p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Q1'25</th>
+          <th>Q2'25</th>
+          <th>Q3'25</th>
+          <th>Q4'25</th>
+          <th class="cur">Q1'26</th>
+          <th class="dh">QoQ</th>
+          <th class="dh">YoY</th>
+          <th class="ytd">YTD'25</th>
+          <th class="ytd">YTD'26</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ══ LOGO EOP ══ -->
+        <tr class="sh">
+          <td>Logo EoP (000's)</td>
+          <td></td><td></td><td></td><td></td>
+          <td class="cur"></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr class="rb">
+          <td><span class="dot-ind dot-g"></span>Total</td>
+          <td>54.5</td><td>54.2</td><td>55.1</td><td>57.2</td>
+          <td class="cur">58.4</td>
+          <td><span class="dp dp-g">+2.1%</span></td>
+          <td><span class="dp dp-g">+7.2%</span></td>
+          <td class="ytd">54.5</td><td class="ytd">58.4</td>
+        </tr>
+        <tr class="rt">
+          <td>Logo Monthly New Adds %</td>
+          <td>5.1%</td><td>4.7%</td><td>4.9%</td><td>5.3%</td>
+          <td class="cur">3.4%</td>
+          <td><span class="dp dp-r">−1.9pp</span></td>
+          <td><span class="dp dp-r">−1.7pp</span></td>
+          <td>5.1%</td><td>3.4%</td>
+        </tr>
+        <tr class="rt">
+          <td>Logo Monthly Churn %</td>
+          <td>5.2%</td><td>4.9%</td><td>4.3%</td><td>4.3%</td>
+          <td class="cur">3.4%</td>
+          <td><span class="dp dp-g">−0.9pp</span></td>
+          <td><span class="dp dp-g">−1.8pp</span></td>
+          <td>5.2%</td><td>3.4%</td>
+        </tr>
+
+        <tr class="gap"><td colspan="10"></td></tr>
+
+        <!-- ══ ARR WALK SPOT ══ -->
+        <tr class="sh">
+          <td>ARR Walk — Spot ($M)</td>
+          <td></td><td></td><td></td><td></td>
+          <td class="cur"></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr class="rb">
+          <td><span class="dot-ind dot-g"></span>ARR BoP</td>
+          <td>$19.2</td><td>$22.4</td><td>$22.9</td><td>$24.2</td>
+          <td class="cur">$26.6</td>
+          <td><span class="dp dp-g">+10%</span></td>
+          <td><span class="dp dp-g">+39%</span></td>
+          <td class="ytd">$19.2</td><td class="ytd">$26.6</td>
+        </tr>
+        <tr class="in">
+          <td><span class="dot-ind dot-g"></span>Additions</td>
+          <td>1.7</td><td>1.8</td><td>1.9</td><td>2.0</td>
+          <td class="cur">1.6</td>
+          <td><span class="dp dp-r">−20%</span></td>
+          <td><span class="dp dp-n">−6%</span></td>
+          <td class="ytd">1.7</td><td class="ytd">1.6</td>
+        </tr>
+        <tr class="in">
+          <td><span class="dot-ind dot-g"></span>Recovered</td>
+          <td>0.4</td><td>0.5</td><td>0.5</td><td>0.7</td>
+          <td class="cur">0.3</td>
+          <td><span class="dp dp-r">−57%</span></td>
+          <td><span class="dp dp-n">−25%</span></td>
+          <td class="ytd">0.4</td><td class="ytd">0.3</td>
+        </tr>
+        <tr class="in">
+          <td><span class="dot-ind dot-r"></span>Net Churn</td>
+          <td class="nv">(2.6)</td><td class="nv">(2.6)</td><td class="nv">(2.5)</td><td class="nv">(2.4)</td>
+          <td class="cur nv">(2.4)</td>
+          <td><span class="dp dp-g">flat</span></td>
+          <td><span class="dp dp-r">+8%</span></td>
+          <td class="ytd nv">(2.6)</td><td class="ytd nv">(2.4)</td>
+        </tr>
+        <tr class="in">
+          <td><span class="dot-ind dot-a"></span>Net Expansion</td>
+          <td>2.7</td><td>0.7</td><td>0.7</td><td>1.5</td>
+          <td class="cur">0.0</td>
+          <td><span class="dp dp-r">−100%</span></td>
+          <td><span class="dp dp-r">−100%</span></td>
+          <td class="ytd">2.7</td><td class="ytd">0.0</td>
+        </tr>
+        <tr class="in">
+          <td><span class="dot-ind dot-s"></span>(+/−) FX Impact</td>
+          <td>0.8</td><td>0.2</td><td>0.7</td><td>0.6</td>
+          <td class="cur">0.7</td>
+          <td><span class="dp dp-g">+17%</span></td>
+          <td><span class="dp dp-n">−13%</span></td>
+          <td class="ytd">0.8</td><td class="ytd">0.7</td>
+        </tr>
+        <tr class="rb">
+          <td><span class="dot-ind dot-g"></span>ARR EoP</td>
+          <td>$22.4</td><td>$22.9</td><td>$24.2</td><td>$26.6</td>
+          <td class="cur">$26.8</td>
+          <td><span class="dp dp-g">+1%</span></td>
+          <td><span class="dp dp-g">+20%</span></td>
+          <td class="ytd">$22.4</td><td class="ytd">$26.8</td>
+        </tr>
+        <tr class="rt">
+          <td>YoY (%)</td>
+          <td>39%</td><td>41%</td><td>31%</td><td>39%</td>
+          <td class="cur">20%</td>
+          <td>—</td><td>—</td>
+          <td>39%</td><td>20%</td>
+        </tr>
+        <tr class="rt">
+          <td>QoQ (%)</td>
+          <td>16%</td><td>3%</td><td>6%</td><td>10%</td>
+          <td class="cur">1%</td>
+          <td>—</td><td>—</td>
+          <td>—</td><td>—</td>
+        </tr>
+
+        <tr class="gap"><td colspan="10"></td></tr>
+
+        <!-- ══ CONSTANT CURRENCY ══ -->
+        <tr class="sh">
+          <td>ARR — Constant Currency ($M)</td>
+          <td></td><td></td><td></td><td></td>
+          <td class="cur"></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr class="rb">
+          <td><span class="dot-ind dot-g"></span>ARR EoP (CC)</td>
+          <td>$24.5</td><td>$24.9</td><td>$25.5</td><td>$27.3</td>
+          <td class="cur">$27.1</td>
+          <td><span class="dp dp-n">−1%</span></td>
+          <td><span class="dp dp-g">+11%</span></td>
+          <td class="ytd">$24.5</td><td class="ytd">$27.1</td>
+        </tr>
+        <tr class="rt">
+          <td>YoY (%) — CC</td>
+          <td>48%</td><td>41%</td><td>26%</td><td>24%</td>
+          <td class="cur">11%</td>
+          <td>—</td><td>—</td>
+          <td>48%</td><td>11%</td>
+        </tr>
+        <tr class="rb">
+          <td><span class="dot-ind dot-a"></span>Net New ARR</td>
+          <td>$3.2</td><td>$0.6</td><td>$1.3</td><td>$2.3</td>
+          <td class="cur">$0.2</td>
+          <td><span class="dp dp-r">−91%</span></td>
+          <td><span class="dp dp-r">−94%</span></td>
+          <td class="ytd">$3.2</td><td class="ytd">$0.2</td>
+        </tr>
+
+        <tr class="gap"><td colspan="10"></td></tr>
+
+        <!-- ══ SAAS METRICS ══ -->
+        <tr class="sh">
+          <td>SaaS Metrics</td>
+          <td></td><td></td><td></td><td></td>
+          <td class="cur"></td><td></td><td></td><td></td><td></td>
+        </tr>
+        <tr class="in">
+          <td><span class="dot-ind dot-g"></span>$ Net Churn / Expansion %</td>
+          <td>3.0%</td><td>3.7%</td><td>2.7%</td><td>1.4%</td>
+          <td class="cur">1.9%</td>
+          <td><span class="dp dp-g">+0.5pp</span></td>
+          <td><span class="dp dp-n">−1.1pp</span></td>
+          <td class="ytd">3.0%</td><td class="ytd">1.9%</td>
+        </tr>
+        <tr class="in">
+          <td><span class="dot-ind dot-s"></span>S&amp;M Total Spend ($K)</td>
+          <td>259</td><td>263</td><td>294</td><td>275</td>
+          <td class="cur">261</td>
+          <td><span class="dp dp-g">−5%</span></td>
+          <td><span class="dp dp-n">+1%</span></td>
+          <td class="ytd">259</td><td class="ytd">261</td>
+        </tr>
+        <tr class="in">
+          <td><span class="dot-ind dot-g"></span>CAC Payback (Months)</td>
+          <td>14.3</td><td>14.8</td><td>14.4</td><td>14.1</td>
+          <td class="cur">13.7</td>
+          <td><span class="dp dp-g">−0.4</span></td>
+          <td><span class="dp dp-g">−0.6</span></td>
+          <td class="ytd">14.3</td><td class="ytd">13.7</td>
+        </tr>
+        <tr class="rt">
+          <td>FX — COP/USD</td>
+          <td>4,172</td><td>4,284</td><td>4,422</td><td>4,601</td>
+          <td class="cur">4,903</td>
+          <td>—</td><td>—</td>
+          <td>4,172</td><td>4,903</td>
+        </tr>
+        <tr class="rt">
+          <td>FX — MXN/USD</td>
+          <td>20.2</td><td>20.4</td><td>20.1</td><td>20.1</td>
+          <td class="cur">19.8</td>
+          <td>—</td><td>—</td>
+          <td>20.2</td><td>19.8</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ft">
+    <span class="ft-left">
+      (1) Churn adjusted by reactivations. New adds = first-time logos only.
+      (2) CC assumes fixed FX as of Mar/2025.
+      (3) CAC Payback = new adds extrapolated by logo churn. · ARR includes Alanube.
+      · <strong>●</strong> green = positive trend &nbsp;|&nbsp; <strong>●</strong> amber = watch &nbsp;|&nbsp; <strong>●</strong> red = negative &nbsp;|&nbsp; QoQ/YoY pills vs prior period
+    </span>
+    <div class="ft-right">
+      <span class="ft-brand">alegra<span class="dot-brand"></span></span>
+      <span class="ft-page">6</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

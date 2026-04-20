@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Contadores — Performance · 3/3 · Alegra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #0f172b;
+    background: #e2e8f0;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh;
+  }
+  .slide {
+    width: 960px; height: 540px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 28px rgba(15,23,43,.12);
+  }
+  .cp3-header {
+    background: #0f172b;
+    height: 40px; flex: 0 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; color: #ffffff;
+  }
+  .cp3-header .title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 700;
+  }
+  .cp3-header .sub { font-size: 10.5px; color: #94a3b8; font-weight: 500; }
+  .cp3-pill {
+    background: #14b8a6; color: #0f172b;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 6px;
+  }
+  .cp3-insight {
+    flex: 0 0 30px;
+    background: #f0fdfa;
+    border-left: 3px solid #14b8a6;
+    display: flex; align-items: center;
+    padding: 0 16px;
+    font-size: 11px; color: #334155;
+    font-weight: 500;
+  }
+  .cp3-insight strong { color: #0f172b; font-weight: 700; margin-right: 4px; }
+
+  .cp3-body {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px; padding: 14px 18px;
+    min-height: 0;
+  }
+
+  .cp3-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex; flex-direction: column;
+    min-height: 0;
+  }
+  .cp3-card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: #0f172b; line-height: 1.2;
+  }
+  .cp3-kpi-row {
+    display: flex; gap: 18px;
+    margin: 6px 0 8px;
+  }
+  .cp3-kpi { display: flex; flex-direction: column; }
+  .cp3-kpi .lbl {
+    font-size: 9px; font-weight: 600;
+    color: #64748b; text-transform: uppercase;
+    letter-spacing: .4px;
+  }
+  .cp3-kpi .val {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px; font-weight: 700;
+    color: #0f172b; line-height: 1;
+  }
+  .cp3-kpi .val.teal { color: #1A7E7F; }
+  .cp3-kpi .val.violet { color: #6366F1; }
+  .cp3-kpi .delta {
+    font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 99px;
+    align-self: flex-start; margin-top: 4px;
+  }
+  .cp3-kpi .delta.pos { background: #dcfce7; color: #16a34a; }
+
+  .cp3-chart-wrap {
+    flex: 1 1 auto;
+    position: relative; min-height: 0;
+  }
+  .cp3-legend {
+    display: flex; gap: 12px;
+    font-size: 10px; color: #64748b;
+    margin-top: 6px;
+  }
+  .cp3-legend .sw {
+    display: inline-block; width: 9px; height: 9px; border-radius: 2px;
+    margin-right: 4px; vertical-align: middle;
+  }
+  .cp3-footer {
+    flex: 0 0 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    background: #f8fafc; border-top: 1px solid #e2e8f0;
+    font-size: 9.5px; color: #64748b;
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <div class="cp3-header">
+    <div>
+      <span class="title">Contadores — Performance</span>
+      <span class="sub">&nbsp;&nbsp;·&nbsp;&nbsp;Adquisición YoY: New Logos &amp; Deals Won</span>
+    </div>
+    <span class="cp3-pill">3 / 3</span>
+  </div>
+
+  <div class="cp3-insight">
+    <strong>Insight:</strong>&nbsp;2026 arrancó con el mejor Q1 histórico: New Logos +44% YoY en Ene-Mar y Deals Won +75% — la tracción comercial está acelerando.
+  </div>
+
+  <div class="cp3-body">
+    <!-- New Logos YoY -->
+    <div class="cp3-card">
+      <div class="cp3-card-title">New Logos — Año vs Año</div>
+      <div class="cp3-kpi-row">
+        <div class="cp3-kpi">
+          <span class="lbl">Ene-26</span>
+          <span class="val violet">741</span>
+          <span class="delta pos">+44% YoY</span>
+        </div>
+        <div class="cp3-kpi">
+          <span class="lbl">Promedio 2025</span>
+          <span class="val">500</span>
+        </div>
+        <div class="cp3-kpi">
+          <span class="lbl">Promedio 2024</span>
+          <span class="val" style="color:#60A5FA;">400</span>
+        </div>
+      </div>
+      <div class="cp3-chart-wrap"><canvas id="newLogos"></canvas></div>
+      <div class="cp3-legend">
+        <span><span class="sw" style="background:#22C55E;"></span>2025</span>
+        <span><span class="sw" style="background:#A78BFA;"></span>2026</span>
+        <span><span class="sw" style="background:#60A5FA;"></span>2024</span>
+      </div>
+    </div>
+
+    <!-- Deals Won YoY -->
+    <div class="cp3-card">
+      <div class="cp3-card-title">Deals Won — Año vs Año</div>
+      <div class="cp3-kpi-row">
+        <div class="cp3-kpi">
+          <span class="lbl">Mar-26</span>
+          <span class="val violet">680</span>
+          <span class="delta pos">+77% YoY</span>
+        </div>
+        <div class="cp3-kpi">
+          <span class="lbl">Ene-26</span>
+          <span class="val violet">576</span>
+        </div>
+        <div class="cp3-kpi">
+          <span class="lbl">Oct-25 récord</span>
+          <span class="val" style="color:#22C55E;">509</span>
+        </div>
+      </div>
+      <div class="cp3-chart-wrap"><canvas id="dealsWon"></canvas></div>
+      <div class="cp3-legend">
+        <span><span class="sw" style="background:#22C55E;"></span>2025</span>
+        <span><span class="sw" style="background:#A78BFA;"></span>2026</span>
+        <span><span class="sw" style="background:#60A5FA;"></span>2024</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cp3-footer">
+    <span>Fuente: Metabase · Dashboard Contadores · Abr 2026</span>
+    <span>Alegra · Confidential &nbsp; 3 / 3</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+  Chart.defaults.font.size = 9;
+  Chart.defaults.color = '#94a3b8';
+
+  const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+  // ============ New Logos YoY ============
+  const nl2024 = [null,null,null,205,437,380,460,360,356,360,387,340];
+  const nl2025 = [515,436,515,440,480,440,501,520,520,615,598,580];
+  const nl2026 = [741,590,635,null,null,null,null,null,null,null,null,null];
+
+  const nlLabel2025 = [515, null, null, null, null, null, 501, null, null, 597, null, null];
+  const nlLabel2026 = [null, 590, 436, null, null, null, null, null, null, null, null, null];
+  const nlLabel2024 = [null, null, null, 205, 437, null, null, null, 356, null, 387, null];
+
+  new Chart(document.getElementById('newLogos'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label:'2024', data: nl2024, backgroundColor:'#60A5FA', maxBarThickness: 14, borderRadius: 2 },
+        { label:'2025', data: nl2025, backgroundColor:'#22C55E', maxBarThickness: 14, borderRadius: 2 },
+        { label:'2026', data: nl2026, backgroundColor:'#A78BFA', maxBarThickness: 14, borderRadius: 2 }
+      ]
+    },
+    options: barsOpts(0, 800, 200),
+    plugins: [ topLabelPlugin('nl', [nlLabel2024, nlLabel2025, nlLabel2026], ['#1E3A8A', '#15803D', '#5B21B6']) ]
+  });
+
+  // ============ Deals Won YoY ============
+  const dw2024 = [null,null,null,null,70,110,135,90,86,130,119,140];
+  const dw2025 = [328,345,245,380,397,400,390,360,494,509,429,450];
+  const dw2026 = [576,523,680,null,null,null,null,null,null,null,null,null];
+
+  const dwLabel2025 = [328, null, 245, null, 397, null, 390, null, 494, 509, 429, null];
+  const dwLabel2026 = [null, 523, 680, null, null, null, null, null, null, null, null, null];
+  const dwLabel2024 = [null, null, null, null, 70, null, 135, null, 86, null, 119, null];
+
+  new Chart(document.getElementById('dealsWon'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label:'2024', data: dw2024, backgroundColor:'#60A5FA', maxBarThickness: 14, borderRadius: 2 },
+        { label:'2025', data: dw2025, backgroundColor:'#22C55E', maxBarThickness: 14, borderRadius: 2 },
+        { label:'2026', data: dw2026, backgroundColor:'#A78BFA', maxBarThickness: 14, borderRadius: 2 }
+      ]
+    },
+    options: barsOpts(0, 800, 200),
+    plugins: [ topLabelPlugin('dw', [dwLabel2024, dwLabel2025, dwLabel2026], ['#1E3A8A', '#15803D', '#5B21B6']) ]
+  });
+
+  function barsOpts(min, max, stepSize) {
+    return {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      layout: { padding: { top: 14, right: 6, left: 0, bottom: 0 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: {
+          grid: { display: false }, border: { color: '#e2e8f0' },
+          ticks: { color: '#64748b', font: { family: 'Inter', size: 9, weight: '500' } }
+        },
+        y: {
+          min, max,
+          grid: { color: 'rgba(15,23,43,.05)' }, border: { display: false },
+          afterFit: (s) => { s.width = 36; },
+          ticks: {
+            color: '#94a3b8', font: { family: 'DM Mono', size: 8.5 },
+            stepSize,
+            callback: v => v.toLocaleString('en-US')
+          }
+        }
+      }
+    };
+  }
+
+  function topLabelPlugin(id, labelArrays, colors) {
+    return {
+      id: 'lbl_' + id,
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        ctx.save();
+        ctx.font = "700 9px 'Inter', sans-serif";
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        for (let d = 0; d < 3; d++) {
+          const meta = chart.getDatasetMeta(d);
+          const labels = labelArrays[d];
+          meta.data.forEach((bar, i) => {
+            const val = labels[i];
+            if (val == null || !bar) return;
+            ctx.fillStyle = colors[d];
+            ctx.fillText(val.toLocaleString('en-US'), bar.x, bar.y - 2);
+          });
+        }
+        ctx.restore();
+      }
+    };
+  }
+})();
+</script>
+
+<script data-pplx-inline-edit>
+(function(){
+  if(window===window.top)return;
+  function inlineAll(orig,clone){
+    if(orig.nodeType!==1)return;
+    try{
+      var cs=getComputedStyle(orig);
+      var t='';
+      for(var i=0;i<cs.length;i++){t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';}
+      clone.style.cssText=t;
+    }catch(e){}
+    var oc=orig.children,cc=clone.children;
+    for(var j=0;j<oc.length&&j<cc.length;j++){inlineAll(oc[j],cc[j]);}
+  }
+  function stripExternal(clone){
+    var imgs=clone.querySelectorAll('img');
+    for(var i=0;i<imgs.length;i++){
+      var s=imgs[i].getAttribute('src');
+      if(s&&!s.startsWith('data:'))imgs[i].removeAttribute('src');
+    }
+    var all=clone.querySelectorAll('*');
+    for(var i=0;i<all.length;i++){
+      var st=all[i].style.cssText;
+      if(st&&st.indexOf('url(')>=0){
+        all[i].style.cssText=st.replace(/url\(["']?(?!data:)[^)"']*["']?\)/gi,'none');
+      }
+    }
+  }
+  var scrollRaf=0;
+  function emitScroll(){
+    scrollRaf=0;
+    var x=window.scrollX||window.pageXOffset||0;
+    var y=window.scrollY||window.pageYOffset||0;
+    window.parent.postMessage({type:'INLINE_EDIT_SCROLL',scrollX:x,scrollY:y},'*');
+  }
+  window.addEventListener('scroll',function(){
+    if(scrollRaf)return;
+    scrollRaf=requestAnimationFrame(emitScroll);
+  },{passive:true,capture:true});
+  emitScroll();
+  window.addEventListener('message',function(e){
+    if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
+    var scrollX=window.scrollX||window.pageXOffset||0;
+    var scrollY=window.scrollY||window.pageYOffset||0;
+    var w=window.innerWidth,h=window.innerHeight;
+    try{
+      var clone=document.documentElement.cloneNode(true);
+      var rm=clone.querySelectorAll('script,link[rel="stylesheet"],style');
+      for(var i=0;i<rm.length;i++){rm[i].remove();}
+      inlineAll(document.documentElement,clone);
+      stripExternal(clone);
+      var html=new XMLSerializer().serializeToString(clone);
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
+        +'<foreignObject width="100%" height="100%">'
+        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
+        +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
+        +html+'</div></div></foreignObject></svg>';
+      var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+      var img=new Image();
+      img.onload=function(){
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0);
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.onerror=function(){
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.src=svgUrl;
+    }catch(err){
+      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+    }
+  });
+})();
+</script></body>
+</html>

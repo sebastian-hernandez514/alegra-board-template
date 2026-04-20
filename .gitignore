@@ -1,0 +1,9 @@
+output/
+__pycache__/
+*.pyc
+.DS_Store
+data/.DS_Store
+assets/.DS_Store
+html_prueba/.DS_Store
+data/.cache_metrics.json
+*.pptx

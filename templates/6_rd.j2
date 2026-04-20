@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alegra Board — R&D Investment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/base.css">
+  <style>
+    .section-cover {
+      background: var(--color-navy);
+      justify-content: center;
+      padding: var(--slide-pad-y) var(--slide-pad-x);
+    }
+    .section-cover .eyebrow {
+      font-size: 11px; font-weight: 600; color: var(--color-teal);
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .section-cover .section-title {
+      font-size: 42px; font-weight: 700; color: #ffffff;
+      letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 14px;
+    }
+    .section-cover .section-sub {
+      font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.40);
+    }
+    .section-cover .slide-num {
+      position: absolute; bottom: 24px; right: var(--slide-pad-x);
+      font-size: 10px; color: rgba(255,255,255,0.15);
+    }
+    /* ── Product Performance table ── */
+    .pp-body {
+      flex: 1; padding: 8px 56px 8px;
+      display: flex; flex-direction: column; gap: 4px; overflow: hidden;
+    }
+    .pp-table { width: 100%; border-collapse: collapse; font-family: 'DM Mono', monospace; }
+    .pp-table thead th {
+      text-align: right; font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8;
+      padding: 2px 7px 4px; white-space: nowrap;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+    .pp-table thead th:first-child { text-align: left; padding-left: 4px; min-width: 170px; }
+    .pp-section td {
+      font-family: 'Inter', sans-serif; font-size: 9.5px; font-weight: 700;
+      color: #0d9488; background: #f0fdfa; padding: 2px 7px;
+      border-top: 1.5px solid #e2e8f0; border-bottom: 1px solid #ccfbf1;
+      letter-spacing: 0.3px; text-transform: uppercase;
+    }
+    .pp-product td {
+      font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 600;
+      color: #0f172b; background: #f8fafc; padding: 2px 7px;
+      border-top: 1.5px solid #e2e8f0; border-bottom: 0.5px solid #e2e8f0;
+      text-align: right;
+    }
+    .pp-product td:first-child { text-align: left; }
+    .pp-metric td {
+      font-size: 10px; color: #64748b; padding: 1px 7px;
+      border-bottom: 1px solid #f1f5f9; text-align: right; white-space: nowrap;
+    }
+    .pp-metric td:first-child { text-align: left; font-style: italic; padding-left: 12px; }
+    .pp-gap td { padding: 1px 0; border: none; }
+    .pp-total td {
+      font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 600;
+      color: #0f172b; padding: 2px 7px; text-align: right;
+      border-top: 1.5px solid #e2e8f0; border-bottom: 0.5px solid #e2e8f0;
+    }
+    .pp-total td:first-child { text-align: left; }
+    .pp-teal  { color: #0d9488 !important; }
+    .pp-blue  { color: #185FA5 !important; }
+    .pp-red   { color: #C04828 !important; }
+
+    .placeholder-inner {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+    }
+    .placeholder-label {
+      font-size: 13px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px; color: #cbd5e1;
+    }
+    .placeholder-note { font-size: 12px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       SLIDE 1 — Section Cover
+       ============================================================ -->
+  <div class="slide section-cover">
+    <div class="eyebrow">Section 06</div>
+    <div class="section-title">R&amp;D Investment</div>
+    <div class="section-sub">{{ config.quarter_label }}</div>
+    <div class="slide-num">1</div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ============================================================
+       SLIDE 2 — Product Performance
+       ============================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">Product Performance — Active Subscriptions & Churn by Product</span>
+      <span class="period">{{ config.month_label }}</span>
+    </div>
+    <div class="pp-body">
+      <table class="pp-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Oct-25</th><th>Nov-25</th><th>Dec-25</th>
+            <th>Jan-26</th><th>Feb-26</th><th>Mar-26</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="pp-section"><td colspan="7">Active Subscriptions (Thousands)</td></tr>
+
+          <!-- Accounting (id_product=1) -->
+          <tr class="pp-product">
+            <td>Accounting</td>
+            <td>46.33</td><td>47.04</td><td>47.48</td><td>48.07</td><td>47.96</td><td>48.78</td>
+          </tr>
+          <tr class="pp-metric"><td>% of total Logos</td><td class="pp-teal">83.3%</td><td class="pp-teal">83.6%</td><td class="pp-teal">83.6%</td><td class="pp-teal">84.6%</td><td class="pp-teal">84.6%</td><td class="pp-teal">83.3%</td></tr>
+          <tr class="pp-metric"><td>Churn rate %</td><td class="pp-teal">6.01%</td><td class="pp-teal">6.14%</td><td class="pp-teal">6.69%</td><td class="pp-teal">7.64%</td><td class="pp-teal">7.63%</td><td class="pp-teal">7.00%</td></tr>
+          <tr class="pp-metric"><td>Avg Ticket New Additions</td><td class="pp-blue">$24.90</td><td class="pp-blue">$24.17</td><td class="pp-blue">$29.32</td><td class="pp-blue">$26.44</td><td class="pp-blue">$30.23</td><td class="pp-blue">$30.83</td></tr>
+          <tr class="pp-metric"><td>% of Core Subscribers</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td></tr>
+          <tr class="pp-gap"><td colspan="7"></td></tr>
+
+          <!-- POS (id_product=4 — Alegra POS) -->
+          <tr class="pp-product">
+            <td>POS</td>
+            <td>11.07</td><td>11.14</td><td>11.19</td><td>11.35</td><td>11.31</td><td>11.70</td>
+          </tr>
+          <tr class="pp-metric"><td>% of total Logos</td><td class="pp-teal">19.9%</td><td class="pp-teal">19.8%</td><td class="pp-teal">19.7%</td><td class="pp-teal">20.0%</td><td class="pp-teal">20.0%</td><td class="pp-teal">20.0%</td></tr>
+          <tr class="pp-metric"><td>Churn rate %</td><td class="pp-teal">6.02%</td><td class="pp-teal">6.66%</td><td class="pp-teal">6.04%</td><td class="pp-teal">7.16%</td><td class="pp-teal">7.78%</td><td class="pp-teal">6.92%</td></tr>
+          <tr class="pp-metric"><td>Avg Ticket New Additions</td><td class="pp-blue">$15.32</td><td class="pp-blue">$15.04</td><td class="pp-blue">$18.09</td><td class="pp-blue">$14.75</td><td class="pp-blue">$18.48</td><td class="pp-blue">$18.02</td></tr>
+          <tr class="pp-metric"><td>% of Core Subscribers</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td><td class="pp-red">35.00%</td></tr>
+          <tr class="pp-gap"><td colspan="7"></td></tr>
+
+          <!-- Payroll (id_product=3) -->
+          <tr class="pp-product">
+            <td>Payroll</td>
+            <td>8.48</td><td>8.54</td><td>8.67</td><td>8.85</td><td>8.78</td><td>8.97</td>
+          </tr>
+          <tr class="pp-metric"><td>% of total Logos</td><td class="pp-teal">15.2%</td><td class="pp-teal">15.2%</td><td class="pp-teal">15.3%</td><td class="pp-teal">15.6%</td><td class="pp-teal">15.5%</td><td class="pp-teal">15.3%</td></tr>
+          <tr class="pp-metric"><td>Churn rate %</td><td class="pp-teal">3.94%</td><td class="pp-teal">4.23%</td><td class="pp-teal">4.23%</td><td class="pp-teal">5.01%</td><td class="pp-teal">6.31%</td><td class="pp-teal">5.29%</td></tr>
+          <tr class="pp-metric"><td>Avg Ticket New Additions</td><td class="pp-blue">$10.75</td><td class="pp-blue">$9.87</td><td class="pp-blue">$10.63</td><td class="pp-blue">$11.76</td><td class="pp-blue">$13.97</td><td class="pp-blue">$14.17</td></tr>
+          <tr class="pp-metric"><td>% of Core Subscribers</td><td class="pp-red">50.00%</td><td class="pp-red">50.00%</td><td class="pp-red">50.00%</td><td class="pp-red">50.00%</td><td class="pp-red">50.00%</td><td class="pp-red">50.00%</td></tr>
+          <tr class="pp-gap"><td colspan="7"></td></tr>
+
+          <!-- Invoicing (id_product=6) -->
+          <tr class="pp-product">
+            <td>Invoicing</td>
+            <td>1.21</td><td>1.13</td><td>1.12</td><td>1.03</td><td>0.94</td><td>0.97</td>
+          </tr>
+          <tr class="pp-metric"><td>% of total Logos</td><td class="pp-teal">2.18%</td><td class="pp-teal">2.01%</td><td class="pp-teal">1.98%</td><td class="pp-teal">1.82%</td><td class="pp-teal">1.65%</td><td class="pp-teal">1.66%</td></tr>
+          <tr class="pp-metric"><td>Churn rate %</td><td class="pp-teal">9.98%</td><td class="pp-teal">9.10%</td><td class="pp-teal">10.38%</td><td class="pp-teal">16.06%</td><td class="pp-teal">8.40%</td><td class="pp-teal">7.21%</td></tr>
+          <tr class="pp-metric"><td>Avg Ticket New Additions</td><td class="pp-blue">$16.07</td><td class="pp-blue">$12.90</td><td class="pp-blue">$13.65</td><td class="pp-blue">$15.15</td><td class="pp-blue">$15.95</td><td class="pp-blue">$15.26</td></tr>
+          <tr class="pp-metric"><td>% of Core Subscribers</td><td class="pp-red">19.00%</td><td class="pp-red">19.00%</td><td class="pp-red">19.00%</td><td class="pp-red">19.00%</td><td class="pp-red">19.00%</td><td class="pp-red">19.00%</td></tr>
+          <tr class="pp-gap"><td colspan="7"></td></tr>
+
+          <!-- Totals -->
+          <tr class="pp-total"><td>Total Subscriptions (K)</td><td>67.09</td><td>67.85</td><td>68.46</td><td>69.31</td><td>68.99</td><td>70.42</td></tr>
+          <tr class="pp-total"><td>Total Logos (K)</td><td>55.62</td><td>56.30</td><td>56.79</td><td>56.85</td><td>56.69</td><td>58.57</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-source">Source: RS · data updated as of Mar-26</span>
+      <span class="footer-page">2</span>
+    </div>
+  </div>
+
+  <div class="slide-divider">↓</div>
+
+  <!-- ============================================================
+       SLIDE 3 — Placeholder
+       ============================================================ -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="title">NPS Alegra Accounting</span>
+      <span class="period">{{ config.quarter_label }}</span>
+    </div>
+    <div class="placeholder-inner">
+      <div class="placeholder-label">Content Pending</div>
+      <div class="placeholder-note">The responsible team will complete this slide with R&D Investment information.</div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-brand">Alegra · Confidential</span>
+      <span class="footer-page">3</span>
+    </div>
+  </div>
+
+</body>
+</html>
